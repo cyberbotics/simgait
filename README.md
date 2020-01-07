@@ -16,7 +16,7 @@ The BIOS was configured to reboot the machine after a power outage.
 
 The following software is installed:
 
-- Ubuntu 18.04 Desktop with `apache2`, `php` and `webots` (from the snap store).
+- Ubuntu 18.04 Desktop with `apache2`, `php`, `git` and `webots` (from the snap store).
 
 A letsencrypt certificate was installed on enable https.
 Apache was configured with a rewrite rule to redirect all traffic from http to the https.
