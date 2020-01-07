@@ -21,4 +21,4 @@ The following software is installed:
 A letsencrypt certificate was installed on enable https.
 Apache was configured with a rewrite rule to redirect all traffic from http to the https.
 
-We plan to install [CodeIgniter4](/codeigniter4/codeigniter4/).
+We plan to install [CodeIgniter4](/codeigniter4/codeigniter4/) to use it as a PHP web framework.
