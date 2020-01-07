@@ -16,7 +16,8 @@
   $payload = json_decode($input);  # assuming content type is application/json
   if ($payload->{'ref'} === 'refs/heads/master') {  # push on the master branch
     # shell_exec('git reset --hard HEAD && git pull');
-    print("OK\n");
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';
+    die("Published master branch on $protocol://$_SERVER[SERVER_NAME]\n");
   } else
-    print("Not on the master branch\n");
+    die("Not on the master branch\n");
 ?>
