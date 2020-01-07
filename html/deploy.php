@@ -1,4 +1,5 @@
 <?php
+  # The contents of deploy.secret should match the github webhook secret
   $secret_file = fopen('deploy.secret', 'r') or die("Unable to open deploy.secret file\n");
   $secret = trim(fread($secret_file, filesize('deploy.secret')));
   fclose($secret_file);
@@ -8,10 +9,14 @@
     die("Missing 'hash' extension to check the secret code validity\n");
   list($algo, $hash) = explode('=', $_SERVER['HTTP_X_HUB_SIGNATURE'], 2) + array('', '');
   if (!in_array($algo, hash_algos(), TRUE))
-    die("Hash algorithm '$algo' is not supported.");
-  $rawPost = file_get_contents('php://input');
-  if ($hash !== hash_hmac($algo, $rawPost, $secret))
+    die("Hash algorithm '$algo' is not supported\n");
+  $input = file_get_contents('php://input');
+  if ($hash !== hash_hmac($algo, $input, $secret))
     die("Hook secret does not match\n");
-  shell_exec('git reset --hard HEAD && git pull');
-  print("OK\n");
+  $payload = json_decode($input);  # assuming content type is application/json
+  if ($payload->{'ref'} === 'refs/heads/master') {  # push on the master branch
+    # shell_exec('git reset --hard HEAD && git pull');
+    print("OK\n");
+  } else
+    print("Not on the master branch\n");
 ?>
