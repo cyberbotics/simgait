@@ -15,7 +15,7 @@
     die("Hook secret does not match\n");
   $payload = json_decode($input);  # assuming content type is application/json
   if ($payload->{'ref'} === 'refs/heads/master') {  # push on the master branch
-    # shell_exec('git reset --hard HEAD && git pull');
+    shell_exec('git reset --hard HEAD && git pull');
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';
     die("Published master branch on $protocol://$_SERVER[SERVER_NAME]\n");
   } else
