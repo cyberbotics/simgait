@@ -22,3 +22,12 @@ A letsencrypt certificate was installed on enable https.
 Apache was configured with a rewrite rule to redirect all traffic from http to the https.
 
 We plan to install [CodeIgniter4](/codeigniter4/codeigniter4/) to use it as a PHP web framework.
+
+## Automatic git synchronization and testing website
+
+The main web site is stored on the server in `/var/www/master/html`.
+It is synchronized automatically with the `html` folder of the `master` branch of this github repository.
+Similarly, the testing web site is stored on the server in `/var/www/testing/html`.
+It is synchronized automatically with the `html` folder of the `testing` branch of this github repository.
+The `deploy.php` script is called by a github webhook on the push event.
+It performs a git pull in the folder corresponding to the branch of the push event.
