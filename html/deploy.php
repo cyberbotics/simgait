@@ -1,4 +1,12 @@
 <?php
+  function my_shell_exec($cmd, &$stdout=null, &$stderr=null) {
+    $proc = proc_open($cmd,[1 => ['pipe','w'], 2 => ['pipe','w'],], $pipes);
+    $stdout = stream_get_contents($pipes[1]);
+    fclose($pipes[1]);
+    $stderr = stream_get_contents($pipes[2]);
+    fclose($pipes[2]);
+    return proc_close($proc);
+  }
   # The contents of deploy.secret should match the github webhook secret
   $secret_file = fopen('deploy.secret', 'r') or die("Unable to open deploy.secret file\n");
   $secret = trim(fread($secret_file, filesize('deploy.secret')));
@@ -15,9 +23,11 @@
     die("Hook secret does not match\n");
   $payload = json_decode($input);  # assuming content type is application/json
   if ($payload->{'ref'} === 'refs/heads/master') {  # push on the master branch
-    shell_exec('git reset --hard HEAD && git pull');
+    my_shell_exec('git reset --hard HEAD', $out1, $err1);
+    my_shell_exec('git pull', $out2, $err2);
+    $out3 = shell_exec('whoami');
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';
-    die("Published master branch on $protocol://$_SERVER[SERVER_NAME]\n");
+    die("Published master branch on $protocol://$_SERVER[SERVER_NAME]\nout1=$out1 err1=$err1 out2=$out2 err2=$err2 out3=$out3\n");
   } else
     die("Not on the master branch\n");
 ?>
