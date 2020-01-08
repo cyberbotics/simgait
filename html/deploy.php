@@ -27,7 +27,7 @@
     my_shell_exec('git pull', $out2, $err2);
     $out3 = shell_exec('whoami');
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';
-    die("Published master branch on $protocol://$_SERVER[SERVER_NAME]\nout1=$out1 err1=$err1 out2=$out2 err2=$err2 out3=$out3\n");
+    die("Published master branch on $protocol://$_SERVER[SERVER_NAME]\nout1=$out1\n err1=$err1\n out2=$out2\n err2=$err2\n out3=$out3\n");
   } else
     die("Not on the master branch\n");
 ?>
