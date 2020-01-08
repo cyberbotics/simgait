@@ -26,7 +26,16 @@
     my_shell_exec('git reset --hard HEAD', $out1, $err1);
     my_shell_exec('git pull', $out2, $err2);
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';
-    die("Published master branch on $protocol://$_SERVER[SERVER_NAME]\nout1=$out1\n\nerr1=$err1\n\nout2=$out2\n\nerr2=$err2\n\n");
+    $output = "Published master branch on $protocol://$_SERVER[SERVER_NAME]\n\n";
+    if ($out1)
+      $output.= "$out1\n\n";
+    if ($err1)
+      $output.= "ERROR: $err1\n\n";
+    if ($out2)
+      $output.= "$out2\n\n";
+    if ($err2)
+      $output.= "ERROR: $err2\n\n";
+    die($output);
   } else
     die("Not on the master branch\n");
 ?>
