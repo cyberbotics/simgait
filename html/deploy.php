@@ -28,13 +28,13 @@
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';
     $output = "Published master branch on $protocol://$_SERVER[SERVER_NAME]\n\n";
     if ($out1)
-      $output.= "$out1\n\n";
+      $output.= "$out1\n";
     if ($err1)
-      $output.= "ERROR: $err1\n\n";
+      $output.= "ERROR: $err1\n";
     if ($out2)
-      $output.= "$out2\n\n";
+      $output.= "$out2\n";
     if ($err2)
-      $output.= "ERROR: $err2\n\n";
+      $output.= "ERROR: $err2\n";
     die($output);
   } else
     die("Not on the master branch\n");
