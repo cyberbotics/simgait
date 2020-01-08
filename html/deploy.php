@@ -1,4 +1,10 @@
 <?php
+  # GitHub synchronization for the master and testing branches of https://simgait.org
+  # This script is called by a GitHub webhook with a secret key (also stored locally in the deploy.secret file).
+  # Any commit pushed in the master branch will automatically update https://simgait.org with the master branch.
+  # Any commit pushed in the testing branch will automatically update https://simgait.org:1443 with the testing branch.
+  # The workflow is to merge a PR in the testing branch to be able to test it on https://simgait.org:1443
+  # If the test is successful, the testing branch can be merged into the master branch to publish the changes.
   function my_shell_exec($cmd, &$stdout=null, &$stderr=null) {
     $proc = proc_open($cmd,[1 => ['pipe','w'], 2 => ['pipe','w'],], $pipes);
     $stdout = stream_get_contents($pipes[1]);
