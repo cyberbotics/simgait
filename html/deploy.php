@@ -26,7 +26,7 @@
   $branch = substr($ref, strrpos($ref, '/') + 1);
   if ($branch !== 'master' && $branch !== 'testing')
     die("push not on 'master' or 'testing' branch\n");
-  if ($branch === 'testing') {
+  if ($branch !== 'master') {
     $url = "https://$_SERVER[SERVER_NAME]:1443";
     chdir("../../$branch");
   } else {
@@ -38,10 +38,10 @@
   if ($out1)
     $output.= "$out1\n";
   if ($err1)
-    $output.= "ERROR: $err1\n";
+    $output.= "STDERR1: $err1\n";
   if ($out2)
     $output.= "$out2\n";
   if ($err2)
-    $output.= "ERROR: $err2\n";
+    $output.= "STDERR2: $err2\n";
   die($output);
 ?>
