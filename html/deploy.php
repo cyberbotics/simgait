@@ -28,7 +28,7 @@
     die("push not on 'master' or 'testing' branch\n");
   if ($branch === 'testing') {
     $url = "https://$_SERVER[SERVER_NAME]:1443";
-    chdir("../../$branch"); 
+    chdir("../../$branch");
   } else {
     $url = "https://$_SERVER[SERVER_NAME]";
   }
