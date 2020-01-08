@@ -23,7 +23,7 @@
     die("Hook secret does not match\n");
   $payload = json_decode($input);  # assuming content type is application/json
   $ref = $payload->{'ref'};
-  if (isset($_GET['branch']) {
+  if (isset($_GET['branch'])) {
     if ($_GET['branch'] !== 'testing')
       die("Only the testing branch is allowed\n");
     $target_branch = 'testing';
