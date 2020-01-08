@@ -22,11 +22,13 @@
   if ($hash !== hash_hmac($algo, $input, $secret))
     die("Hook secret does not match\n");
   $payload = json_decode($input);  # assuming content type is application/json
-  if ($payload->{'ref'} === 'refs/heads/master') {  # push on the master branch
+  $ref = $payload->{'ref'};
+  $branch = substr($ref, strrpos($ref, '/') + 1);
+  if ($branch === 'master' || $branch === 'testing') {  # push on the master or testing branch
     my_shell_exec('git reset --hard HEAD', $out1, $err1);
     my_shell_exec('git pull', $out2, $err2);
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';
-    $output = "Published master branch on $protocol://$_SERVER[SERVER_NAME]\n\n";
+    $output = "Published testing branch on $protocol://$_SERVER[SERVER_NAME]\n\n";
     if ($out1)
       $output.= "$out1\n";
     if ($err1)
@@ -37,5 +39,5 @@
       $output.= "ERROR: $err2\n";
     die($output);
   } else
-    die("Not on the master branch\n");
+    die("Not on the master or testing branch\n");
 ?>
