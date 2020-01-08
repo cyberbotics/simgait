@@ -26,7 +26,7 @@
   $branch = substr($ref, strrpos($ref, '/') + 1);
   if ($branch !== 'master' && $branch !== 'testing')
     die("push not on 'master' or 'testing' branch\n");
-  if ($branch === 'testing') {
+  if ($branch !== 'master') {
     $url = "https://$_SERVER[SERVER_NAME]:1443";
     chdir("../../$branch");
   } else {
