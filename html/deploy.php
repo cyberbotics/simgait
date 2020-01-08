@@ -38,10 +38,10 @@
   if ($out1)
     $output.= "$out1\n";
   if ($err1)
-    $output.= "STDERR1: $err1\n";
+    $output.= "ERROR: $err1\n";
   if ($out2)
     $output.= "$out2\n";
   if ($err2)
-    $output.= "STDERR2: $err2\n";
+    $output.= "$err2\n";
   die($output);
 ?>
