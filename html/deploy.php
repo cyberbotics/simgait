@@ -38,10 +38,10 @@
   if ($out1)
     $output.= "$out1\n";
   if ($err1)
-    $output.= "STDERR1: $err1\n";
+    $output.= "STDERR1: $err1\n";  # git reset --hard HEAD
   if ($out2)
     $output.= "$out2\n";
   if ($err2)
-    $output.= "STDERR2: $err2\n";
+    $output.= "STDERR2: $err2\n";  # git pull
   die($output);
 ?>
