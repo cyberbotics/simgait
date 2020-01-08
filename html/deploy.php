@@ -23,16 +23,10 @@
     die("Hook secret does not match\n");
   $payload = json_decode($input);  # assuming content type is application/json
   $ref = $payload->{'ref'};
-  if (isset($_GET['branch'])) {
-    if ($_GET['branch'] !== 'testing')
-      die("Only the testing branch is allowed\n");
-    $target_branch = 'testing';
-  } else
-    $target_branch = 'master';
   $current_branch = trim(shell_exec('git rev-parse --abbrev-ref HEAD'));
   die($current_branch);
   $branch = substr($ref, strrpos($ref, '/') + 1);
-  if ($branch === $target_branch) {  # push on the master or testing branch
+  if ($branch === $current_branch) {  # push on the master or testing branch
     my_shell_exec('git reset --hard HEAD', $out1, $err1);
     my_shell_exec('git pull', $out2, $err2);
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http';
@@ -48,5 +42,5 @@
       $output.= "ERROR: $err2\n";
     die($output);
   } else
-    die("Not on the $target_branch branch\n");
+    die("Not on the '$branch' branch, current branch is '$current_branch'\n");
 ?>
