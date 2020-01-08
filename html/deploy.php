@@ -24,7 +24,7 @@
   $payload = json_decode($input);  # assuming content type is application/json
   $ref = $payload->{'ref'};
   $current_branch = trim(shell_exec('git rev-parse --abbrev-ref HEAD'));
-  die($current_branch);
+  # die($current_branch);
   $branch = substr($ref, strrpos($ref, '/') + 1);
   if ($branch === $current_branch) {  # push on the master or testing branch
     my_shell_exec('git reset --hard HEAD', $out1, $err1);
