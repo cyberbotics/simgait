@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="SimGait: musculoskeletal models of the human with neural control.">
+  <meta name="description" content="SimGait: Neuromechanical simulation of human locomotion.">
   <title>SimGait</title>
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
@@ -69,18 +69,30 @@
   <section class="section">
     <div class="container">
       <h1 class="title">SimGait</h1>
-      <p class="subtitle">musculoskeletal models of the human with neural control</p>
+      <p class="subtitle">Neuromechanical simulation of human locomotion</p>
       <article class="media">
         <figure class="media-left">
-          <p class="image"><img src="/images/nms-simulator.png"></p>
+          <p class="image is-128x128"><img src="/images/nms-simulator.png"></p>
        </figure>
        <div class="media-content">
          <div class="content">
-           <p><strong>SimGait</strong> <small>Neuromechanical simulation of human locomotion</small>
-           <br>
-           The SimGait project is a four year project funded by the SNSF, the Swiss national science foundation (collaborative Sinergia project).
-           This project is a collaboration with Dr Stéphane Armand at the Willy Taillard Kinesiology Lab at the University Hospital of Geneva (HUG) and Prof Alexandros Kalousis of the Data Mining and Machine Learning Group at the University of Applied Sciences, Western Switzerland, in Geneva.
+           <p>
+             The <strong>SimGait</strong> project is a four year project funded by the SNSF, the Swiss national science foundation (collaborative Sinergia project).
+             This project is a collaboration with Dr Stéphane Armand at the Willy Taillard Kinesiology Lab at the University Hospital of Geneva (HUG) and Prof Alexandros Kalousis of the Data Mining and Machine Learning Group at the University of Applied Sciences, Western Switzerland, in Geneva.
            </p>
+           <p>
+             The aim of this project is to create a musculoskeletal model of the human with neural control to be able to model healthy and impaired gait, for example due to cerebral palsy.
+             The model consist of a dynamics model that models the motion of the legs and trunk, and is operated by muscle forces.
+             The height and weight can be scaled to individual persons.
+             The neural control consists of three levels:
+             <ol>
+               <li>Reflexes, which are spinal sensorimotor loops to the muscles that do not go through the brain.</li>
+               <li>Central pattern generator in the spinal cord, which interacts with reflexes and creates time dependent signals to the leg muscles that generate a walking motion.</li>
+               <li>Descending signals from the brain, for example to modulate the speed, or step frequency of the gait.</li>
+             </ol>
+             This model will be used to model gaits of persons with cerebral palsy.
+             The goal is to increase our understanding of cerebral palsy by finding which parts of the neural control and muscles are impaired.
+             A second goal is to investigate whether the model can be used to predict the effect of a surgery, such that surgeons can improve the success rate of surgeries.
          </div>
         </div>
       </article>
