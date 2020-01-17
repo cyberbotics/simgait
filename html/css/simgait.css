@@ -1,0 +1,25 @@
+.brand-logo-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 2em; }
+
+.brand-logo {
+  width: 10vw;
+  min-width: 10em;
+  max-width: 100%;
+  margin-left:2em;
+  margin-right:2em;
+  transition: transform .2s;
+  /* Firefox 3.5+ */
+  filter: url(filters.svg#grayscale);
+  /* IE6-9 */
+  filter: gray;
+  /* Google Chrome & Safari 6+ */
+  -webkit-filter: grayscale(1); }
+
+.brand-logo:hover {
+  filter: none;
+  -webkit-filter: none;
+  transform: scale(1.5);
+  z-index: 10; }
