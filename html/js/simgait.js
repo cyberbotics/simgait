@@ -76,6 +76,10 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       let data = "e-mail:" + email + " - category: " + category;
       console.log(data);
+      fetch('/ajax/sign-up.php', { method: 'post', body: JSON.stringify({email: email, category: category})})
+        .then((res) => res.json())
+        .then((data) => console.log(data.email + " " + data.category))
+        .catch((error) => console.log('ERROR: ' + error));
       alert("Not yet functional.\n\n" + data);
     });
   });
