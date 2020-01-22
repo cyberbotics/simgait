@@ -17,6 +17,7 @@ class Modal {
     document.addEventListener('keydown', Modal.escape);
     this._element.querySelector('button.delete').addEventListener('click', Modal.close);
     this._element.querySelector('button.cancel').addEventListener('click', Modal.close);
+    this._element.querySelector('.modal-background').addEventListener('click', Modal.close);
   }
   static close(event) {
     event.preventDefault();
