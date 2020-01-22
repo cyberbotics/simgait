@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let modal = new Modal('#sign-up-modal');
     modal.show();
     modal.element.querySelector('#sign-up-email').focus();
-    let help = modal.element.querySelector("#sign-up-category-help");
+    let help = modal.element.querySelector('#sign-up-category-help');
     help.innerHTML = '&nbsp;';
     modal.element.querySelectorAll('input[name="category"]').forEach((input) => {
       input.checked = false;
@@ -53,13 +53,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const item = event.target.value;
         switch(item) {
           case 'developer':
-            help.innerHTML = "Modify simulations: neuromechanical models, environments and locomotion controllers.";
+            help.innerHTML = 'Modify simulations: neuromechanical models, environments and locomotion controllers.';
             break;
           case 'clinician':
-            help.innerHTML = "Simulate walking gaits of real patients, observe the results of different therapies.";
+            help.innerHTML = 'Simulate walking gaits of real patients, observe the results of different therapies.';
             break;
           case 'educator':
-            help.innerHTML = "Simulate combinations of motor impairments for different pathologies.";
+            help.innerHTML = 'Simulate combinations of motor impairments for different pathologies.';
             break;
         }
       });
@@ -67,8 +67,30 @@ document.addEventListener('DOMContentLoaded', function() {
     modal.element.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
       modal.hide();
-      console.log("submitted");
-      alert("Not yet functional.")
+      let email = modal.element.querySelector('#sign-up-email').value;
+      let category;
+      modal.element.querySelectorAll('input[name="category"]').forEach((input) => {
+        if (input.checked)
+          category = input.value;
+      });
+      let data = "e-mail:" + email + " - category: " + category;
+      console.log(data);
+      alert("Not yet functional.\n\n" + data);
+    });
+  });
+  document.querySelector('a#log-in').addEventListener('click', function(event) {
+    event.preventDefault();
+    let modal = new Modal('#log-in-modal');
+    modal.show();
+    modal.element.querySelector('#log-in-email').focus();
+    modal.element.querySelector('form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      let email = modal.element.querySelector('#log-in-email').value;
+      let password = modal.element.querySelector('#log-in-password').value;
+      let data = "e-mail: " + email + " - password: " + password;
+      console.log(data);
+      alert("Not yet functional.\n\n" + data);
+      modal.hide();
     });
   });
 });
