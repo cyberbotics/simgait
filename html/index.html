@@ -12,6 +12,47 @@
   <link rel="stylesheet" href="css/simgait.css">
 </head>
 <body>
+  <div class="modal" id="sign-up-modal">
+    <div class="modal-background"></div>
+    <form id="sign-up-form">
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Sign up</p>
+          <button type="button" class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="field">
+            <label class="label">E-mail</label>
+            <div class="control has-icons-left">
+              <input id="sign-up-email" class="input" type="email" required placeholder="Enter your e-mail address">
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Category</label>
+            <div class="control">
+              <label class="radio">
+                <input id="sign-up-developer" type="radio" name="category" value="developer" required> Developer
+              </label>
+              <label class="radio">
+                <input id="sign-up-clinician" type="radio" name="category" value="clinician"> Clinician
+              </label>
+              <label class="radio">
+                <input id="sign-up-educator" type="radio" name="category" value="educator"> Educator
+              </label>
+              <p id="sign-up-category-help" class="help">&nbsp;</p>
+            </div>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" type="submit" form="sign-up-form">Register</button>
+          <button class="button cancel" type="button">Cancel</button>
+        </footer>
+      </form>
+    </div>
+  </div>
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="index.html">
@@ -39,7 +80,7 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a class="button is-info">
+            <a class="button is-info" id="sign-up">
               <strong>Sign up</strong>
             </a>
             <a class="button is-light">
@@ -132,5 +173,6 @@
       </div>
     </div>
   </section>
+  <script src="js/simgait.js"></script>
 </body>
 </html>
