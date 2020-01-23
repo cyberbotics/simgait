@@ -40,6 +40,15 @@ class Modal {
 }
 Modal.current = null;
 
+class AlertModal extends Modal {
+  constructor(title, text) {
+    super('#alert-modal');
+    this.element.querySelector('#alert-modal-title').innerHTML = title;
+    this.element.querySelector('#alert-modal-text').innerHTML = text;
+    this.show();
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('a#sign-up').addEventListener('click', function(event) {
     event.preventDefault();
@@ -67,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     modal.element.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
-      modal.hide();
       let email = modal.element.querySelector('#sign-up-email').value;
       let category;
       modal.element.querySelectorAll('input[name="category"]').forEach((input) => {
@@ -76,11 +84,18 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       let data = "e-mail:" + email + " - category: " + category;
       console.log(data);
+      modal.hide();
       fetch('/ajax/sign-up.php', { method: 'post', body: JSON.stringify({email: email, category: category})})
-        .then((res) => res.json())
-        .then((data) => console.log(data.email + " " + data.category))
+        .then(function(response) {
+           return response.json();
+         })
+        .then(function(data) {
+           console.log(data.email + " " + data.category);
+         })
         .catch((error) => console.log('ERROR: ' + error));
-      alert("Not yet functional.\n\n" + data);
+      new AlertModal("Thank you!",
+                     "Your registration will be processed manually.<br />" +
+                     "The administrator will contact you about it very soon.");
     });
   });
   document.querySelector('a#log-in').addEventListener('click', function(event) {
