@@ -14,7 +14,11 @@ class Modal {
     Modal.current = this;
     document.querySelector('html').classList.add('is-clipped');
     this._element.classList.add('is-active');
+    this.element.querySelectorAll('p.help').forEach((p) => p.innerHTML = '&nbsp;');
     document.addEventListener('keydown', Modal.escape);
+    let submit = this._element.querySelector('button[type="submit"]');
+    if (submit)
+      submit.classList.remove('is-loading');
     this._element.querySelector('button.delete').addEventListener('click', Modal.close);
     this._element.querySelector('button.cancel').addEventListener('click', Modal.close);
     this._element.querySelector('.modal-background').addEventListener('click', Modal.close);
@@ -56,7 +60,6 @@ document.addEventListener('DOMContentLoaded', function() {
     modal.show();
     modal.element.querySelector('#sign-up-email').focus();
     let help = modal.element.querySelector('#sign-up-category-help');
-    help.innerHTML = '&nbsp;';
     modal.element.querySelectorAll('input[name="category"]').forEach((input) => {
       input.checked = false;
       input.addEventListener('change', function(event) {
@@ -76,26 +79,27 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     modal.element.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
-      let email = modal.element.querySelector('#sign-up-email').value;
+      const email = modal.element.querySelector('#sign-up-email').value;
       let category;
       modal.element.querySelectorAll('input[name="category"]').forEach((input) => {
         if (input.checked)
           category = input.value;
       });
-      let data = "e-mail:" + email + " - category: " + category;
-      console.log(data);
-      modal.hide();
+      modal.element.querySelector('button[type="submit"]').classList.add('is-loading');
       fetch('/ajax/sign-up.php', { method: 'post', body: JSON.stringify({email: email, category: category})})
         .then(function(response) {
            return response.json();
          })
         .then(function(data) {
-           console.log(data.email + " " + data.category);
+           modal.hide();
+           if (data.error)
+             new AlertModal("Error", data.error);
+           else
+             new AlertModal("Thank you!",
+                            "Your registration will be processed manually.<br />" +
+                            "The administrator will contact you about it very soon.");
          })
         .catch((error) => console.log('ERROR: ' + error));
-      new AlertModal("Thank you!",
-                     "Your registration will be processed manually.<br />" +
-                     "The administrator will contact you about it very soon.");
     });
   });
   document.querySelector('a#log-in').addEventListener('click', function(event) {
@@ -103,14 +107,39 @@ document.addEventListener('DOMContentLoaded', function() {
     let modal = new Modal('#log-in-modal');
     modal.show();
     modal.element.querySelector('#log-in-email').focus();
+    modal.element.querySelector('#log-in-forgot').addEventListener('click', function(event) {
+      modal.hide();
+      let forgot = new Modal('#forgot-modal');
+      forgot.show();
+      forgot.element.querySelector('#forgot-email').value = modal.element.querySelector('#log-in-email').value;
+      forgot.element.querySelector('#forgot-email').focus();
+      forgot.element.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        forgot.element.querySelector('button[type="submit"]').classList.add('is-loading');
+        const email = forgot.element.querySelector('#forgot-email').value;
+        fetch('/ajax/forgot.php', { method: 'post', body: JSON.stringify({email: email})})
+         .then(function(response) {
+            return response.json();
+           })
+         .then(function(data) {
+            forgot.hide();
+            if (data.error)
+              new AlertModal("Error", data.error);
+            else
+              new AlertModal("Thank you!",
+                             "An e-mail with a password reset link was just sent to you.<br />" +
+                             "Check your inbox now.");
+          })
+         .catch((error) => console.log('ERROR: ' + error));
+      });
+    });
     modal.element.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
       let email = modal.element.querySelector('#log-in-email').value;
       let password = modal.element.querySelector('#log-in-password').value;
       let data = "e-mail: " + email + " - password: " + password;
       console.log(data);
-      alert("Not yet functional.\n\n" + data);
-      modal.hide();
+      modal.element.querySelector('#log-in-help').innerHTML = "Your e-mail or password is wrong, please try again.";
     });
   });
 });

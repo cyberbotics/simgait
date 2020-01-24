@@ -3,6 +3,8 @@
   $json = file_get_contents('php://input');
   $data = json_decode($json);
   $to = $data->{'email'};
+  if (!filter_var($to, FILTER_VALIDATE_EMAIL))
+    die("{'error': 'Wrong e-mail address.'}");
   $subject = "SimGait sign up";
   $message = "<html><head><title>$subject</title></head>"
            . "<body><p>Hello,</p><p>Your request to open a " . $data->{'category'}

@@ -24,7 +24,7 @@
           <div id="alert-modal-text"></div>
         </section>
         <footer class="modal-card-foot">
-          <button class="button cancel" type="button">Ok</button>
+          <button class="button cancel is-success" type="button">Ok</button>
         </footer>
       </form>
     </div>
@@ -60,7 +60,7 @@
               <label class="radio">
                 <input type="radio" name="category" value="educator"> Educator
               </label>
-              <p id="sign-up-category-help" class="help">&nbsp;</p>
+              <p id="sign-up-category-help" class="help"></p>
             </div>
           </div>
         </section>
@@ -71,6 +71,7 @@
       </form>
     </div>
   </div>
+
   <div class="modal" id="log-in-modal">
     <div class="modal-background"></div>
     <form>
@@ -97,7 +98,9 @@
                 <i class="fas fa-lock"></i>
               </span>
             </div>
+            <div class="has-text-right"><a id="log-in-forgot" class="help">Forgot your password?</a></div>
           </div>
+          <p id="log-in-help" class="help"></p>
         </section>
         <footer class="modal-card-foot">
           <button class="button is-success" type="submit">Log in</button>
@@ -106,6 +109,34 @@
       </form>
     </div>
   </div>
+
+  <div class="modal" id="forgot-modal">
+    <div class="modal-background"></div>
+    <form>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Forgot your password?</p>
+          <button type="button" class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="field">
+            <label class="label">E-mail</label>
+            <div class="control has-icons-left">
+              <input id="forgot-email" class="input" type="email" required placeholder="Enter your e-mail address">
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+            </div>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" type="submit">Reset password</button>
+          <button class="button cancel" type="button">Cancel</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="index.html">
