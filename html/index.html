@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="SimGait: Neuromechanical simulation of human locomotion.">
+  <meta name="description" content="SimGait: Simulation of human locomotion - a neuromechanical and machine learning approach">
   <title>SimGait</title>
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
@@ -12,131 +12,6 @@
   <link rel="stylesheet" href="css/simgait.css">
 </head>
 <body>
-  <div class="modal" id="alert-modal">
-    <div class="modal-background"></div>
-    <form>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p id="alert-modal-title" class="modal-card-title">Log in</p>
-          <button type="button" class="delete" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-          <div id="alert-modal-text"></div>
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button cancel is-success" type="button">Ok</button>
-        </footer>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal" id="sign-up-modal">
-    <div class="modal-background"></div>
-    <form>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Sign up</p>
-          <button type="button" class="delete" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="field">
-            <label class="label">E-mail</label>
-            <div class="control has-icons-left">
-              <input id="sign-up-email" class="input" type="email" required placeholder="Enter your e-mail address">
-              <span class="icon is-small is-left">
-                <i class="fas fa-envelope"></i>
-              </span>
-            </div>
-          </div>
-          <div class="field">
-            <label class="label">Category</label>
-            <div class="control">
-              <label class="radio">
-                <input type="radio" name="category" value="developer" required> Developer
-              </label>
-              <label class="radio">
-                <input type="radio" name="category" value="clinician"> Clinician
-              </label>
-              <label class="radio">
-                <input type="radio" name="category" value="educator"> Educator
-              </label>
-              <p id="sign-up-category-help" class="help"></p>
-            </div>
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button is-success" type="submit">Sign up</button>
-          <button class="button cancel" type="button">Cancel</button>
-        </footer>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal" id="log-in-modal">
-    <div class="modal-background"></div>
-    <form>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Log in</p>
-          <button type="button" class="delete" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="field">
-            <label class="label">E-mail</label>
-            <div class="control has-icons-left">
-              <input id="log-in-email" class="input" type="email" required placeholder="Enter your e-mail address">
-              <span class="icon is-small is-left">
-                <i class="fas fa-envelope"></i>
-              </span>
-            </div>
-          </div>
-          <div class="field">
-            <label class="label">Password</label>
-            <div class="control has-icons-left">
-              <input id="log-in-password" class="input" type="password" required>
-              <span class="icon is-small is-left">
-                <i class="fas fa-lock"></i>
-              </span>
-            </div>
-            <div class="has-text-right"><a id="log-in-forgot" class="help">Forgot your password?</a></div>
-          </div>
-          <p id="log-in-help" class="help"></p>
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button is-success" type="submit">Log in</button>
-          <button class="button cancel" type="button">Cancel</button>
-        </footer>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal" id="forgot-modal">
-    <div class="modal-background"></div>
-    <form>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Forgot your password?</p>
-          <button type="button" class="delete" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="field">
-            <label class="label">E-mail</label>
-            <div class="control has-icons-left">
-              <input id="forgot-email" class="input" type="email" required placeholder="Enter your e-mail address">
-              <span class="icon is-small is-left">
-                <i class="fas fa-envelope"></i>
-              </span>
-            </div>
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button is-success" type="submit">Reset password</button>
-          <button class="button cancel" type="button">Cancel</button>
-        </footer>
-      </form>
-    </div>
-  </div>
-
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="index.html">
@@ -179,7 +54,7 @@
     <div class="hero-body">
       <div class="container">
         <h1 class="title">SimGait</h1>
-        <h2 class="subtitle">Neuromechanical simulation of human locomotion</h2>
+        <h2 class="subtitle">Simulation of human locomotion - a neuromechanical and machine learning approach</h2>
       </div>
     </div>
   </section>

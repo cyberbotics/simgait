@@ -1,66 +1,42 @@
 'uses strict';
 
-class Modal {
-  constructor(selector) {
-    this._element = document.querySelector(selector);
-  }
-  set element(e) {
-    this._element = e;
-  }
-  get element() {
-    return this._element;
-  }
-  show() {
-    Modal.current = this;
-    document.querySelector('html').classList.add('is-clipped');
-    this._element.classList.add('is-active');
-    this.element.querySelectorAll('p.help').forEach((p) => p.innerHTML = '&nbsp;');
-    document.addEventListener('keydown', Modal.escape);
-    let submit = this._element.querySelector('button[type="submit"]');
-    if (submit)
-      submit.classList.remove('is-loading');
-    this._element.querySelector('button.delete').addEventListener('click', Modal.close);
-    this._element.querySelector('button.cancel').addEventListener('click', Modal.close);
-    this._element.querySelector('.modal-background').addEventListener('click', Modal.close);
-  }
-  static close(event) {
-    event.preventDefault();
-    Modal.current.hide();
-  }
-  static escape(event) {
-    if (event.keyCode == 27)
-      Modal.close(event);
-  }
-  hide() {
-    this.element.classList.remove('is-active');
-    document.querySelector('html').classList.remove('is-clipped');
-    document.removeEventListener('keydown', Modal.escape);
-    let parent = this.element.parentElement;
-    const clone = this.element.cloneNode(true);  // remove all event listeners
-    parent.removeChild(this.element);
-    parent.appendChild(clone);
-    Modal.current = null;
-  }
-}
-Modal.current = null;
-
-class AlertModal extends Modal {
-  constructor(title, text) {
-    super('#alert-modal');
-    this.element.querySelector('#alert-modal-title').innerHTML = title;
-    this.element.querySelector('#alert-modal-text').innerHTML = text;
-    this.show();
-  }
-}
-
 document.addEventListener('DOMContentLoaded', function() {
+  // define web component
+  window.customElements.define('modal-dialog', ModalDialog);
+
+  // sign up dialog
   document.querySelector('a#sign-up').addEventListener('click', function(event) {
     event.preventDefault();
-    let modal = new Modal('#sign-up-modal');
-    modal.show();
-    modal.element.querySelector('#sign-up-email').focus();
-    let help = modal.element.querySelector('#sign-up-category-help');
-    modal.element.querySelectorAll('input[name="category"]').forEach((input) => {
+    let content = `
+    <div class="field">
+      <label class="label">E-mail</label>
+      <div class="control has-icons-left">
+        <input id="sign-up-email" class="input" type="email" required placeholder="Enter your e-mail address">
+        <span class="icon is-small is-left">
+          <i class="fas fa-envelope"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Category</label>
+      <div class="control">
+        <label class="radio">
+          <input type="radio" name="category" value="developer" required> Developer
+        </label>
+        <label class="radio">
+          <input type="radio" name="category" value="clinician"> Clinician
+        </label>
+        <label class="radio">
+          <input type="radio" name="category" value="educator"> Educator
+        </label>
+        <p id="sign-up-category-help" class="help"></p>
+      </div>
+    </div>
+    `
+    let modal = new ModalDialog('Sign up', content, 'Cancel', 'Sign up');
+    modal.querySelector('#sign-up-email').focus();
+    let help = modal.querySelector('#sign-up-category-help');
+    modal.querySelectorAll('input[name="category"]').forEach((input) => {
       input.checked = false;
       input.addEventListener('change', function(event) {
         const item = event.target.value;
@@ -77,15 +53,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
     });
-    modal.element.querySelector('form').addEventListener('submit', function(event) {
+    modal.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
-      const email = modal.element.querySelector('#sign-up-email').value;
+      const email = modal.querySelector('#sign-up-email').value;
       let category;
-      modal.element.querySelectorAll('input[name="category"]').forEach((input) => {
+      modal.querySelectorAll('input[name="category"]').forEach((input) => {
         if (input.checked)
           category = input.value;
       });
-      modal.element.querySelector('button[type="submit"]').classList.add('is-loading');
+      modal.querySelector('button[type="submit"]').classList.add('is-loading');
       fetch('/ajax/sign-up.php', { method: 'post', body: JSON.stringify({email: email, category: category})})
         .then(function(response) {
            return response.json();
@@ -93,30 +69,64 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(function(data) {
            modal.hide();
            if (data.error)
-             new AlertModal("Error", data.error);
+             new ModalDialog("Error", data.error);
            else
-             new AlertModal("Thank you!",
-                            "Your registration will be processed manually.<br />" +
-                            "The administrator will contact you about it very soon.");
+             new ModalDialog("Thank you!",
+                         "Your registration will be processed manually.<br />" +
+                         "The administrator will contact you about it very soon.");
          })
         .catch((error) => console.log('ERROR: ' + error));
     });
   });
+
+  // log in dialog (including password reminder)
   document.querySelector('a#log-in').addEventListener('click', function(event) {
     event.preventDefault();
-    let modal = new Modal('#log-in-modal');
-    modal.show();
-    modal.element.querySelector('#log-in-email').focus();
-    modal.element.querySelector('#log-in-forgot').addEventListener('click', function(event) {
+    let content = `
+    <div class="field">
+      <label class="label">E-mail</label>
+      <div class="control has-icons-left">
+        <input id="log-in-email" class="input" type="email" required placeholder="Enter your e-mail address">
+        <span class="icon is-small is-left">
+          <i class="fas fa-envelope"></i>
+        </span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="label">Password</label>
+      <div class="control has-icons-left">
+        <input id="log-in-password" class="input" type="password" required>
+        <span class="icon is-small is-left">
+          <i class="fas fa-lock"></i>
+        </span>
+      </div>
+      <div class="has-text-right"><a id="log-in-forgot" class="help">Forgot your password?</a></div>
+    </div>
+    <p id="log-in-help" class="help"></p>
+    `;
+    let modal = new ModalDialog('Log in', content, 'Cancel', 'Log in');
+    modal.querySelector('#log-in-email').focus();
+    modal.querySelector('#log-in-forgot').addEventListener('click', function(event) {
       modal.hide();
-      let forgot = new Modal('#forgot-modal');
+      content = `
+      <div class="field">
+        <label class="label">E-mail</label>
+        <div class="control has-icons-left">
+          <input id="forgot-email" class="input" type="email" required placeholder="Enter your e-mail address"
+           value="${modal.querySelector('#log-in-email').value}">
+          <span class="icon is-small is-left">
+            <i class="fas fa-envelope"></i>
+          </span>
+        </div>
+      </div>
+      `;
+      let forgot = new ModalDialog('Forgot your password?', content, 'Cancel', 'Reset Password');
       forgot.show();
-      forgot.element.querySelector('#forgot-email').value = modal.element.querySelector('#log-in-email').value;
-      forgot.element.querySelector('#forgot-email').focus();
-      forgot.element.querySelector('form').addEventListener('submit', function(event) {
+      forgot.querySelector('#forgot-email').focus();
+      forgot.querySelector('form').addEventListener('submit', function(event) {
         event.preventDefault();
-        forgot.element.querySelector('button[type="submit"]').classList.add('is-loading');
-        const email = forgot.element.querySelector('#forgot-email').value;
+        forgot.querySelector('button[type="submit"]').classList.add('is-loading');
+        const email = forgot.querySelector('#forgot-email').value;
         fetch('/ajax/forgot.php', { method: 'post', body: JSON.stringify({email: email})})
          .then(function(response) {
             return response.json();
@@ -124,22 +134,92 @@ document.addEventListener('DOMContentLoaded', function() {
          .then(function(data) {
             forgot.hide();
             if (data.error)
-              new AlertModal("Error", data.error);
+              new ModalDialog("Error", data.error);
             else
-              new AlertModal("Thank you!",
-                             "An e-mail with a password reset link was just sent to you.<br />" +
-                             "Check your inbox now.");
+              new ModalDialog("Thank you!",
+                          "An e-mail with a password reset link was just sent to you.<br />Check your inbox now.");
           })
          .catch((error) => console.log('ERROR: ' + error));
       });
     });
-    modal.element.querySelector('form').addEventListener('submit', function(event) {
+    modal.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
-      let email = modal.element.querySelector('#log-in-email').value;
-      let password = modal.element.querySelector('#log-in-password').value;
+      let email = modal.querySelector('#log-in-email').value;
+      let password = modal.querySelector('#log-in-password').value;
       let data = "e-mail: " + email + " - password: " + password;
       console.log(data);
-      modal.element.querySelector('#log-in-help').innerHTML = "Your e-mail or password is wrong, please try again.";
+      modal.querySelector('#log-in-help').innerHTML = "Your e-mail or password is wrong, please try again.";
     });
   });
 });
+
+class ModalDialog extends HTMLElement {
+  constructor(title, text, close='Ok', action='') {
+    super();
+    this.classList.add('modal');
+    let actionButton, closeClass;
+    if (action) {
+      actionButton = `<button class="button is-success" type="submit">${action}</button> `;
+      closeClass = '';
+    } else {
+      closeClass = ` is-success`;
+      actionButton = '';
+    }
+    this.innerHTML = `
+      <div class="modal-background"></div>
+      <form>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">${title}</p>
+            <button type="button" class="delete" aria-label="close"></button>
+          </header>
+          <section class="modal-card-body">
+           <p>${text}</p>
+          </section>
+          <footer class="modal-card-foot">
+            ${actionButton}<button class="button cancel${closeClass}" type="button">${close}</button>
+          </footer>
+        </div>
+      </form>
+    `;
+    document.querySelector('body').appendChild(this);
+  }
+  set title(title) {
+    this.querySelector('p.modal-card-title').innerHTML = title;
+  }
+  set text(text) {
+    this.querySelector('section.modal-card-body').innerHTML = '<div>' + text + '</div>';
+  }
+  set button(button) {
+    this.querySelector('button.cancel').innerHTML = button;
+  }
+  show() {
+    document.querySelector('html').classList.add('is-clipped');
+    this.classList.add('is-active');
+    ModalDialog.current = this;
+    this.querySelectorAll('p.help').forEach((p) => p.innerHTML = '&nbsp;');
+    document.addEventListener('keydown', function(event) {
+      if (event.keyCode == 27)
+        ModalDialog.close(event);
+    });
+    let submit = this.querySelector('button[type="submit"]');
+    if (submit)
+      submit.classList.remove('is-loading');
+    this.querySelector('button.delete').addEventListener('click', ModalDialog.close);
+    this.querySelector('button.cancel').addEventListener('click', ModalDialog.close);
+    this.querySelector('.modal-background').addEventListener('click', ModalDialog.close);
+  }
+  static close(event) {
+    event.preventDefault();
+    ModalDialog.current.hide();
+  }
+  hide() {
+    ModalDialog.current = null;
+    document.querySelector('body').removeChild(this);
+    return;
+  }
+  connectedCallback() {
+    this.show();
+  }
+}
+ModalDialog.current = null;
