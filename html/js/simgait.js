@@ -150,6 +150,194 @@ document.addEventListener('DOMContentLoaded', function() {
       modal.querySelector('#log-in-help').innerHTML = "Your e-mail or password is wrong, please try again.";
     });
   });
+
+  function findGetParameter(parameterName) {
+    let result = null, tmp = [];
+    let items = location.search.substr(1).split("&");
+    for(let index = 0; index < items.length; index++) {
+      tmp = items[index].split("=");
+      if (tmp[0] === parameterName)
+        result = decodeURIComponent(tmp[1]);
+    }
+    return result;
+  }
+
+  // account creation: entering the password
+  const token = findGetParameter('token');
+  if (token) {
+    const email = findGetParameter('email');
+    if (email) {
+      let content = `
+      <div class="field">
+        <label class="label">E-mail</label>
+        <div class="control has-icons-left">
+          <input class="input" type="email" required readonly value="${email}">
+          <span class="icon is-small is-left">
+            <i class="fas fa-envelope"></i>
+          </span>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Password</label>
+        <div class="control has-icons-left">
+          <input id="choose-password" class="input" type="password" required autocomplete=new-password>
+          <span class="icon is-small is-left">
+            <i class="fas fa-lock"></i>
+          </span>
+        </div>
+        <div id="choose-password-help" class="help">
+          8 characters minimum, including at least a lowercase letter, an uppercase letter, a number and a symbol.
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Password (confirm)</label>
+        <div class="control has-icons-left">
+          <input id="choose-confirm-password" class="input" type="password" required>
+          <span class="icon is-small is-left">
+            <i class="fas fa-lock"></i>
+          </span>
+        </div>
+        <div id="choose-confirm-help" class="help">&nbsp;</div>
+      </div>
+      `;
+      choose = new ModalDialog('Choose a password', content, 'Cancel', 'Ok');
+      choose.querySelector('#choose-password').focus();
+      choose.querySelector('button[type="submit"]').disabled = true;
+      choose.querySelector('#choose-password').value = '';
+      choose.querySelector('#choose-password').addEventListener('change', checkPasswordMatch);
+      choose.querySelector('#choose-password').addEventListener('input', checkPasswordMatch);
+      choose.querySelector('#choose-confirm-password').addEventListener('change', checkPasswordMatch);
+      choose.querySelector('#choose-confirm-password').addEventListener('input', checkPasswordMatchInput);
+      let testPasswordMatch = false;
+      let validPassword = false;
+      function checkPasswordMatchInput(event) {
+        const password = choose.querySelector('#choose-password').value;
+        const confirm = choose.querySelector('#choose-confirm-password').value;
+        if (confirm.length == 0) {
+          choose.querySelector('#choose-confirm-help').innerHTML = '&nbsp;'
+          testPasswordMatch = false;
+          choose.querySelector('button[type="submit"]').disabled = true;
+        }
+        if (confirm.length == password.length || testPasswordMatch) {
+          testPasswordMatch = true;
+          checkPasswordMatch(event);
+        }
+      }
+      function checkPasswordMatch(event) {
+        const password = choose.querySelector('#choose-password').value;
+        const confirm = choose.querySelector('#choose-confirm-password').value;
+        if (event.type == 'input') {
+          let length = password.length;
+          let message = '';
+          if (length < 8)
+            message = '8 characters minimum';
+          let number_count = 0;
+          let uppercase_count = 0;
+          let lowercase_count = 0;
+          for(i = 0; i < length; i++)
+            if (password[i] >= '0' && password[i] <= '9')
+              number_count++;
+            else if (password[i] >= 'A' && password[i] <= 'Z')
+              uppercase_count++;
+            else if (password[i] >= 'a' && password[i] <= 'z')
+              lowercase_count++;
+          let symbol_count = length - number_count - uppercase_count - lowercase_count;
+          if (lowercase_count == 0 || uppercase_count == 0 || number_count == 0 || symbol_count == 0)
+            if (message == '')
+              message = 'Missing ';
+            else
+              message += ', including at least ';
+          if (lowercase_count == 0)
+            message += 'a lowercase letter';
+          if (uppercase_count == 0) {
+            if (lowercase_count == 0)
+              if (number_count > 0 && symbol_count > 0)
+                message += ' and ';
+              else
+                message += ', '
+            message += 'an uppercase letter';
+          }
+          if (number_count == 0) {
+            if (lowercase_count == 0 || uppercase_count == 0) {
+              if (symbol_count > 0)
+                message += ' and ';
+              else
+                message += ', ';
+            }
+            message += 'a number';
+          }
+          if (symbol_count == 0) {
+            if (lowercase_count == 0 || uppercase_count == 0 || number_count == 0)
+              message += ' and ';
+            message += 'a symbol';
+          }
+          const help = choose.querySelector('#choose-password-help');
+          if (message == '') {
+            validPassword = true;
+            message = 'Valid password.';
+            help.classList.remove('is-danger');
+            help.classList.add('is-success');
+          } else {
+            help.classList.add('is-danger');
+            help.classList.remove('is-success');
+            validPassword = false;
+            message += '.';
+          }
+          help.innerHTML = message;
+        }
+        if (!confirm)
+          return;
+        const help = choose.querySelector('#choose-confirm-help');
+        const button = choose.querySelector('button[type="submit"]');
+        if (password != confirm) {
+          help.classList.add('is-danger');
+          help.classList.remove('is-success');
+          help.innerHTML = "Passwords mismatch: please re-enter carefully your password.";
+          button.disabled = true;
+        } else {
+          help.classList.remove('is-danger');
+          help.classList.add('is-success');
+          help.innerHTML = "Confirmed password.";
+          if (validPassword)
+            button.disabled = false;
+        }
+      }
+      choose.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        choose.querySelector('button[type="submit"]').classList.add('is-loading');
+        fetch('/ajax/password.php', { method: 'post', body: JSON.stringify({token: token, email: email, password: password})})
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(data) {
+            console.log(data);
+            choose.close();
+          })
+          .catch((error) => console.log('ERROR: ' + error));
+      });
+    }
+  }
+  document.querySelector('#log-out').style.display='none';
+  let email = localStorage.getItem('email');
+  let password = localStorage.getItem('password');
+  let category = '';
+  if (email && password) {
+    fetch('/ajax/authenticate.php', { method: 'post', body: JSON.stringify({email: email, password: password})})
+      .then(function(response) {
+         return response.json();
+       })
+      .then(function(data) {
+         if (data.error)
+           new ModalDialog("Error", data.error);
+         else {
+           document.querySelector('#log-out').style.display='block';
+           document.querySelector('#log-in').style.display='none';
+           document.querySelector('#sign-up').style.display='none';
+           category = data.category;
+         }
+       })
+      .catch((error) => console.log('ERROR: ' + error));
+  }
 });
 
 class ModalDialog extends HTMLElement {
