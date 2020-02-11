@@ -14,11 +14,15 @@
   $token = bin2hex(random_bytes(16));
   $result = $mysqli->query("INSERT INTO user(email, token, category) VALUES(\"$email\", \"$token\", \"$category\")")
             or die("{\"error\": \"MySQL error: $mysqli->error\"}");
-  $link = 'http' . ($_SERVER['HTTPS'] ? 's' : '') . '://' . $_SERVER['SERVER_NAME'] . "/?token=$token&email=$email";
+  $link = 'http';
+  if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    $link .= 's';
+  $link .= '://' . $_SERVER['SERVER_NAME'] . "/?token=$token&email=$email";
   $subject = "SimGait sign up";
   $message = "<html><head><title>$subject</title></head>"
-           . "<body><p>Hello,</p><p>Please click on this <a href="$link">link</a> to validate your $category "
-           . " account request on <a href=\"https://simgait.org\">simgait.org</a>.</p>"
+           . "<body><p>Hello,</p><p>Please click on this <a href=\"$link\">link</a> to set a password and activate your "
+           . "$category account.</p>"
+           . "<p>This link will expires in 72 hours.</p>"
            . "<p>Best regards,</p><p><a href=\"https://simgait.org\">simgait.org</a></p>\n";
   $header = "From: support@cyberbotics.com\r\n"
           . "Reply-To: Olivier.Michel@cyberbotics.com\r\n"

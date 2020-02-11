@@ -4,6 +4,15 @@ document.addEventListener('DOMContentLoaded', function() {
   // define web component
   window.customElements.define('modal-dialog', ModalDialog);
 
+  // login function
+  function login(email, password) {
+    localStorage.setItem('email', email);
+    localStorage.setItem('password', password);
+    document.querySelector('#log-out').style.display='block';
+    document.querySelector('#log-in').style.display='none';
+    document.querySelector('#sign-up').style.display='none';
+  }
+
   // sign up dialog
   document.querySelector('a#sign-up').addEventListener('click', function(event) {
     event.preventDefault();
@@ -72,8 +81,8 @@ document.addEventListener('DOMContentLoaded', function() {
              new ModalDialog("Error", data.error);
            else
              new ModalDialog("Thank you!",
-                         "Your registration will be processed manually.<br />" +
-                         "The administrator will contact you about it very soon.");
+                             "An e-mail was just sent to you to verify your address.<br />" +
+                             "Click on the link in the e-mail to set a password and activate your " + category + " account.");
          })
         .catch((error) => console.log('ERROR: ' + error));
     });
@@ -305,15 +314,37 @@ document.addEventListener('DOMContentLoaded', function() {
       choose.querySelector('form').addEventListener('submit', function(event) {
         event.preventDefault();
         choose.querySelector('button[type="submit"]').classList.add('is-loading');
-        fetch('/ajax/password.php', { method: 'post', body: JSON.stringify({token: token, email: email, password: password})})
-          .then(function(response) {
-            return response.json();
-          })
-          .then(function(data) {
-            console.log(data);
-            choose.close();
-          })
-          .catch((error) => console.log('ERROR: ' + error));
+        async function sha256Hash(text) {
+          const data = new TextEncoder().encode(text);
+          const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+          const hashArray = Array.from(new Uint8Array(hashBuffer));
+          const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+          return hashHex;
+        }
+        sha256Hash(password).then(function(hash) {
+          fetch('/ajax/password.php', { method: 'post', body: JSON.stringify({token: token, email: email, password: hash})})
+            .then(function(response) {
+              return response.json();
+            })
+            .then(function(data) {
+              choose.close();
+              console.log(data);
+              if (data.error)
+                new ModalDialog('Account activation error', data.error);
+              else {
+                if (data.enabled == 1)
+                  new ModalDialog('Welcome to simgait.org',
+                                  '<p>Your new account was just enabled.</p>');
+                else
+                  new ModalDialog('Welcome to simgait.org',
+                                '<p>Your new account will be validated by our administrator in the next few hours.</p>' +
+                                '<p>You will receive an e-mail notification about it.</p>');
+
+                login(email, hash);
+              }
+            })
+            .catch((error) => console.log('ERROR: ' + error));
+        });
       });
     }
   }
@@ -321,6 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let email = localStorage.getItem('email');
   let password = localStorage.getItem('password');
   let category = '';
+  /*
   if (email && password) {
     fetch('/ajax/authenticate.php', { method: 'post', body: JSON.stringify({email: email, password: password})})
       .then(function(response) {
@@ -338,6 +370,7 @@ document.addEventListener('DOMContentLoaded', function() {
        })
       .catch((error) => console.log('ERROR: ' + error));
   }
+  */
 });
 
 class ModalDialog extends HTMLElement {
