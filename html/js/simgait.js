@@ -25,6 +25,19 @@ document.addEventListener('DOMContentLoaded', function() {
           <i class="fas fa-envelope"></i>
         </span>
       </div>
+      <div id="sign-up-email-help" class="help">We will send you an e-mail to verify this address.</div>
+    </div>
+    <div class="field">
+      <label class="label">Username</label>
+      <div class="control has-icons-left">
+        <input id="sign-up-username" class="input" required placeholder="Choose a username" maxlen="39">
+        <span class="icon is-small is-left">
+          <i class="fas fa-user"></i>
+        </span>
+      </div>
+      <div id="sign-up-username-help" class="help">
+        Use only lowercase alphanumeric or hyphen. No consecutive hyphens. No hyphen at the beginning or at the end.
+      </div>
     </div>
     <div class="field">
       <label class="label">Category</label>
@@ -62,16 +75,123 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
     });
+    function cleanupUsername(username, typing = false) {
+      // generate a good suggested username according to github username rules:
+      // all lowercase alphanumeric characters and hyphens, but no consecutive hyphens, cannot begin or end with an hyphen,
+      // and maximum length is 39 characters, regexp: /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i
+      function isAlphaNumeric(code) {
+        return ((code > 47 && code < 58) || // numeric (0-9)
+                (code > 64 && code < 91) || // upper alpha (A-Z)
+                (code > 96 && code < 123))  // lower alpha (a-z)
+      }
+      // step 1: convert to lowercase
+      let username1 = username.toLowerCase();
+      // step 2: replace non alphanumeric characters with hypens
+      let username2 = '';
+      for(let i = 0; i < username1.length; i++)
+        if (isAlphaNumeric(username1.charCodeAt(i)))
+          username2 += username1[i];
+        else
+          username2 += '-';
+      // step 3: remove leading and trailing hyphens
+      let begin = username2.length, end = username2.length;
+      for(let i = 0; i < username2.length; i++)
+        if (username2[i] != '-') {
+          if (!typing)
+            end = i;
+          if (begin == username2.length)
+            begin = i;
+        }
+      let username3 = username2.substring(begin, end + 1);
+      // step 4: remove multiple consecutive hyphens
+      let username4 = username3.replace(/-{2,}/g, '-');
+      // step 5: cut after 39 characters
+      return username4.substring(0, 39);
+    }
+    modal.querySelector('#sign-up-email').addEventListener('change', function(event) {
+      event.target.setCustomValidity('');
+      const email = event.target.value;
+      const help = modal.querySelector('#sign-up-email-help');
+      // check if e-mail address is valid
+      let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!re.test(String(email).toLowerCase())) {
+        help.innerHTML = 'This e-mail address is invalid.';
+        help.classList.add('is-danger');
+        help.classList.remove('is-success');
+        return;
+      }
+      // check if this e-mail address is not already registered
+      fetch('/ajax/uniqueness.php', { method: 'post', body: JSON.stringify({field: 'email', value: email})})
+       .then(function(response) {
+          return response.json();
+         })
+       .then(function(data) {
+          if (data.error) {
+            help.innerHTML = data.error;
+            event.target.setCustomValidity(data.error);
+            help.classList.add('is-danger');
+            help.classList.remove('is-success');
+          } else if (data.status == 'OK') {
+            help.innerHTML = 'This e-mail address is available for registration.';
+            help.classList.add('is-success');
+            help.classList.remove('is-danger');
+          }
+        })
+       .catch((error) => console.log('ERROR: ' + error));
+    });
+    modal.querySelector('#sign-up-username').addEventListener('focus', function(event) {
+      let username = event.target;
+      if (username.value != '')
+        return;
+      const email = modal.querySelector('#sign-up-email').value;
+      username.value = cleanupUsername(email.split('@')[0]);
+      username.dispatchEvent(new CustomEvent('change', {'target': username}));
+    });
+    modal.querySelector('#sign-up-username').addEventListener('keyup', function(event) {
+      this.value = cleanupUsername(this.value, true);
+    });
+    modal.querySelector('#sign-up-username').addEventListener('change', function(event) {
+      this.value = cleanupUsername(this.value);
+      event.target.setCustomValidity('');
+      let help = modal.querySelector('#sign-up-username-help');
+      if (this.value == '') {
+        help.innerHTML = 'Use only lowercase alphanumeric or hyphen. No consecutive hyphens. '
+                       + 'No hyphen at the beginning or at the end.';
+        help.classList.remove('is-danger');
+        help.classList.remove('is-success');
+        return;
+      }
+      // check if this username is not already registered
+      fetch('/ajax/uniqueness.php', { method: 'post', body: JSON.stringify({field: 'username', value: this.value})})
+       .then(function(response) {
+          return response.json();
+         })
+       .then(function(data) {
+          if (data.error) {
+            help.innerHTML = data.error;
+            event.target.setCustomValidity(data.error);
+            help.classList.add('is-danger');
+            help.classList.remove('is-success');
+          } else if (data.status == 'OK') {
+            help.innerHTML = 'This username is available for registration.';
+            help.classList.add('is-success');
+            help.classList.remove('is-danger');
+          }
+        })
+       .catch((error) => console.log('ERROR: ' + error));
+    });
     modal.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
       const email = modal.querySelector('#sign-up-email').value;
+      const username = modal.querySelector('#sign-up-username').value;
       let category;
       modal.querySelectorAll('input[name="category"]').forEach((input) => {
         if (input.checked)
           category = input.value;
       });
       modal.querySelector('button[type="submit"]').classList.add('is-loading');
-      fetch('/ajax/sign-up.php', { method: 'post', body: JSON.stringify({email: email, category: category})})
+      fetch('/ajax/sign-up.php', { method: 'post',
+                                   body: JSON.stringify({email: email, username: username, category: category})})
         .then(function(response) {
            return response.json();
          })
@@ -328,7 +448,6 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(function(data) {
               choose.close();
-              console.log(data);
               if (data.error)
                 new ModalDialog('Account activation error', data.error);
               else {
@@ -339,7 +458,6 @@ document.addEventListener('DOMContentLoaded', function() {
                   new ModalDialog('Welcome to simgait.org',
                                 '<p>Your new account will be validated by our administrator in the next few hours.</p>' +
                                 '<p>You will receive an e-mail notification about it.</p>');
-
                 login(email, hash);
               }
             })
