@@ -14,7 +14,7 @@
   $mysqli->set_charset('utf8');
   $field = $mysqli->escape_string($data->{'field'});
   if ($field == 'email')
-    $fieldName = 'e-mail';
+    $fieldName = 'e-mail address';
   elseif ($field == 'username')
     $fieldName = $field;
   else

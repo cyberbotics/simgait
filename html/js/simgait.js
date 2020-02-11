@@ -3,14 +3,49 @@
 document.addEventListener('DOMContentLoaded', function() {
   // define web component
   window.customElements.define('modal-dialog', ModalDialog);
-
+  async function sha256Hash(text) {
+    const data = new TextEncoder().encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+  }
   // login function
-  function login(email, password) {
-    localStorage.setItem('email', email);
-    localStorage.setItem('password', password);
-    document.querySelector('#log-out').style.display='block';
-    document.querySelector('#log-in').style.display='none';
-    document.querySelector('#sign-up').style.display='none';
+  function login() {
+    password = localStorage.getItem('password');
+    console.log("password: " + password);
+    email = localStorage.getItem('email');
+    if (password != '' && email != '') {
+      document.querySelector('#user-menu').style.display = 'none';
+      document.querySelector('#log-in').style.display = 'none';
+      document.querySelector('#sign-up').style.display = 'none';
+      fetch('/ajax/authenticate.php', { method: 'post', body: JSON.stringify({email: email, password: password})})
+        .then(function(response) {
+           return response.json();
+         })
+        .then(function(data) {
+           if (data.error) {
+             password = '';
+             localStorage.setItem('password', '');
+             new ModalDialog("Error", data.error);
+           } else {
+             /*
+             localStorage.setItem('username', data.username);
+             localStorage.setItem('category', data.category);
+             localStorage.setItem('enabled', data.enabled);
+             */
+             document.querySelector('#user-menu').style.display = 'block';
+             document.querySelector('#log-in').style.display = 'none';
+             document.querySelector('#sign-up').style.display = 'none';
+             document.querySelector('#username').innerHTML = data.username;
+           }
+         })
+        .catch((error) => console.log('ERROR: ' + error));
+    } else {
+      document.querySelector('#user-menu').style.display = 'none';
+      document.querySelector('#log-in').style.display = 'block';
+      document.querySelector('#sign-up').style.display = 'block';
+    }
   }
 
   // sign up dialog
@@ -276,7 +311,15 @@ document.addEventListener('DOMContentLoaded', function() {
       let password = modal.querySelector('#log-in-password').value;
       let data = "e-mail: " + email + " - password: " + password;
       console.log(data);
-      modal.querySelector('#log-in-help').innerHTML = "Your e-mail or password is wrong, please try again.";
+      localStorage.setItem('email', email);
+      sha256Hash(password).then(function(hash) {
+        localStorage.setItem('password', hash);
+        let error = login();
+        if (error)
+          modal.querySelector('#log-in-help').innerHTML = "Your e-mail or password is wrong, please try again.";
+        else
+          modal.close();
+      });
     });
   });
 
@@ -434,13 +477,6 @@ document.addEventListener('DOMContentLoaded', function() {
       choose.querySelector('form').addEventListener('submit', function(event) {
         event.preventDefault();
         choose.querySelector('button[type="submit"]').classList.add('is-loading');
-        async function sha256Hash(text) {
-          const data = new TextEncoder().encode(text);
-          const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-          const hashArray = Array.from(new Uint8Array(hashBuffer));
-          const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-          return hashHex;
-        }
         sha256Hash(password).then(function(hash) {
           fetch('/ajax/password.php', { method: 'post', body: JSON.stringify({token: token, email: email, password: hash})})
             .then(function(response) {
@@ -458,7 +494,9 @@ document.addEventListener('DOMContentLoaded', function() {
                   new ModalDialog('Welcome to simgait.org',
                                 '<p>Your new account will be validated by our administrator in the next few hours.</p>' +
                                 '<p>You will receive an e-mail notification about it.</p>');
-                login(email, hash);
+                localStorage.setItem('email', email);
+                localStorage.setItem('password', hash);
+                login();
               }
             })
             .catch((error) => console.log('ERROR: ' + error));
@@ -466,29 +504,11 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   }
-  document.querySelector('#log-out').style.display='none';
-  let email = localStorage.getItem('email');
-  let password = localStorage.getItem('password');
-  let category = '';
-  /*
-  if (email && password) {
-    fetch('/ajax/authenticate.php', { method: 'post', body: JSON.stringify({email: email, password: password})})
-      .then(function(response) {
-         return response.json();
-       })
-      .then(function(data) {
-         if (data.error)
-           new ModalDialog("Error", data.error);
-         else {
-           document.querySelector('#log-out').style.display='block';
-           document.querySelector('#log-in').style.display='none';
-           document.querySelector('#sign-up').style.display='none';
-           category = data.category;
-         }
-       })
-      .catch((error) => console.log('ERROR: ' + error));
-  }
-  */
+  document.querySelector('#log-out').addEventListener('click', function(event) {
+    localStorage.setItem('password', '');
+    login();
+  });
+  login();
 });
 
 class ModalDialog extends HTMLElement {
