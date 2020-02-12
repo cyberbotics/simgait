@@ -11,7 +11,12 @@ document.addEventListener('DOMContentLoaded', function() {
     return hashHex;
   }
   // login function
-  function login() {
+  function login(error = null, success = null) {
+    function showSignupAndLogin() {
+      document.querySelector('#user-menu').style.display = 'none';
+      document.querySelector('#log-in').style.display = 'flex';
+      document.querySelector('#sign-up').style.display = 'flex';
+    }
     password = localStorage.getItem('password');
     console.log("password: " + password);
     email = localStorage.getItem('email');
@@ -27,25 +32,22 @@ document.addEventListener('DOMContentLoaded', function() {
            if (data.error) {
              password = '';
              localStorage.setItem('password', '');
-             new ModalDialog("Error", data.error);
+             if (error)
+               error(data.error);
+             else
+               new ModalDialog("Error", data.error);
+             showSignupAndLogin();
            } else {
-             /*
-             localStorage.setItem('username', data.username);
-             localStorage.setItem('category', data.category);
-             localStorage.setItem('enabled', data.enabled);
-             */
-             document.querySelector('#user-menu').style.display = 'block';
+             document.querySelector('#user-menu').style.display = 'flex';
              document.querySelector('#log-in').style.display = 'none';
              document.querySelector('#sign-up').style.display = 'none';
              document.querySelector('#username').innerHTML = data.username;
+             if (success)
+               success();
            }
          })
         .catch((error) => console.log('ERROR: ' + error));
-    } else {
-      document.querySelector('#user-menu').style.display = 'none';
-      document.querySelector('#log-in').style.display = 'block';
-      document.querySelector('#sign-up').style.display = 'block';
-    }
+    } else showSignupAndLogin();
   }
 
   // sign up dialog
@@ -314,11 +316,11 @@ document.addEventListener('DOMContentLoaded', function() {
       localStorage.setItem('email', email);
       sha256Hash(password).then(function(hash) {
         localStorage.setItem('password', hash);
-        let error = login();
-        if (error)
-          modal.querySelector('#log-in-help').innerHTML = "Your e-mail or password is wrong, please try again.";
-        else
+        login(function(error) {
+          modal.querySelector('#log-in-help').innerHTML = error; // "Your e-mail or password is wrong, please try again.";
+        }, function(success) {
           modal.close();
+        });
       });
     });
   });
@@ -562,6 +564,7 @@ class ModalDialog extends HTMLElement {
     }
   }
   close() {
+    document.querySelector('html').classList.remove('is-clipped');
     document.removeEventListener('keydown', ModalDialog._close);
     ModalDialog.current = null;
     this.remove();
