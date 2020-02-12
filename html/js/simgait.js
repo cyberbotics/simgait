@@ -590,11 +590,11 @@ ModalDialog.current = null;
 
 function homePage() {
   return `
-<section class="hero is-info">
+<section class="hero" style="background: linear-gradient(0deg, rgba(15,43,87,1) 0%, rgba(50,115,220,1) 90%);">
   <div class="hero-body">
     <div class="container">
-      <h1 class="title">SimGait</h1>
-      <h2 class="subtitle">Simulation of human locomotion &ndash; a neuromechanical and machine learning approach</h2>
+      <h1 class="title has-text-white">SimGait</h1>
+      <h2 class="subtitle has-text-white">Simulation of human locomotion &ndash; a neuromechanical and machine learning approach</h2>
     </div>
   </div>
 </section>
@@ -687,9 +687,32 @@ function homePage() {
 
 function settingsPage() {
   return `
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title"><i class="fas fa-cog"></i> Settings</h1>
+        <h2 class="subtitle">Manage your account</h2>
+      </div>
+    </div>
+  </section>
   <section class="section">
-    <div class="container">
-      <h1 class="title">Settings</h1>
+    <div class="container box has-background-grey-lighter">
+      <p class="title">Change password</p>
+      <p>
+        We will send you a e-mail with a link to reset your password.
+      </p>
+      <br>
+      <button class="button is-link">Change password</button>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container box has-background-grey-lighter">
+      <p class="title">Delete Account</p>
+      <p>
+        <i class="fas fa-exclamation-triangle"></i> Once you delete your account, there is no going back. Please be certain.
+      </p>
+      <br>
+      <button class="button is-danger">Delete my account</button>
     </div>
   </section>
   `;

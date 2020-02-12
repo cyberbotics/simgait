@@ -11,8 +11,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.css">
   <link rel="stylesheet" href="css/simgait.css">
 </head>
-<body>
-  <nav class="navbar" role="navigation" aria-label="main navigation">
+<body class="has-navbar-fixed-top">
+  <nav class="navbar is-link is-fixed-top" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="/">
         <img src="images/simgait-28.png" /> &nbsp; SimGait
@@ -29,7 +29,7 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a class="button is-info" id="sign-up">
+            <a class="button is-link" id="sign-up">
               <strong>Sign up</strong>
             </a>
             <a class="button is-light" id="log-in">
@@ -50,10 +50,10 @@
     </div>
   </nav>
   <div id="page-content"></div>
-  <footer class="footer has-background-grey-dark has-text-white">
+  <footer class="footer" style="background: linear-gradient(0deg, rgba(15,43,87,1) 0%, rgba(50,115,220,1) 100%);">
     <div class="content has-text-centered">
       <p><strong><a class="has-text-white" href="/">SimGait</a></strong></p>
-      <p>Simulation of human locomotion &ndash; a neuromechanical and machine learning approach.</p>
+      <p class="has-text-white">Simulation of human locomotion &ndash; a neuromechanical and machine learning approach.</p>
     </div>
   </footer>
   <script src="js/simgait.js"></script>
