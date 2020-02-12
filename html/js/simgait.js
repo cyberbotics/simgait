@@ -3,6 +3,20 @@
 document.addEventListener('DOMContentLoaded', function() {
   // define web component
   window.customElements.define('modal-dialog', ModalDialog);
+
+  // navbar-burger
+  const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+  if ($navbarBurgers.length > 0) {
+    $navbarBurgers.forEach( el => {
+      el.addEventListener('click', () => {
+        const target = el.dataset.target;
+        const $target = document.getElementById(target);
+        el.classList.toggle('is-active');
+        $target.classList.toggle('is-active');
+      });
+    });
+  }
+
   async function sha256Hash(text) {
     const data = new TextEncoder().encode(text);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
