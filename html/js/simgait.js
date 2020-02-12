@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  Router.init();
+
   async function sha256Hash(text) {
     const data = new TextEncoder().encode(text);
     const hashBuffer = await crypto.subtle.digest('SHA-256', data);
@@ -32,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
       document.querySelector('#sign-up').style.display = 'flex';
     }
     password = localStorage.getItem('password');
-    console.log("password: " + password);
     email = localStorage.getItem('email');
     if (password != '' && email != '') {
       document.querySelector('#user-menu').style.display = 'none';
@@ -504,10 +505,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 new ModalDialog('Account activation error', data.error);
               else {
                 if (data.enabled == 1)
-                  new ModalDialog('Welcome to simgait.org',
+                  new ModalDialog('Welcome to SimGait',
                                   '<p>Your new account was just enabled.</p>');
                 else
-                  new ModalDialog('Welcome to simgait.org',
+                  new ModalDialog('Welcome to SimGait',
                                 '<p>Your new account will be validated by our administrator in the next few hours.</p>' +
                                 '<p>You will receive an e-mail notification about it.</p>');
                 localStorage.setItem('email', email);
@@ -585,3 +586,155 @@ class ModalDialog extends HTMLElement {
   }
 }
 ModalDialog.current = null;
+
+function homePage() {
+  return `
+<section class="hero is-info">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">SimGait</h1>
+      <h2 class="subtitle">Simulation of human locomotion &ndash; a neuromechanical and machine learning approach</h2>
+    </div>
+  </div>
+</section>
+<section class="section" id="overview">
+  <div class="container">
+    <h1 class="title">Overview</h1>
+    <article class="media">
+      <figure class="media-left">
+        <p class="image is-1by2" style="width:200px"><img src="images/nms-simulator.png"></p>
+     </figure>
+     <div class="media-content">
+       <div class="content">
+         <p>
+           The <strong>SimGait</strong> project is a four year project funded by the
+           <a href="http://www.snf.ch" target="_blank">SNSF</a>, the Swiss national science foundation
+           (<a href="http://p3.snf.ch/project-177179" target="_blank">collaborative Sinergia project #177179</a>).
+           This project is a collaboration between
+           <a href="https://www.unige.ch/medecine/kinesiology/people/stephanea/" target="_blank">Dr Stéphane Armand</a> of the
+           <a href="https://www.unige.ch/medecine/kinesiology/" target="_blank">Willy Taillard Kinesiology Lab</a> at the
+           <a href="https://www.hug-ge.ch" target="_blank">University Hospital of Geneva (HUG)</a>,
+           <a href="https://www.unige.ch" target="_blank">University of Geneva</a>,
+           <a href="https://www.epfl.ch/labs/biorob/people/ijspeert/" target="_blank">Prof. Auke-Jan Ijspeert</a> of the
+           <a href="https://www.epfl.ch/labs/biorob/" target="_blank">Biorob laboratory</a> at the
+           <a href="https://epfl.ch" target="_blank">EPFL</a> in Lausanne
+           and <a href="http://dmml.ch/alexandros-kalousis/" target="_blank">Prof. Alexandros Kalousis</a> of the
+           <a href="http://dmml.ch" target="_blank">Data Mining and Machine Learning Group</a> at the
+           <a href="https://www.hesge.ch" target="_blank">University of Applied Sciences, Western Switzerland</a>, in Geneva.
+         </p>
+         <p>
+           The aim of this project is to create a musculoskeletal model of the human with neural control to be able to model
+           healthy and impaired gait, for example due to cerebral palsy.
+           The model consist of a dynamics model that models the motion of the legs and trunk, and is operated by muscle forces.
+           Machine learning methods will be used to predict a patient’s gait from their clinical data using a data-driven model.
+           The height and weight can be scaled to individual persons.
+           The neural control consists of three levels:
+           <ol>
+             <li>Reflexes, which are spinal sensorimotor loops to the muscles that do not go through the brain.</li>
+             <li>Central pattern generator in the spinal cord, which interacts with reflexes and creates time dependent signals
+             to the leg muscles that generate a walking motion.</li>
+             <li>Descending signals from the brain, for example to modulate the speed, or step frequency of the gait.</li>
+           </ol>
+           This model will be used to model gaits of persons with cerebral palsy.
+           The goal is to increase our understanding of cerebral palsy by finding which parts of the neural control and muscles
+           are impaired.
+           A second goal is to investigate whether the model can be used to predict the effect of a surgery, such that surgeons
+           can improve the success rate of surgeries.
+         </p>
+       </div>
+      </div>
+    </article>
+  </div>
+</section>
+<section class="section" id="simulations">
+  <div class="container">
+    <h1 class="title">Simulations</h1>
+    <div class="columns">
+      <div class="column">
+        <figure class="video is-1by2">
+          <video playsinline autoplay muted loop>
+            <source src="videos/healthy_walk.webm" />
+          </video>
+          <figcaption>Simulation of a healthy gait.</figcaption>
+        </figure>
+      </div>
+      <div class="column">
+        <figure class="video is-1by2">
+          <video playsinline autoplay muted loop>
+            <source src="videos/weakness_walk.webm" />
+          </video>
+          <figcaption>Simulation of an impaired gait (weakness of soleus bilateral).</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="partners" class="section">
+  <div class="container">
+    <h2 class="title">Partners</h2>
+    <div class="brand-logo-container">
+      <a href="http://www.snf.ch" target="_blank"><img class="brand-logo" src="images/snsf.png" /></a>
+      <a href="https://www.unige.ch/medecine/kinesiology/" target="_blank"><img class="brand-logo"
+        src="images/unige-hug-kinesiology.png" /></a>
+      <a href="https://www.epfl.ch/labs/biorob/" target="_blank"><img class="brand-logo" src="images/epfl-biorob.png" /></a>
+      <a href="http://dmml.ch" target="_blank"><img class="brand-logo" src="images/hesge-dmml.png" /></a>
+    </div>
+  </div>
+</section>
+  `;
+}
+
+function settingsPage() {
+  return `
+  <section class="section">
+    <div class="container">
+      <h1 class="title">Settings</h1>
+    </div>
+  </section>
+  `;
+}
+class Router {  // static class (e.g. only static methods)
+  static init() {
+    const pathname = window.location.pathname.substring(1);
+    let content = '';
+    let name = '';
+    let anchors = [];
+    for(let i = 0; i < Router.routes.length; i++) {
+      if (pathname == Router.routes[i].url) {
+        content = Router.routes[i].callback();
+        name = Router.routes[i].name;
+        anchors = Router.routes[i].anchors;
+        break;
+      }
+    }
+    if (content == '' && name == '') {
+      const hostname = document.location.hostname;
+      name = 'page not found';
+      content = `
+      <section class="hero is-danger">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title"><i class="fas fa-exclamation-triangle"></i> Page not found (404 error)</h1>
+            <p>The requested page was not found.</p>
+            <p>
+              Please report any bug to <a class="has-text-white" href="mailto:webmaster@${hostname}">webmaster@${hostname}</a>
+            </p>
+          </div>
+        </div>
+      </section>
+      `;
+    }
+    document.head.querySelector('#title').innerHTML = 'SimGait - ' + name;
+    document.body.querySelector('#page-content').innerHTML = content;
+    if (anchors) {
+      let menu = '';
+      for(let i = 0; i < anchors.length; i++)
+        menu += `<a class="navbar-item" href="#${anchors[i].toLowerCase()}">${anchors[i]}</a>`;
+      document.body.querySelector('.navbar-start').innerHTML = menu;
+    }
+  }
+}
+Router.routes = [
+  { url: '', name: 'home page', callback: homePage, anchors: ['Overview', 'Simulations', 'Partners'] },
+  { url: 'settings', name: 'settings', callback: settingsPage }
+];
