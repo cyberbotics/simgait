@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
              showSignupAndLogin();
            } else {
              document.querySelector('#user-menu').style.display = 'flex';
+             document.querySelector('#profile').href = '/' + data.username;
              document.querySelector('#log-in').style.display = 'none';
              document.querySelector('#sign-up').style.display = 'none';
              document.querySelector('#username').innerHTML = data.username;
