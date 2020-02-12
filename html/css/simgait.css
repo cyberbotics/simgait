@@ -25,5 +25,5 @@
   z-index: 10; }
 
 .navbar {
-  min-height:56px;
+  min-height:56px; /* needed to avoid heigth change when Log In and Sign Up buttons are hidden */
 }
