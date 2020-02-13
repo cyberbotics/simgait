@@ -327,10 +327,8 @@ document.addEventListener('DOMContentLoaded', function() {
       event.preventDefault();
       let email = modal.querySelector('#log-in-email').value;
       let password = modal.querySelector('#log-in-password').value;
-      let data = "e-mail: " + email + " - password: " + password;
-      console.log(data);
       localStorage.setItem('email', email);
-      sha256Hash(password).then(function(hash) {
+      sha256Hash(password + 'SimGait').then(function(hash) {
         localStorage.setItem('password', hash);
         login(function(error) {
           modal.querySelector('#log-in-help').innerHTML = error; // "Your e-mail or password is wrong, please try again.";
@@ -495,7 +493,7 @@ document.addEventListener('DOMContentLoaded', function() {
       choose.querySelector('form').addEventListener('submit', function(event) {
         event.preventDefault();
         choose.querySelector('button[type="submit"]').classList.add('is-loading');
-        sha256Hash(password).then(function(hash) {
+        sha256Hash(choose.querySelector('#choose-password').value + 'SimGait').then(function(hash) {
           fetch('/ajax/password.php', { method: 'post', body: JSON.stringify({token: token, email: email, password: hash})})
             .then(function(response) {
               return response.json();
