@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  Router.init();
+  Router.load();
 
   async function sha256Hash(text) {
     const data = new TextEncoder().encode(text);
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     password = localStorage.getItem('password');
     email = localStorage.getItem('email');
-    if (password != '' && email != '') {
+    if (password && email) {
       document.querySelector('#user-menu').style.display = 'none';
       document.querySelector('#log-in').style.display = 'none';
       document.querySelector('#sign-up').style.display = 'none';
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(function(data) {
            if (data.error) {
              password = '';
-             localStorage.setItem('password', '');
+             localStorage.removeItem('password');
              if (error)
                error(data.error);
              else
@@ -268,11 +268,11 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(function(data) {
            modal.close();
            if (data.error)
-             new ModalDialog("Error", data.error);
+             new ModalDialog('Error', data.error);
            else
-             new ModalDialog("Thank you!",
-                             "An e-mail was just sent to you to verify your address.<br />" +
-                             "Click on the link in the e-mail to set a password and activate your " + category + " account.");
+             new ModalDialog('Thank you!',
+                             'An e-mail was just sent to you to verify your address.<br />' +
+                             'Click on the link in the e-mail to set a password and activate your ' + category + ' account.');
          })
         .catch((error) => console.log('ERROR: ' + error));
     });
@@ -530,19 +530,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   document.querySelector('#log-out').addEventListener('click', function(event) {
-    localStorage.setItem('password', '');
+    localStorage.removeItem('password');
     login();
   });
   login();
 });
 
 class ModalDialog extends HTMLElement {
-  constructor(title, text, close='Ok', action='') {
+  constructor(title, text, close='Ok', action='', actionType = 'is-success') {
     super();
     this.classList.add('modal');
     let actionButton, closeClass;
     if (action) {
-      actionButton = `<button class="button is-success" type="submit">${action}</button> `;
+      actionButton = `<button class="button ${actionType}" type="submit">${action}</button> `;
       closeClass = '';
     } else {
       closeClass = ` is-success`;
@@ -694,6 +694,9 @@ function homePage() {
 }
 
 function settingsPage() {
+  // we need to be logged in to view this page
+  if (!localStorage.getItem('password') || !localStorage.getItem('email'))
+    return homePage();
   Router.setup('settings', [], `
 <section class="section">
     <div class="container">
@@ -717,7 +720,7 @@ function settingsPage() {
       <i class="fas fa-exclamation-triangle"></i> &nbsp; Once you delete your account, there is no going back. Please be certain.
     </div>
     <div class="panel-block">
-      <button class="button is-danger">Delete my account</button>
+      <button class="button is-danger" id="delete-account">Delete my account</button>
     </div>
   </div>
 </section>`);
@@ -725,14 +728,42 @@ function settingsPage() {
     event.target.classList.add('is-loading');
     forgotPassword(localStorage.getItem('email'), function() { event.target.classList.remove('is-loading'); });
   });
+  document.querySelector('#delete-account').addEventListener('click', function(event) {
+    let dialog = new ModalDialog('Really delete account?', '<p>All your data will be deleted from our database.</p>' +
+                                 '<p>There is no way to recover deleted data.</p>', 'Cancel', 'Delete Account', 'is-danger');
+    dialog.querySelector('form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      dialog.querySelector('button[type="submit"]').classList.add('is-loading');
+      fetch('/ajax/delete.php', { method: 'post', body: JSON.stringify({email: localStorage.getItem('email'),
+                                                                        password: localStorage.getItem('password')})})
+       .then(function(response) {
+          return response.json();
+         })
+       .then(function(data) {
+          dialog.close();
+          if (data.error)
+            new ModalDialog('Error', data.error);
+          else {
+            new ModalDialog('Account deleted',
+                            '<p>Your account was successfully deleted.</p><p>All you data was erased.</p>');
+            localStorage.removeItem('password');
+            localStorage.removeItem('email');
+            Router.load('');
+          }
+        })
+       .catch((error) => console.log('ERROR: ' + error));
+    });
+  });
 }
 class Router {  // static class (e.g. only static methods)
-  static init() {
-    const pathname = window.location.pathname.substring(1);
-    let setup = null;
+  static load(page=null) {
+    if (page == null)
+      page = window.location.pathname.substring(1)
     for(let i = 0; i < Router.routes.length; i++) {
-      if (pathname == Router.routes[i].url) {
+      if (page == Router.routes[i].url) {
         Router.routes[i].setup();
+        window.history.pushState(page, page, page);
+        console.log("setting history to \"" + page + "\"");
         return;
       }
     }
