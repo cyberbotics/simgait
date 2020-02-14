@@ -11,35 +11,27 @@
   if (!$mysqli)
     error("Can't connect to MySQL database: $mysqli->error");
   $mysqli->set_charset('utf8');
-  $email = $mysqli->escape_string($data->{'email'});
-  if (!filter_var($email, FILTER_VALIDATE_EMAIL))
-    error('Wrong e-mail address.');
+  $id = intval($data->{'id'});
   $token = $mysqli->escape_string($data->{'token'});
   if (!preg_match('/^[0-9a-f]{32}$/',$token))
     error('Wrong token format.');
   $password = $mysqli->escape_string($data->{'password'});
   if (!preg_match('/^[0-9a-f]{64}$/',$password))
     error('Wrong password format.');
-  $query = "SELECT enabled, token, password, updated + INTERVAL 72 HOUR AS expiration, NOW() AS `now` "
-         . "FROM user WHERE email=\"$email\"";
-  $result = $mysqli->query($query) or error($mysqli->error);
+  $mysqli->query("DELETE FROM request WHERE updated < NOW() - INTERVAL 72 HOUR");
+  $result = $mysqli->query("SELECT user, type, token FROM request WHERE id=$id") or error($mysqli->error);
+  $request = $result->fetch_assoc();
+  $result->free();
+  if (!$request)
+    error('Token not found.');
+  $mysqli->query("DELETE FROM request WHERE id=$id") or die($mysqli->error);
+  if ($request['token'] != $token)
+    error("Wrong token: $request[token] != $token");
+  $mysqli->query("UPDATE user SET password=\"$password\" WHERE id=$request[user]") or error($mysqli->error);
+  $result = $mysqli->query("SELECT enabled FROM user WHERE id=$request[user]") or error($mysqli->error);
   $user = $result->fetch_assoc();
   $result->free();
   if (!$user)
-    error('E-mail address not found.');
-  if ($user['token'] == '')
-    error('Account already activated.');
-  if ($user['token'] != $token)
-    error('Wrong token.');
-  $expiration = strtotime($user['expiration']);
-  $now = strtotime($user['now']);
-  if ($expiration < $now)
-    error('Expired token.');
-  if ($user['password'] != '')
-    error('Password already set.');
-  $query = "UPDATE user SET password=\"$password\", token=\"\" WHERE email=\"$email\" AND token=\"$token\"";
-  $mysqli->query($query) or error($mysqli->error);
-  if ($mysqli->affected_rows != 1)
-    error('Cannot set password.');
-  die("{\"enabled\": \"$user[enabled]\"}");
+    error('Cannot find user.');
+  die("{\"type\": \"$request[type]\", \"enabled\": \"$user[enabled]\"}");
  ?>

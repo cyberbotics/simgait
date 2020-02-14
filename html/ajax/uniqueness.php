@@ -20,8 +20,7 @@
   else
     error("Cannot check the uniqueness of the $field field.");
   $value = $mysqli->escape_string($data->{'value'});
-  $query = "SELECT $field FROM user WHERE $field=\"$value\"";
-  $result = $mysqli->query($query) or error($mysqli->error);
+  $result = $mysqli->query("SELECT $field FROM user WHERE $field=\"$value\"") or error($mysqli->error);
   $user = $result->fetch_assoc();
   $result->free();
   if ($user)

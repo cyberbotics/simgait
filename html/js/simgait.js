@@ -1,5 +1,22 @@
 'uses strict';
 
+function forgotPassword(email, callback = null) {
+  fetch('/ajax/forgot.php', { method: 'post', body: JSON.stringify({email: email})})
+   .then(function(response) {
+      return response.json();
+     })
+   .then(function(data) {
+      if (callback)
+        callback();
+      if (data.error)
+        new ModalDialog("Error", data.error);
+      else
+        new ModalDialog("Password reset",
+                        "An e-mail with a password reset link was just sent to you.<br />Check your inbox now.");
+    })
+   .catch((error) => console.log('ERROR: ' + error));
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   // define web component
   window.customElements.define('modal-dialog', ModalDialog);
@@ -26,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     return hashHex;
   }
-  // login function
+
   function login(error = null, success = null) {
     function showSignupAndLogin() {
       document.querySelector('#user-menu').style.display = 'none';
@@ -307,20 +324,7 @@ document.addEventListener('DOMContentLoaded', function() {
       forgot.querySelector('form').addEventListener('submit', function(event) {
         event.preventDefault();
         forgot.querySelector('button[type="submit"]').classList.add('is-loading');
-        const email = forgot.querySelector('#forgot-email').value;
-        fetch('/ajax/forgot.php', { method: 'post', body: JSON.stringify({email: email})})
-         .then(function(response) {
-            return response.json();
-           })
-         .then(function(data) {
-            forgot.close();
-            if (data.error)
-              new ModalDialog("Error", data.error);
-            else
-              new ModalDialog("Thank you!",
-                          "An e-mail with a password reset link was just sent to you.<br />Check your inbox now.");
-          })
-         .catch((error) => console.log('ERROR: ' + error));
+        forgotPassword(forgot.querySelector('#forgot-email').value, function() { forgot.close(); });
       });
     });
     modal.querySelector('form').addEventListener('submit', function(event) {
@@ -354,7 +358,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const token = findGetParameter('token');
   if (token) {
     const email = findGetParameter('email');
-    if (email) {
+    const token_id = findGetParameter('id');
+    if (email && token_id) {
       let content = `
       <div class="field">
         <label class="label">E-mail</label>
@@ -494,7 +499,7 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         choose.querySelector('button[type="submit"]').classList.add('is-loading');
         sha256Hash(choose.querySelector('#choose-password').value + 'SimGait').then(function(hash) {
-          fetch('/ajax/password.php', { method: 'post', body: JSON.stringify({token: token, email: email, password: hash})})
+          fetch('/ajax/password.php', { method: 'post', body: JSON.stringify({id: token_id, token: token, password: hash})})
             .then(function(response) {
               return response.json();
             })
@@ -503,13 +508,17 @@ document.addEventListener('DOMContentLoaded', function() {
               if (data.error)
                 new ModalDialog('Account activation error', data.error);
               else {
-                if (data.enabled == 1)
-                  new ModalDialog('Welcome to SimGait',
-                                  '<p>Your new account was just enabled.</p>');
-                else
-                  new ModalDialog('Welcome to SimGait',
-                                '<p>Your new account will be validated by our administrator in the next few hours.</p>' +
-                                '<p>You will receive an e-mail notification about it.</p>');
+                if (data.type == 'reset')
+                  new ModalDialog('Password reset',
+                                  '<p>Your password was successfully reset.</p>');
+                else if (data.type == 'sign up')
+                  if (data.enabled == 1)
+                    new ModalDialog('Welcome to SimGait',
+                                    '<p>Your new account was just enabled.</p>');
+                  else
+                    new ModalDialog('Welcome to SimGait',
+                                  '<p>Your new account will be validated by our administrator in the next few hours.</p>' +
+                                  '<p>You will receive an e-mail notification about it.</p>');
                 localStorage.setItem('email', email);
                 localStorage.setItem('password', hash);
                 login();
@@ -587,7 +596,7 @@ class ModalDialog extends HTMLElement {
 ModalDialog.current = null;
 
 function homePage() {
-  return `
+  Router.setup('home', ['Overview', 'Simulations', 'Partners'], `
 <section class="hero" style="background: linear-gradient(0deg, rgba(15,43,87,1) 0%, rgba(50,115,220,1) 90%);">
   <div class="hero-body">
     <div class="container">
@@ -628,12 +637,14 @@ function homePage() {
            Machine learning methods will be used to predict a patient’s gait from their clinical data using a data-driven model.
            The height and weight can be scaled to individual persons.
            The neural control consists of three levels:
-           <ol>
-             <li>Reflexes, which are spinal sensorimotor loops to the muscles that do not go through the brain.</li>
-             <li>Central pattern generator in the spinal cord, which interacts with reflexes and creates time dependent signals
-             to the leg muscles that generate a walking motion.</li>
-             <li>Descending signals from the brain, for example to modulate the speed, or step frequency of the gait.</li>
-           </ol>
+         </p>
+         <ol>
+           <li>Reflexes, which are spinal sensorimotor loops to the muscles that do not go through the brain.</li>
+           <li>Central pattern generator in the spinal cord, which interacts with reflexes and creates time dependent signals
+           to the leg muscles that generate a walking motion.</li>
+           <li>Descending signals from the brain, for example to modulate the speed, or step frequency of the gait.</li>
+         </ol>
+         <p>
            This model will be used to model gaits of persons with cerebral palsy.
            The goal is to increase our understanding of cerebral palsy by finding which parts of the neural control and muscles
            are impaired.
@@ -679,84 +690,76 @@ function homePage() {
       <a href="http://dmml.ch" target="_blank"><img class="brand-logo" src="images/hesge-dmml.png" /></a>
     </div>
   </div>
-</section>
-  `;
+</section>`);
 }
 
 function settingsPage() {
-  return `
-  <section class="hero">
-    <div class="hero-body">
-      <div class="container">
-        <h1 class="title"><i class="fas fa-cog"></i> Settings</h1>
-        <h2 class="subtitle">Manage your account</h2>
-      </div>
+  Router.setup('settings', [], `
+<section class="section">
+    <div class="container">
+      <h1 class="title"><i class="fas fa-cog"></i> Settings</h1>
+      <h2 class="subtitle">Manage your account</h2>
+  </div>
+</section>
+<section class="section">
+  <div class="container panel">
+    <p class="panel-heading">Change password</p>
+    <div class="panel-block">
+      We will send you a e-mail with a link to reset your password.
     </div>
-  </section>
-  <section class="section">
-    <div class="container box has-background-grey-lighter">
-      <p class="title">Change password</p>
-      <p>
-        We will send you a e-mail with a link to reset your password.
-      </p>
-      <br>
-      <button class="button is-link">Change password</button>
+    <div class="panel-block">
+      <button class="button is-link" id="change-password">Change password</button>
     </div>
-  </section>
-  <section class="section">
-    <div class="container box has-background-grey-lighter">
-      <p class="title">Delete Account</p>
-      <p>
-        <i class="fas fa-exclamation-triangle"></i> Once you delete your account, there is no going back. Please be certain.
-      </p>
-      <br>
+  </div>
+  <div class="container panel">
+    <p class="panel-heading">Delete Account</p>
+    <div class="panel-block">
+      <i class="fas fa-exclamation-triangle"></i> &nbsp; Once you delete your account, there is no going back. Please be certain.
+    </div>
+    <div class="panel-block">
       <button class="button is-danger">Delete my account</button>
     </div>
-  </section>
-  `;
+  </div>
+</section>`);
+  document.querySelector('#change-password').addEventListener('click', function(event) {
+    event.target.classList.add('is-loading');
+    forgotPassword(localStorage.getItem('email'), function() { event.target.classList.remove('is-loading'); });
+  });
 }
 class Router {  // static class (e.g. only static methods)
   static init() {
     const pathname = window.location.pathname.substring(1);
-    let content = '';
-    let name = '';
-    let anchors = [];
+    let setup = null;
     for(let i = 0; i < Router.routes.length; i++) {
       if (pathname == Router.routes[i].url) {
-        content = Router.routes[i].callback();
-        name = Router.routes[i].name;
-        anchors = Router.routes[i].anchors;
-        break;
+        Router.routes[i].setup();
+        return;
       }
     }
-    if (content == '' && name == '') {
-      const hostname = document.location.hostname;
-      name = 'page not found';
-      content = `
-      <section class="hero is-danger">
-        <div class="hero-body">
-          <div class="container">
-            <h1 class="title"><i class="fas fa-exclamation-triangle"></i> Page not found (404 error)</h1>
-            <p>The requested page was not found.</p>
-            <p>
-              Please report any bug to <a class="has-text-white" href="mailto:webmaster@${hostname}">webmaster@${hostname}</a>
-            </p>
-          </div>
-        </div>
-      </section>
-      `;
-    }
-    document.head.querySelector('#title').innerHTML = 'SimGait - ' + name;
+    const hostname = document.location.hostname;
+    Router.setup('page not found', [], `
+<section class="hero is-danger">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title"><i class="fas fa-exclamation-triangle"></i> Page not found (404 error)</h1>
+      <p>The requested page was not found.</p>
+      <p>
+        Please report any bug to <a class="has-text-white" href="mailto:webmaster@${hostname}">webmaster@${hostname}</a>
+      </p>
+    </div>
+  </div>
+</section>`);
+  }
+  static setup(title, anchors, content) {
+    document.head.querySelector('#title').innerHTML = 'SimGait - ' + title;
+    let menu = '';
+    for(let i = 0; i < anchors.length; i++)
+      menu += `<a class="navbar-item" href="#${anchors[i].toLowerCase()}">${anchors[i]}</a>`;
+    document.body.querySelector('.navbar-start').innerHTML = menu;
     document.body.querySelector('#page-content').innerHTML = content;
-    if (anchors) {
-      let menu = '';
-      for(let i = 0; i < anchors.length; i++)
-        menu += `<a class="navbar-item" href="#${anchors[i].toLowerCase()}">${anchors[i]}</a>`;
-      document.body.querySelector('.navbar-start').innerHTML = menu;
-    }
   }
 }
 Router.routes = [
-  { url: '', name: 'home page', callback: homePage, anchors: ['Overview', 'Simulations', 'Partners'] },
-  { url: 'settings', name: 'settings', callback: settingsPage }
+  {url: '', setup: homePage},
+  {url: 'settings', setup: settingsPage}
 ];
