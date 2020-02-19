@@ -7,7 +7,6 @@ export default class Router {  // static class (e.g. only static methods)
     Router.routes = routes;
     const body = document.querySelector('body');
     body.classList.add('has-navbar-fixed-top');
-    // body.append(navbar());
     Router.resetNavbar();
     body.append(Router.content);
     body.append(footer);
@@ -18,17 +17,13 @@ export default class Router {  // static class (e.g. only static methods)
       if (element.tagName == 'A' && element.href && event.button == 0) {  // left click on an <a href=...>
         if (element.pathname != document.location.pathname && element.origin == document.location.origin) {
           // same-origin navigation: a link within the site (we are skipping linking to the same page with possibly hashtags)
-          var newPath = element.pathname;
           event.preventDefault();  // prevent the browser from doing the navigation
-          Router.load(newPath);
-          history.pushState(null, '', newPath);
-          document.querySelector('#user-menu').classList.remove('is-active');
-          document.querySelector('.navbar-burger').classList.remove('is-active');
-          element.classList.remove('is-active');
+          Router.load(element.pathname + element.hash);
         }
       }
     });
     window.onpopstate = function(event) {
+      console.log("popstate " + document.location.pathname);
       Router.load(document.location.pathname);
       event.preventDefault();
     }
@@ -612,6 +607,7 @@ export default class Router {  // static class (e.g. only static methods)
     } else Router.load('/');
   }
   static load(page) {
+    console.log("loading " + page);
     Router.resetNavbar();
     const url = new URL(window.location.origin + page);
     if (Router.email && Router.password) {
