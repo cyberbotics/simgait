@@ -11,51 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.css">
   <link rel="stylesheet" href="css/simgait.css">
 </head>
-<body class="has-navbar-fixed-top">
-  <nav class="navbar is-link is-fixed-top" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="/">
-        <img src="images/simgait-28.png" /> &nbsp; SimGait
-      </a>
-      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="simgait-navbar">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    </div>
-    <div id="simgait-navbar" class="navbar-menu">
-      <div class="navbar-start">
-      </div>
-      <div class="navbar-end">
-        <div class="navbar-item">
-          <div class="buttons">
-            <a class="button is-success" id="sign-up">
-              <strong>Sign up</strong>
-            </a>
-            <a class="button is-light" id="log-in">
-              Log in
-            </a>
-          </div>
-        </div>
-        <div id="user-menu" class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link" id="username">username</a>
-          <div class="navbar-dropdown is-boxed">
-            <a class="navbar-item" href="/settings"><i class="fas fa-cog"> &nbsp; </i>Settings</a>
-            <a class="navbar-item" href="/username" id="profile"><i class="fas fa-user"> &nbsp; </i>Profile</a>
-            <div class="navbar-divider"></div>
-            <a class="navbar-item" id="log-out"><i class="fas fa-power-off"> &nbsp; </i>Log out</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
-  <div id="page-content"></div>
-  <footer class="footer" style="background: linear-gradient(0deg, rgba(15,43,87,1) 0%, rgba(50,115,220,1) 100%);">
-    <div class="content has-text-centered">
-      <p><strong><a class="has-text-white" href="/">SimGait</a></strong></p>
-      <p class="has-text-white">Simulation of human locomotion &ndash; a neuromechanical and machine learning approach.</p>
-    </div>
-  </footer>
-  <script src="js/simgait.js"></script>
+<body>
+  <script src="js/simgait.js" type="module"></script>
 </body>
 </html>
