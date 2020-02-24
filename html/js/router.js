@@ -15,16 +15,20 @@ export default class Router {  // static class (e.g. only static methods)
     body.addEventListener('click', function(event) {
       var element = event.target;
       if (element.tagName == 'A' && element.href && event.button == 0) {  // left click on an <a href=...>
-        if (element.pathname != document.location.pathname && element.origin == document.location.origin) {
+        console.log("hash: " + document.location.hash + " => " + element.hash);
+        console.log("pathname: " + document.location.pathname + " => " + element.pathname);
+        if (element.origin == document.location.origin &&
+            (element.pathname != document.location.pathname || document.location.hash == element.hash || element.hash == '')) {
           // same-origin navigation: a link within the site (we are skipping linking to the same page with possibly hashtags)
           event.preventDefault();  // prevent the browser from doing the navigation
+          console.log("going to load: " + element.pathname + element.hash);
           Router.load(element.pathname + element.hash);
         }
       }
     });
     window.onpopstate = function(event) {
-      console.log("popstate " + document.location.pathname);
-      Router.load(document.location.pathname);
+      console.log("popstate " + document.location.pathname + document.location.hash);
+      Router.load(document.location.pathname + document.location.hash, false);
       event.preventDefault();
     }
     function navbar() {
@@ -606,7 +610,7 @@ export default class Router {  // static class (e.g. only static methods)
         .catch((error) => console.log('ERROR: ' + error));
     } else Router.load('/');
   }
-  static load(page) {
+  static load(page, pushHistory = true) {
     console.log("loading " + page);
     Router.resetNavbar();
     const url = new URL(window.location.origin + page);
@@ -622,8 +626,10 @@ export default class Router {  // static class (e.g. only static methods)
     for(let i = 0; i < Router.routes.length; i++) {
       if (url.pathname == Router.routes[i].url) {
         Router.routes[i].setup();
-        window.history.pushState(name, name, url.pathname + url.search + url.hash);
-        console.log("setting history to \"" + url.pathname + url.search + url.hash + "\"");
+        if (pushHistory) {
+          window.history.pushState(name, name, url.pathname + url.search + url.hash);
+          console.log("setting history to \"" + name + " - URL: "+ url.pathname + url.search + url.hash + "\"");
+        }
         return;
       }
     }
