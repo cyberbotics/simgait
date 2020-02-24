@@ -243,17 +243,6 @@ export default class Router {  // static class (e.g. only static methods)
       });
     }
 
-    // navbar-burger
-    const navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-    if (navbarBurgers.length > 0) {
-      navbarBurgers.forEach( el => {
-        el.addEventListener('click', () => {
-          el.classList.toggle('is-active');
-          document.getElementById(el.dataset.target).classList.toggle('is-active');
-        });
-      });
-    }
-
     // account creation: entering the password
     const token = findGetParameter('token');
     if (token) {
@@ -313,6 +302,17 @@ export default class Router {  // static class (e.g. only static methods)
   </div>
 </nav>`;
     document.body.prepend(template.content.firstChild)
+
+    // navbar-burger
+    const navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+    if (navbarBurgers.length > 0) {
+      navbarBurgers.forEach( el => {
+        el.addEventListener('click', () => {
+          el.classList.toggle('is-active');
+          document.getElementById(el.dataset.target).classList.toggle('is-active');
+        });
+      });
+    }
 
     // log out
     document.querySelector('a#log-out').addEventListener('click', function(event) {
