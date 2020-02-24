@@ -243,6 +243,84 @@ export default class Router {  // static class (e.g. only static methods)
       });
     }
 
+    // navbar-burger
+    const navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+    if (navbarBurgers.length > 0) {
+      navbarBurgers.forEach( el => {
+        el.addEventListener('click', () => {
+          el.classList.toggle('is-active');
+          document.getElementById(el.dataset.target).classList.toggle('is-active');
+        });
+      });
+    }
+
+    // account creation: entering the password
+    const token = findGetParameter('token');
+    if (token) {
+      const id = findGetParameter('id');
+      const email = findGetParameter('email');
+      if (id && email)
+        resetPassword(id, token, email);
+    } else
+      Router.login();
+    Router.load(window.location.pathname + window.location.search + window.location.hash);
+  }
+  static resetNavbar() {
+    let navbar = document.querySelector('.navbar');
+    let username;
+    if (navbar) {
+      username = document.querySelector('#username').innerHTML;
+      document.body.removeChild(navbar);
+    } else
+      username = 'username';
+    let template = document.createElement('template');
+    template.innerHTML =
+`<nav class="navbar is-link is-fixed-top" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="/">
+      <img src="images/logo-28.png" /> &nbsp; ${Router.title}
+    </a>
+    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="router-navbar">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div id="router-navbar" class="navbar-menu">
+    <div class="navbar-start">
+    </div>
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+          <a class="button is-success" id="sign-up">
+            <strong>Sign up</strong>
+          </a>
+          <a class="button is-light" id="log-in">
+            Log in
+          </a>
+        </div>
+        <div id="user-menu" class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link" id="username">${username}</a>
+        <div class="navbar-dropdown is-boxed">
+          <a class="navbar-item" href="/settings"><i class="fas fa-cog"> &nbsp; </i>Settings</a>
+          <a class="navbar-item" href="/${username}" id="profile"><i class="fas fa-user"> &nbsp; </i>Profile</a>
+          <div class="navbar-divider"></div>
+          <a class="navbar-item" id="log-out"><i class="fas fa-power-off"> &nbsp; </i>Log out</a>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>`;
+    document.body.prepend(template.content.firstChild)
+
+    // log out
+    document.querySelector('a#log-out').addEventListener('click', function(event) {
+      console.log("Logout");
+      Router.password = null;
+      Router.load('/');
+    });
+
     // sign up dialog
     document.querySelector('a#sign-up').addEventListener('click', function(event) {
       event.preventDefault();
@@ -502,82 +580,6 @@ export default class Router {  // static class (e.g. only static methods)
         });
       });
     });
-
-    document.querySelector('#log-out').addEventListener('click', function(event) {
-      Router.password = null;
-      Router.login();
-    });
-
-    // navbar-burger
-    const navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-    if (navbarBurgers.length > 0) {
-      navbarBurgers.forEach( el => {
-        el.addEventListener('click', () => {
-          el.classList.toggle('is-active');
-          document.getElementById(el.dataset.target).classList.toggle('is-active');
-        });
-      });
-    }
-
-    // account creation: entering the password
-    const token = findGetParameter('token');
-    if (token) {
-      const id = findGetParameter('id');
-      const email = findGetParameter('email');
-      if (id && email)
-        resetPassword(id, token, email);
-    } else
-      Router.login();
-    Router.load(window.location.pathname + window.location.search + window.location.hash);
-  }
-  static resetNavbar() {
-    let navbar = document.querySelector('.navbar');
-    let username;
-    if (navbar) {
-      username = document.querySelector('#username').innerHTML;
-      document.body.removeChild(navbar);
-    } else
-      username = 'username';
-    let template = document.createElement('template');
-    template.innerHTML =
-`<nav class="navbar is-link is-fixed-top" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a class="navbar-item" href="/">
-      <img src="images/logo-28.png" /> &nbsp; ${Router.title}
-    </a>
-    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="router-navbar">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-  <div id="router-navbar" class="navbar-menu">
-    <div class="navbar-start">
-    </div>
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          <a class="button is-success" id="sign-up">
-            <strong>Sign up</strong>
-          </a>
-          <a class="button is-light" id="log-in">
-            Log in
-          </a>
-        </div>
-        <div id="user-menu" class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link" id="username">${username}</a>
-        <div class="navbar-dropdown is-boxed">
-          <a class="navbar-item" href="/settings"><i class="fas fa-cog"> &nbsp; </i>Settings</a>
-          <a class="navbar-item" href="/${username}" id="profile"><i class="fas fa-user"> &nbsp; </i>Profile</a>
-          <div class="navbar-divider"></div>
-          <a class="navbar-item" id="log-out"><i class="fas fa-power-off"> &nbsp; </i>Log out</a>
-        </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</nav>`;
-    document.body.prepend(template.content.firstChild)
   }
   static login(error = null, success = null) {
     console.log('login e-mail: ' + Router.email + " - password: " + Router.password);
