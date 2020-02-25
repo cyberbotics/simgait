@@ -257,15 +257,15 @@ export default class Router {  // static class (e.g. only static methods)
           <a class="button is-light" id="log-in">
             Log in
           </a>
-          <div id="user-menu" class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link" id="username">${username}</a>
-            <div class="navbar-dropdown is-boxed">
-              <a class="navbar-item" href="/settings"><i class="fas fa-cog"> &nbsp; </i>Settings</a>
-              <a class="navbar-item" href="/${username}" id="profile"><i class="fas fa-user"> &nbsp; </i>Profile</a>
-              <div class="navbar-divider"></div>
-              <a class="navbar-item" id="log-out"><i class="fas fa-power-off"> &nbsp; </i>Log out</a>
-            </div>
-          </div>
+        </div>
+      </div>
+      <div id="user-menu" class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link" id="username">${username}</a>
+        <div class="navbar-dropdown is-boxed">
+          <a class="navbar-item" href="/settings"><i class="fas fa-cog"> &nbsp; </i>Settings</a>
+          <a class="navbar-item" href="/${username}" id="profile"><i class="fas fa-user"> &nbsp; </i>Profile</a>
+          <div class="navbar-divider"></div>
+          <a class="navbar-item" id="log-out"><i class="fas fa-power-off"> &nbsp; </i>Log out</a>
         </div>
       </div>
     </div>
