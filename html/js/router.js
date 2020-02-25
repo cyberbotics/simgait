@@ -265,7 +265,7 @@ export default class Router {  // static class (e.g. only static methods)
         <a class="navbar-link" id="username">${username}</a>
         <div class="navbar-dropdown is-boxed">
           <a class="navbar-item" href="/settings"><i class="fas fa-cog"> &nbsp; </i>Settings</a>
-          <a class="navbar-item" href="/${username}" id="profile"><i class="fas fa-user"> &nbsp; </i>Profile</a>
+          <a class="navbar-item" href="/${username}" id="simulations"><i class="fas fa-folder"> &nbsp; </i>Simulations</a>
           <div class="navbar-divider"></div>
           <a class="navbar-item" id="log-out"><i class="fas fa-power-off"> &nbsp; </i>Log out</a>
         </div>
@@ -573,7 +573,7 @@ export default class Router {  // static class (e.g. only static methods)
              Router.load('/');
            } else {
              document.querySelector('#user-menu').style.display = 'flex';
-             document.querySelector('#profile').href = '/' + data.username;
+             document.querySelector('#simulations').href = '/' + data.username;
              document.querySelector('#log-in').style.display = 'none';
              document.querySelector('#sign-up').style.display = 'none';
              document.querySelector('#username').innerHTML = data.username;
@@ -600,28 +600,41 @@ export default class Router {  // static class (e.g. only static methods)
     for(let i = 0; i < Router.routes.length; i++) {
       if (url.pathname == Router.routes[i].url) {
         Router.routes[i].setup();
-        if (pushHistory) {
+        if (pushHistory)
           window.history.pushState(name, name, url.pathname + url.search + url.hash);
-          console.log("setting history to \"" + name + " - URL: "+ url.pathname + url.search + url.hash + "\"");
-        }
         return;
       }
     }
-    const hostname = document.location.hostname;
-    let content = {};
-    content.innerHTML =
+    const username = url.pathname.substring(1);
+    console.log('username: ' + username);
+    fetch('/ajax/user.php', {method: 'post', body: JSON.stringify({email: Router.email,
+                                                                   password: Router.password,
+                                                                   username: username})})
+      .then(function(response) {
+         return response.json();
+       })
+      .then(function(data) {
+         if (data.error) {  // no such user
+           const hostname = document.location.hostname;
+           let content = {};
+           content.innerHTML =
 `<section class="hero is-danger">
   <div class="hero-body">
     <div class="container">
       <h1 class="title"><i class="fas fa-exclamation-triangle"></i> Page not found (404 error)</h1>
       <p>The requested page was not found.</p>
-      <p>
-        Please report any bug to <a class="has-text-white" href="mailto:webmaster@${hostname}">webmaster@${hostname}</a>
-      </p>
+      <p>Please report any bug to <a class="has-text-white" href="mailto:webmaster@${hostname}">webmaster@${hostname}</a></p>
     </div>
   </div>
 </section>`;
-    Router.setup('page not found', [], content.innerHTML);
+           Router.setup('page not found', [], content.innerHTML);
+         } else {
+           Router.setup('userpage', [], '<div>content</div>');
+         }
+         if (pushHistory)
+           window.history.pushState(name, name, url.pathname + url.search + url.hash);
+       })
+      .catch((error) => console.log('ERROR: ' + error));
   }
   static setup(title, anchors, content) {
     document.head.querySelector('#title').innerHTML = Router.title + ' - ' + title;
