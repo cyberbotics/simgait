@@ -31,7 +31,8 @@ function homePage() {
     </div>
   </div>
 </section>
-<section class="section" id="overview">
+<a class="anchor" id="overview"></a>
+<section class="section">
   <div class="container">
     <h1 class="title">Overview</h1>
     <article class="media">
@@ -82,7 +83,8 @@ function homePage() {
     </article>
   </div>
 </section>
-<section class="section" id="simulations">
+<a class="anchor" id="simulations"></a>
+<section class="section">
   <div class="container">
     <h1 class="title">Simulations</h1>
     <div class="columns">
@@ -105,7 +107,8 @@ function homePage() {
     </div>
   </div>
 </section>
-<section id="partners" class="section">
+<a class="anchor" id="partners">
+<section class="section">
   <div class="container">
     <h2 class="title">Partners</h2>
     <div class="brand-logo-container">
