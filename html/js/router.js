@@ -582,7 +582,7 @@ export default class Router {  // static class (e.g. only static methods)
            }
          })
         .catch((error) => console.log('ERROR: ' + error));
-    } else Router.load('/');
+    }
   }
   static load(page, pushHistory = true) {
     console.log("loading " + page);
@@ -599,10 +599,11 @@ export default class Router {  // static class (e.g. only static methods)
     }
     for(let i = 0; i < Router.routes.length; i++) {
       if (url.pathname == Router.routes[i].url) {
-        Router.routes[i].setup();
-        if (pushHistory)
-          window.history.pushState(name, name, url.pathname + url.search + url.hash);
-        return;
+        if (Router.routes[i].setup()) {
+          if (pushHistory)
+            window.history.pushState(name, name, url.pathname + url.search + url.hash);
+          return;
+        }
       }
     }
     const username = url.pathname.substring(1);

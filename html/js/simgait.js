@@ -121,12 +121,13 @@ function homePage() {
   </div>
 </section>`;
   Router.setup('home', ['Overview', 'Simulations', 'Partners'], template.innerHTML);
+  return true;
 }
 
 function settingsPage() {
   // we need to be logged in to view this page
   if (!Router.password || !Router.email)
-    return homePage();
+    return false;
   const template = document.createElement('template');
   template.innerHTML = `
 <section class="section">
@@ -185,4 +186,5 @@ function settingsPage() {
        .catch((error) => console.log('ERROR: ' + error));
     });
   });
+  return true;
 }
