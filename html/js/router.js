@@ -13,7 +13,9 @@ export default class Router {  // static class (e.g. only static methods)
 
     // Catch clicks on the root-level element.
     body.addEventListener('click', function(event) {
-      var element = event.target;
+      let element = event.target;
+      if (element.tagName != 'A' && element.parentElement.tagName == 'A')
+        element = element.parentElement;
       if (element.tagName == 'A' && element.href && event.button == 0) {  // left click on an <a href=...>
         console.log("hash: " + document.location.hash + " => " + element.hash);
         console.log("pathname: " + document.location.pathname + " => " + element.pathname);
