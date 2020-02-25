@@ -23,6 +23,8 @@ export default class Router {  // static class (e.g. only static methods)
           event.preventDefault();  // prevent the browser from doing the navigation
           console.log("going to load: " + element.pathname + element.hash);
           Router.load(element.pathname + element.hash);
+          if (element.hash == '')
+            window.scrollTo(0, 0);
         }
       }
     });
@@ -30,38 +32,6 @@ export default class Router {  // static class (e.g. only static methods)
       console.log("popstate " + document.location.pathname + document.location.hash);
       Router.load(document.location.pathname + document.location.hash, false);
       event.preventDefault();
-    }
-    function navbar() {
-      let template = document.createElement('template');
-      template.innerHTML =
-  `<nav class="navbar is-link is-fixed-top" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="/">
-        <img src="images/logo-28.png" /> &nbsp; ${Router.title}
-      </a>
-      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="router-navbar">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    </div>
-    <div id="router-navbar" class="navbar-menu">
-      <div class="navbar-start">
-      </div>
-      <div class="navbar-end">
-        <div class="navbar-item">
-          <div class="buttons">
-            <a class="button is-success" id="sign-up">
-              <strong>Sign up</strong>
-            </a>
-            <a class="button is-light" id="log-in">
-              Log in
-            </a>
-          </div>
-        </div>
-      </div>
-    </nav>`;
-      return template.content.firstChild;
     }
     function findGetParameter(parameterName) {
       let result = null, tmp = [];
@@ -287,15 +257,15 @@ export default class Router {  // static class (e.g. only static methods)
           <a class="button is-light" id="log-in">
             Log in
           </a>
-        </div>
-        <div id="user-menu" class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link" id="username">${username}</a>
-        <div class="navbar-dropdown is-boxed">
-          <a class="navbar-item" href="/settings"><i class="fas fa-cog"> &nbsp; </i>Settings</a>
-          <a class="navbar-item" href="/${username}" id="profile"><i class="fas fa-user"> &nbsp; </i>Profile</a>
-          <div class="navbar-divider"></div>
-          <a class="navbar-item" id="log-out"><i class="fas fa-power-off"> &nbsp; </i>Log out</a>
-        </div>
+          <div id="user-menu" class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link" id="username">${username}</a>
+            <div class="navbar-dropdown is-boxed">
+              <a class="navbar-item" href="/settings"><i class="fas fa-cog"> &nbsp; </i>Settings</a>
+              <a class="navbar-item" href="/${username}" id="profile"><i class="fas fa-user"> &nbsp; </i>Profile</a>
+              <div class="navbar-divider"></div>
+              <a class="navbar-item" id="log-out"><i class="fas fa-power-off"> &nbsp; </i>Log out</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
