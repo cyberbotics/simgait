@@ -601,11 +601,7 @@ export default class Router {  // static class (e.g. only static methods)
     for(let i = 0; i < Router.routes.length; i++) {
       if (url.pathname == Router.routes[i].url) {
         if (Router.routes[i].setup()) {
-          if (window.location.hash) {
-            console.log("Scrolling to " + document.querySelector(window.location.hash).id);
-            document.querySelector(window.location.hash).scrollIntoView();
-          }
-          if (pushHistory)
+          if (pushHistory && url.pathname != '/404.php')
             window.history.pushState(null, name, url.pathname + url.search + url.hash);
           return;
         }
