@@ -107,10 +107,10 @@ function homePage() {
     </div>
   </div>
 </section>
-<a class="anchor" id="partners">
+<a class="anchor" id="partners"></a>
 <section class="section">
   <div class="container">
-    <h2 class="title">Partners</h2>
+    <h1 class="title">Partners</h1>
     <div class="brand-logo-container">
       <a href="http://www.snf.ch" target="_blank"><img class="brand-logo" src="images/snsf.png" /></a>
       <a href="https://www.unige.ch/medecine/kinesiology/" target="_blank"><img class="brand-logo"

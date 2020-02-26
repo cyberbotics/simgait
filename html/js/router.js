@@ -5,6 +5,7 @@ export default class Router {  // static class (e.g. only static methods)
     Router.title = title;
     Router.content = document.createElement('div');
     Router.routes = routes;
+    Router.routes.push({url:'/404.php', setup: Router.notFound});
     const body = document.querySelector('body');
     body.classList.add('has-navbar-fixed-top');
     Router.resetNavbar();
@@ -265,7 +266,7 @@ export default class Router {  // static class (e.g. only static methods)
         <a class="navbar-link" id="username">${username}</a>
         <div class="navbar-dropdown is-boxed">
           <a class="navbar-item" href="/settings"><i class="fas fa-cog"> &nbsp; </i>Settings</a>
-          <a class="navbar-item" href="/${username}" id="simulations"><i class="fas fa-folder"> &nbsp; </i>Simulations</a>
+          <a class="navbar-item" href="/${username}" id="projects"><i class="fas fa-folder"> &nbsp; </i>Projects</a>
           <div class="navbar-divider"></div>
           <a class="navbar-item" id="log-out"><i class="fas fa-power-off"> &nbsp; </i>Log out</a>
         </div>
@@ -573,7 +574,7 @@ export default class Router {  // static class (e.g. only static methods)
              Router.load('/');
            } else {
              document.querySelector('#user-menu').style.display = 'flex';
-             document.querySelector('#simulations').href = '/' + data.username;
+             document.querySelector('#projects').href = '/' + data.username;
              document.querySelector('#log-in').style.display = 'none';
              document.querySelector('#sign-up').style.display = 'none';
              document.querySelector('#username').innerHTML = data.username;
@@ -600,8 +601,12 @@ export default class Router {  // static class (e.g. only static methods)
     for(let i = 0; i < Router.routes.length; i++) {
       if (url.pathname == Router.routes[i].url) {
         if (Router.routes[i].setup()) {
+          if (window.location.hash) {
+            console.log("Scrolling to " + document.querySelector(window.location.hash).id);
+            document.querySelector(window.location.hash).scrollIntoView();
+          }
           if (pushHistory)
-            window.history.pushState(name, name, url.pathname + url.search + url.hash);
+            window.history.pushState(null, name, url.pathname + url.search + url.hash);
           return;
         }
       }
@@ -615,27 +620,40 @@ export default class Router {  // static class (e.g. only static methods)
          return response.json();
        })
       .then(function(data) {
-         if (data.error) {  // no such user
-           const hostname = document.location.hostname;
-           let content = {};
-           content.innerHTML =
-`<section class="hero is-danger">
-  <div class="hero-body">
-    <div class="container">
-      <h1 class="title"><i class="fas fa-exclamation-triangle"></i> Page not found (404 error)</h1>
-      <p>The requested page was not found.</p>
-      <p>Please report any bug to <a class="has-text-white" href="mailto:webmaster@${hostname}">webmaster@${hostname}</a></p>
-    </div>
-  </div>
-</section>`;
-           Router.setup('page not found', [], content.innerHTML);
-         } else {
+         if (data.error)  // no such user
+           Router.notFound();
+         else {
            Router.setup('userpage', [], '<div>content</div>');
          }
          if (pushHistory)
-           window.history.pushState(name, name, url.pathname + url.search + url.hash);
+           window.history.pushState(null, name, url.pathname + url.search + url.hash);
        })
       .catch((error) => console.log('ERROR: ' + error));
+  }
+  static notFound() {
+    console.log(window.location.href)
+    if (window.location.pathname != '/404.php')
+      window.location.replace('/404.php?pathname=' + window.location.pathname);
+    else {
+      const pathname = (window.location.search.startsWith('?pathname=') ? window.location.search.substring(10) : '/404');
+      const url = window.location.origin + pathname;
+      console.log("url = " + url);
+      window.history.pushState(null, '404 Not Found', url);
+      const hostname = document.location.hostname;
+      let content = {};
+      content.innerHTML =
+`<section class="hero is-danger">
+<div class="hero-body">
+<div class="container">
+<h1 class="title"><i class="fas fa-exclamation-triangle"></i> Page not found (404 error)</h1>
+<p>The requested page: <a href="${url}">${url}</a> was not found.</p>
+<p>Please report any bug to <a class="has-text-white" href="mailto:webmaster@${hostname}">webmaster@${hostname}</a></p>
+</div>
+</div>
+</section>`;
+      Router.setup('page not found', [], content.innerHTML);
+    }
+    return true;
   }
   static setup(title, anchors, content) {
     document.head.querySelector('#title').innerHTML = Router.title + ' - ' + title;
