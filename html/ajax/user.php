@@ -23,14 +23,24 @@
       error("This e-mail address is not registered.");
     if ($user['password'] != $password)
       error("The password you entered is wrong.");
-    $answer['authenticated'] = true;
+    $answer['self'] = true;
   } else
-    $answer['authenticated'] = false;
-  $result = $mysqli->query("SELECT username FROM user where username=\"$username\"") or error($mysqli->error);
+    $answer['self'] = false;
+  $result = $mysqli->query("SELECT id FROM user where username=\"$username\"") or error($mysqli->error);
   $user = $result->fetch_assoc();
   $result->free();
   if (!$user)
     error("No such user: $username");
+  $query = "SELECT id, repository, branch, tag, simulator, version, published FROM project WHERE user = $user[id]";
+  if ($answer['self'] === false)
+    $query .= " AND published = 1";
+  $result = $mysqli->query($query) or error($mysqli->error);
+  if ($result->num_rows) {
+    $answer['projects'] = array();
+    while ($project = $result->fetch_assoc())
+      array_push($answer['projects'], $project);
+  }
+  $result->free();
   $answer['status'] = 'success';
   die(json_encode($answer));
  ?>

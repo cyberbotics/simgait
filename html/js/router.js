@@ -618,9 +618,8 @@ export default class Router {  // static class (e.g. only static methods)
       .then(function(data) {
          if (data.error)  // no such user
            Router.notFound();
-         else {
-           Router.setup('userpage', [], '<div>content</div>');
-         }
+         else
+           Router.userPage(data);
          if (pushHistory)
            window.history.pushState(null, name, url.pathname + url.search + url.hash);
        })
@@ -650,6 +649,44 @@ export default class Router {  // static class (e.g. only static methods)
       Router.setup('page not found', [], content.innerHTML);
     }
     return true;
+  }
+  static userPage(data) {
+    let button = {}
+    let published_head = {};
+    if (data.self === false) {
+      button.innerHTML = ``;
+      published_head.innerHTML = ``;
+    } else {
+      button.innerHTML = `<button class="button is-link" id="add-a-new-project">Add a new project</button>`;
+      published_head.innerHTML = `<td>Published</td>`;
+    }
+    let content = {};
+    let projects = {};
+    if (data.projects && data.project.length > 0) {
+
+    } else
+      projects.innerHTML = '<tr><td>(no projects)</td></tr>';
+    content.innerHTML =
+`<section class="section">
+  <div class="container">
+    <h1 class="title">Projects</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <td>Repository</td><td>Branch / Tag</td><td>Host</td>${published_head.innerHTML}
+        </tr>
+      </thead>
+      <tbody>
+        ${projects.innerHTML}
+      </tbody>
+    </table>
+    ${button.innerHTML}
+  </div>
+</section>`;
+    Router.setup('userpage', [], content.innerHTML);
+    Router.content.querySelector("#add-a-new-project").addEventListener('click', function(event) {
+      console.log("Add a new project");
+    });
   }
   static setup(title, anchors, content) {
     document.head.querySelector('#title').innerHTML = Router.title + ' - ' + title;
