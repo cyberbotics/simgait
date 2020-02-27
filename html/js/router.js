@@ -684,9 +684,41 @@ export default class Router {  // static class (e.g. only static methods)
   </div>
 </section>`;
     Router.setup('userpage', [], content.innerHTML);
-    Router.content.querySelector("#add-a-new-project").addEventListener('click', function(event) {
-      console.log("Add a new project");
-    });
+    if (data.self !== false)
+      Router.content.querySelector("#add-a-new-project").addEventListener('click', function(event) {
+        console.log("Add a new project");
+        let content = {};
+        content.innerHTML =
+`<div class="field">
+  <label class="label">Git Repository</label>
+  <div class="control has-icons-left">
+    <input id="repository" class="input" type="url" required placeholder="https://github.com/my_name/my_project">
+    <span class="icon is-small is-left">
+      <i class="fab fa-github"></i>
+    </span>
+  </div>
+  <div class="help">This Git repository should be available over HTTPS without authentication.</div>
+</div>
+<div class="field">
+  <label class="label">Branch / Tag</label>
+  <div class="control has-icons-left">
+    <input id="branch-or-tag" class="input" required placeholder="branch or tag name" maxlen="40">
+    <span class="icon is-small is-left">
+      <i class="fas fa-code-branch"></i>
+    </span>
+  </div>
+  <div class="control">
+    <label class="radio">
+      <input type="radio" name="branch-or-tag" value="branch" required> Branch
+    </label>
+    <label class="radio">
+      <input type="radio" name="branch-or-tag" value="tag"> Tag
+    </label>
+  </div>
+</div>`;
+        let modal = new ModalDialog('Add project', content.innerHTML, 'Cancel', 'Add');
+        modal.querySelector('#repository').focus();
+      });
   }
   static setup(title, anchors, content) {
     document.head.querySelector('#title').innerHTML = Router.title + ' - ' + title;
