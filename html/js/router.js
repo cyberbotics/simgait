@@ -673,7 +673,7 @@ export default class Router {  // static class (e.g. only static methods)
     <table class="table">
       <thead>
         <tr>
-          <td>Repository</td><td>Branch / Tag</td><td>Host</td>${published_head.innerHTML}
+          <td>Title</td><td>Repository</td><td>Folder</td><td>Tag / Branch</td>${published_head.innerHTML}
         </tr>
       </thead>
       <tbody>
@@ -692,7 +692,7 @@ export default class Router {  // static class (e.g. only static methods)
 `<div class="field">
   <label class="label">Git Repository</label>
   <div class="control has-icons-left">
-    <input id="repository" class="input" type="url" required placeholder="https://github.com/my_name/my_project">
+    <input id="repository" class="input" type="url" required placeholder="https://github.com/my_name/my_project" value="https://github.com/">
     <span class="icon is-small is-left">
       <i class="fab fa-github"></i>
     </span>
@@ -700,24 +700,64 @@ export default class Router {  // static class (e.g. only static methods)
   <div class="help">This Git repository should be available over HTTPS without authentication.</div>
 </div>
 <div class="field">
-  <label class="label">Branch / Tag</label>
+  <label class="label">Folder</label>
   <div class="control has-icons-left">
-    <input id="branch-or-tag" class="input" required placeholder="branch or tag name" maxlen="40">
+    <input id="folder" class="input" placeholder="my_simualtions/my_wonderful_simulation" maxlen="2048">
+    <span class="icon is-small is-left">
+      <i class="fas fa-folder"></i>
+    </span>
+  </div>
+  <div class="help">Folder in which your project is located.</div>
+</div>
+<div class="field">
+  <label class="label">Tag / Branch</label>
+  <div class="control has-icons-left">
+    <input id="tag-or-branch-name" class="input" required placeholder="tag or branch name" maxlen="40">
     <span class="icon is-small is-left">
       <i class="fas fa-code-branch"></i>
     </span>
   </div>
   <div class="control">
     <label class="radio">
-      <input type="radio" name="branch-or-tag" value="branch" required> Branch
+      <input type="radio" name="tag-or-branch" value="tag" required> Tag
     </label>
     <label class="radio">
-      <input type="radio" name="branch-or-tag" value="tag"> Tag
+      <input type="radio" name="tag-or-branch" value="branch"> Branch
     </label>
   </div>
 </div>`;
         let modal = new ModalDialog('Add project', content.innerHTML, 'Cancel', 'Add');
-        modal.querySelector('#repository').focus();
+        let input = modal.querySelector('#repository');
+        input.focus();
+        input.selectionStart = input.selectionEnd = input.value.length;
+        modal.querySelector('form').addEventListener('submit', function(event) {
+          event.preventDefault();
+          modal.querySelector('button[type="submit"]').classList.add('is-loading');
+          const repository = modal.querySelector('#repository').value;
+          const folder = modal.querySelector('#folder').value;
+          const tag_or_branch = modal.querySelector('input[name="tag-or-branch"]').checked;
+          const name = modal.querySelector('#tag-or-branch-name').value;
+          const tag = tag_or_branch ? name : '';
+          const branch = tag_or_branch ? '' : name;
+          console.log("branch = " + branch);
+          console.log("tag = " + tag);
+          fetch('/ajax/project.php', { method: 'post', body: JSON.stringify({email: Router.email,
+                                                                             password: Router.password,
+                                                                             repository: repository,
+                                                                             folder: folder,
+                                                                             tag: tag,
+                                                                             branch: branch})})
+           .then(function(response) {
+              return response.json();
+             })
+           .then(function(data) {
+              if (data.error)
+                console.log(data.error);
+              else
+                modal.close();
+            })
+           .catch((error) => console.log('ERROR: ' + error));
+        });
       });
   }
   static setup(title, anchors, content) {

@@ -1,5 +1,5 @@
 <?php
-  // This script deletes a user account and all its related data
+  // This script provides information for a user page
   function error($message) {
     die("{\"error\":\"$message\"}");
   }
@@ -31,7 +31,7 @@
   $result->free();
   if (!$user)
     error("No such user: $username");
-  $query = "SELECT id, repository, branch, tag, simulator, version, published FROM project WHERE user = $user[id]";
+  $query = "SELECT id, repository, branch, tag, folder, published FROM project WHERE user = $user[id]";
   if ($answer['self'] === false)
     $query .= " AND published = 1";
   $result = $mysqli->query($query) or error($mysqli->error);
