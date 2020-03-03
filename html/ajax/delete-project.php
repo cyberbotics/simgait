@@ -13,15 +13,16 @@
   $mysqli->set_charset('utf8');
   $email = $mysqli->escape_string($data->{'email'});
   $password = $mysqli->escape_string($data->{'password'});
+  $project_id = intval($data->{'project'});
   $result = $mysqli->query("SELECT id, password FROM user WHERE email=\"$email\"") or error($mysqli->error);
   $user = $result->fetch_assoc();
   $result->free();
   if (!$user)
-    error('Wrong e-mail');
+    error("Wrong e-mail");
   if ($user['password'] != $password)
     error('Wrong password');
-  $mysqli->query("DELETE FROM user WHERE id=$user[id]");
-  $mysqli->query("DELETE FROM request WHERE user=$user[id]");
-  $mysqli->query("DELETE FROM project WHERE user=$user[id]");
+  $mysqli->query("DELETE FROM project WHERE user=$user[id] AND id=$project_id");
+  if ($mysqli->affected_rows == 0)
+    error("Could not delete project $project_id");
   die('{"status": "success"}');
  ?>

@@ -31,9 +31,9 @@
   $result->free();
   if (!$user)
     error("No such user: $username");
-  $query = "SELECT id, title, repository, branch, tag, folder, published FROM project WHERE user = $user[id]";
+  $query = "SELECT id, title, repository, branch, tag, folder, public FROM project WHERE user = $user[id]";
   if ($answer['self'] === false)
-    $query .= " AND published = 1";
+    $query .= " AND public = 1";
   $result = $mysqli->query($query) or error($mysqli->error);
   if ($result->num_rows) {
     $answer['projects'] = array();

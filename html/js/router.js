@@ -651,42 +651,87 @@ export default class Router {  // static class (e.g. only static methods)
     return true;
   }
   static userPage(data) {
+    function addProject(project) {
+      let line = {};
+      const checked = project.public == "1" ? ' checked' : '';
+      const separator = project.folder == '' ? '' : '/';
+      const url = project.repository + '/tree/' + project.branch + project.tag + separator + project.folder;
+      line.innerHTML =
+`<tr id="project-${project.id}">
+  <td>
+    <button class="button is-small is-outlined is-link" title="run this project">
+      <span class="icon"><i class="fas fa-play fa-lg"></i></span>
+    </button>
+  </td>
+  <td><a href="${url}" target="_blank">${project.title}</a></td>
+  <td><a href="${project.repository}" target="_blank">${project.repository}</a></td>
+  <td><a href="${url}" target="_blank">${project.folder}</a></td>
+  <td>${project.tag}${project.branch}</td>
+  <td style="text-align:center"><input type="checkbox"${checked}></td>
+  <td><button class="button is-small is-outlined is-danger" title="delete this project" id="delete-${project.id}"><span class="icon"><i class="fas fa-times fa-lg"></i></span></button></td>
+</tr>`;
+      return line.innerHTML;
+    }
+    function deleteProject(event) {
+      let button = event.target;
+      while (button.tagName != 'BUTTON')
+        button = button.parentNode;
+      const project_id = button.id.substring(7);
+      console.log("deleting project " + project_id);
+      let dialog = new ModalDialog('Really delete project?',
+                                   '<p>Note: this will not delete any data from your GitHub repository.</p>',
+                                   'Cancel', 'Delete Project', 'is-danger');
+      dialog.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        dialog.querySelector('button[type="submit"]').classList.add('is-loading');
+        fetch('/ajax/delete-project.php', { method: 'post', body: JSON.stringify({email: Router.email,
+                                                                                  password: Router.password,
+                                                                                  project: project_id})})
+         .then(function(response) {
+            return response.json();
+           })
+         .then(function(data) {
+            dialog.close();
+            if (data.error)
+              new ModalDialog('Error', data.error);
+            else {
+              const row = Router.content.querySelector('#project-' + project_id);
+              row.parentNode.removeChild(row);
+              project_count--;
+              if (project_count == 0)
+                Router.content.querySelector("#no-project").style.display = 'flex';
+            }
+          })
+         .catch((error) => console.log('ERROR: ' + error));
+      });
+    }
     let button = {}
-    let published_head = {};
+    let head_end = {};
     if (data.self === false) {
       button.innerHTML = ``;
-      published_head.innerHTML = ``;
+      head_end.innerHTML = ``;
     } else {
       button.innerHTML = `<button class="button is-link" id="add-a-new-project">Add a new project</button>`;
-      published_head.innerHTML = `<td>Published</td>`;
+      head_end.innerHTML = `<td>Public</td><td></td>`;
     }
     let content = {};
     let projects = {};
+    let project_count = 0;
+    projects.innerHTML = `<tr id="no-project"><td>(no project)</td></tr>`;
     if (data.projects && data.projects.length > 0) {
-      projects.innerHTML = '';
+      project_count = data.projects.length;
       data.projects.forEach(function(project, index) {
-        const checked = project.published == "1" ? ' checked' : '';
-        const separator = project.folder == '' ? '' : '/';
-        const url = project.repository + '/tree/' + project.branch + project.tag + separator + project.folder;
-        projects.innerHTML += `<tr id="project-${project.id}">` +
-                              `<td><button class="button is-small is-outlined is-link"><span class="icon"><i class="fas fa-play fa-lg"></i></span></button></td>` +
-                              `<td><a href="${url}" target="_blank">${project.title}</a></td>` +
-                              `<td><a href="${project.repository}" target="_blank">${project.repository}</a></td>` +
-                              `<td><a href="${url}" target="_blank">${project.folder}</a></td>` +
-                              `<td>${project.tag}${project.branch}</td>` +
-                              `<td style="text-align:center"><input type="checkbox"${checked}></td>` +
-                              `</tr>`;
+        projects.innerHTML += addProject(project);
       });
-    } else
-      projects.innerHTML = '<tr><td>(no projects)</td></tr>';
+    }
     content.innerHTML =
 `<section class="section">
   <div class="container">
     <h1 class="title">Projects</h1>
-    <table class="table">
+    <table id="project-table" class="table">
       <thead>
         <tr>
-          <tr><td></td><td>Title</td><td>Repository</td><td>Folder</td><td>Tag / Branch</td>${published_head.innerHTML}
+          <tr><td></td><td>Title</td><td>Repository</td><td>Folder</td><td>Tag / Branch</td>${head_end.innerHTML}
         </tr>
       </thead>
       <tbody>
@@ -697,7 +742,9 @@ export default class Router {  // static class (e.g. only static methods)
   </div>
 </section>`;
     Router.setup('userpage', [], content.innerHTML);
-    if (data.self !== false)
+    if (data.projects && data.projects.length > 0)
+      Router.content.querySelector("#no-project").style.display = 'none';
+    if (data.self !== false) {
       Router.content.querySelector("#add-a-new-project").addEventListener('click', function(event) {
         console.log("Add a new project");
         let content = {};
@@ -725,7 +772,7 @@ export default class Router {  // static class (e.g. only static methods)
 <div class="field">
   <label class="label">Tag / Branch</label>
   <div class="control has-icons-left">
-    <input id="tag-or-branch-name" class="input" required placeholder="tag or branch name" maxlen="40">
+    <input id="tag-or-branch-name" class="input" required placeholder="tag or branch name" maxlen="40" value="master">
     <span class="icon is-small is-left">
       <i class="fas fa-code-branch"></i>
     </span>
@@ -735,7 +782,7 @@ export default class Router {  // static class (e.g. only static methods)
       <input type="radio" name="tag-or-branch" value="tag" required> Tag
     </label>
     <label class="radio">
-      <input type="radio" name="tag-or-branch" value="branch"> Branch
+      <input type="radio" name="tag-or-branch" value="branch" required checked> Branch
     </label>
   </div>
 </div>`;
@@ -766,12 +813,32 @@ export default class Router {  // static class (e.g. only static methods)
            .then(function(data) {
               if (data.error)
                 console.log(data.error);
-              else
+              else {
                 modal.close();
+                if (project_count == 0)
+                  Router.content.querySelector("#no-project").style.display = 'none';
+                let project = {};
+                project.id = data.id;
+                project.title = data.title;
+                project.repository = repository;
+                project.folder = folder;
+                project.tag = tag;
+                project.branch = branch;
+                let template = document.createElement('template');
+                template.innerHTML = addProject(project);
+                project_count++;
+                Router.content.querySelector('#project-table').appendChild(template.content.firstChild);
+                Router.content.querySelector('#delete-' + project.id).addEventListener('click', deleteProject);
+              }
             })
            .catch((error) => console.log('ERROR: ' + error));
         });
       });
+      if (data.projects && data.projects.length > 0)
+        data.projects.forEach(function(project, index) {
+          Router.content.querySelector('#delete-' + project.id).addEventListener('click', deleteProject);
+        });
+    }
   }
   static setup(title, anchors, content) {
     document.head.querySelector('#title').innerHTML = Router.title + ' - ' + title;

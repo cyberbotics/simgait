@@ -100,10 +100,12 @@
   if ($m === false)
     error("Missing closing double quote for WorldInfo.title in $default world file");
   $title = substr($world, $n, $m - $n);
-  $query = "INSERT INTO project(title, user, repository, branch, tag, folder, published) VALUES(\"$title\", $user[id], " .
-           "\"https://github.com/$username/$repository_name\", \"$branch\", \"$tag\", \"$folder\", 0)";
+  $repository =
+  $query = "INSERT INTO project(title, user, repository, branch, tag, folder, public) VALUES(\"$title\", $user[id], " .
+           "\"$repository\", \"$branch\", \"$tag\", \"$folder\", 0)";
   $mysqli->query($query) or error($mysqli->error);
   $answer = array();
+  $answer['id'] = $mysqli->insert_id;
   $answer['default'] = $default;
   $answer['title'] = $title;
   $answer['status'] = 'success';
