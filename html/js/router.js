@@ -662,8 +662,21 @@ export default class Router {  // static class (e.g. only static methods)
     }
     let content = {};
     let projects = {};
-    if (data.projects && data.project.length > 0) {
-
+    if (data.projects && data.projects.length > 0) {
+      projects.innerHTML = '';
+      data.projects.forEach(function(project, index) {
+        const checked = project.published == "1" ? ' checked' : '';
+        const separator = project.folder == '' ? '' : '/';
+        const url = project.repository + '/tree/' + project.branch + project.tag + separator + project.folder;
+        projects.innerHTML += `<tr id="project-${project.id}">` +
+                              `<td><button class="button is-small is-outlined is-link"><span class="icon"><i class="fas fa-play fa-lg"></i></span></button></td>` +
+                              `<td><a href="${url}" target="_blank">${project.title}</a></td>` +
+                              `<td><a href="${project.repository}" target="_blank">${project.repository}</a></td>` +
+                              `<td><a href="${url}" target="_blank">${project.folder}</a></td>` +
+                              `<td>${project.tag}${project.branch}</td>` +
+                              `<td style="text-align:center"><input type="checkbox"${checked}></td>` +
+                              `</tr>`;
+      });
     } else
       projects.innerHTML = '<tr><td>(no projects)</td></tr>';
     content.innerHTML =
@@ -673,7 +686,7 @@ export default class Router {  // static class (e.g. only static methods)
     <table class="table">
       <thead>
         <tr>
-          <td>Title</td><td>Repository</td><td>Folder</td><td>Tag / Branch</td>${published_head.innerHTML}
+          <tr><td></td><td>Title</td><td>Repository</td><td>Folder</td><td>Tag / Branch</td>${published_head.innerHTML}
         </tr>
       </thead>
       <tbody>
