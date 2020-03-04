@@ -309,7 +309,7 @@ export default class User extends Router {  // static class (e.g. only static me
   </div>
 </div>`;
     let that = this;
-    // log out
+
     div.querySelector('a#log-out').addEventListener('click', function(event) {
       that.password = null;
       if (window.location.pathname == '/settings')
@@ -317,7 +317,7 @@ export default class User extends Router {  // static class (e.g. only static me
       else
         that.load();
     });
-    // sign up dialog
+
     div.querySelector('a#sign-up').addEventListener('click', function(event) {
       event.preventDefault();
       let content = {};
@@ -512,7 +512,6 @@ export default class User extends Router {  // static class (e.g. only static me
       });
     });
 
-    // log in dialog (including password reminder)
     div.querySelector('a#log-in').addEventListener('click', function(event) {
       event.preventDefault();
       let content = {};
