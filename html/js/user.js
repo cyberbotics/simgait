@@ -259,8 +259,7 @@ export default class User extends Router {  // static class (e.g. only static me
       const email = findGetParameter('email');
       if (id && email)
         resetPassword(id, token, email);
-    } /* else
-      this.login(); */
+    }
   }
   load(page, pushHistory) {
     console.log("load");
