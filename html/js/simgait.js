@@ -1,11 +1,8 @@
 import ModalDialog from './modal_dialog.js';
-import Router from './router.js';
+import Project from './project.js';
 
 document.addEventListener('DOMContentLoaded', function() {
-  Router.init('SimGait', footer(), [
-    {url: '/', setup: homePage},
-    {url: '/settings', setup: settingsPage}
-  ]);
+  let project = new Project('SimGait', footer(), [{url: '/', setup: homePage}]);
 });
 
 function footer() {
@@ -20,7 +17,7 @@ function footer() {
   return template.content.firstChild;
 }
 
-function homePage() {
+function homePage(project) {
   const template = document.createElement('template');
   template.innerHTML = `
 <section class="hero" style="background: linear-gradient(0deg, rgba(15,43,87,1) 0%, rgba(50,115,220,1) 90%);">
@@ -120,71 +117,6 @@ function homePage() {
     </div>
   </div>
 </section>`;
-  Router.setup('home', ['Overview', 'Simulations', 'Partners'], template.innerHTML);
-  return true;
-}
-
-function settingsPage() {
-  // we need to be logged in to view this page
-  if (!Router.password || !Router.email)
-    return false;
-  const template = document.createElement('template');
-  template.innerHTML = `
-<section class="section">
-    <div class="container">
-      <h1 class="title"><i class="fas fa-cog"></i> Settings</h1>
-      <h2 class="subtitle">Manage your account</h2>
-  </div>
-</section>
-<section class="section">
-  <div class="container panel">
-    <p class="panel-heading">Change password</p>
-    <div class="panel-block">
-      We will send you a e-mail with a link to reset your password.
-    </div>
-    <div class="panel-block">
-      <button class="button is-link" id="change-password">Change password</button>
-    </div>
-  </div>
-  <div class="container panel">
-    <p class="panel-heading">Delete Account</p>
-    <div class="panel-block">
-      <i class="fas fa-exclamation-triangle"></i> &nbsp; Once you delete your account, there is no going back. Please be certain.
-    </div>
-    <div class="panel-block">
-      <button class="button is-danger" id="delete-account">Delete my account</button>
-    </div>
-  </div>
-</section>`;
-  Router.setup('settings', [], template.innerHTML);
-  document.querySelector('#change-password').addEventListener('click', function(event) {
-    event.target.classList.add('is-loading');
-    Router.forgotPassword(Router.email, function() { event.target.classList.remove('is-loading'); });
-  });
-  document.querySelector('#delete-account').addEventListener('click', function(event) {
-    let dialog = new ModalDialog('Really delete account?', '<p>All your data will be deleted from our database.</p>' +
-                                 '<p>There is no way to recover deleted data.</p>', 'Cancel', 'Delete Account', 'is-danger');
-    dialog.querySelector('form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      dialog.querySelector('button[type="submit"]').classList.add('is-loading');
-      fetch('/ajax/delete.php', { method: 'post', body: JSON.stringify({email: Router.email, password: Router.password})})
-       .then(function(response) {
-          return response.json();
-         })
-       .then(function(data) {
-          dialog.close();
-          if (data.error)
-            new ModalDialog('Error', data.error);
-          else {
-            new ModalDialog('Account deleted',
-                            '<p>Your account was successfully deleted.</p><p>All you data was erased.</p>');
-            Router.password = null;
-            Router.email = null;
-            Router.load('/');
-          }
-        })
-       .catch((error) => console.log('ERROR: ' + error));
-    });
-  });
+  project.setup('home', ['Overview', 'Simulations', 'Partners'], template.innerHTML);
   return true;
 }
