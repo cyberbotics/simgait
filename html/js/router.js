@@ -104,7 +104,6 @@ export default class Router {  // static class (e.g. only static methods)
     if (window.location.pathname != '/404.php') {
       console.log("redirect to: " + '/404.php?pathname=' + window.location.pathname);
       window.location.replace('/404.php?pathname=' + window.location.pathname);
-//      this.setup('redirect page', [], '');
     } else {
       const pathname = (window.location.search.startsWith('?pathname=') ? window.location.search.substring(10) : '/404');
       const url = window.location.origin + pathname;

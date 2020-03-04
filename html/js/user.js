@@ -312,7 +312,10 @@ export default class User extends Router {  // static class (e.g. only static me
     // log out
     div.querySelector('a#log-out').addEventListener('click', function(event) {
       that.password = null;
-      that.load('/');
+      if (window.location.pathname == '/settings')
+        that.load('/');
+      else
+        that.load();
     });
     // sign up dialog
     div.querySelector('a#sign-up').addEventListener('click', function(event) {
@@ -602,6 +605,7 @@ export default class User extends Router {  // static class (e.g. only static me
              document.querySelector('#projects').href = '/' + data.username;
              document.querySelector('#username').innerHTML = data.username;
              that.username = data.username;
+             that.load();
              if (success)
                success();
            }
