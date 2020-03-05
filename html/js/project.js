@@ -9,9 +9,9 @@ export default class Project extends User {
     const username = url.pathname.substring(1);
     console.log('username: ' + username);
     let that = this;
-    fetch('/ajax/user.php', {method: 'post', body: JSON.stringify({email: this.email,
-                                                                   password: this.password,
-                                                                   username: username})})
+    fetch('/ajax/project/user.php', {method: 'post', body: JSON.stringify({email: this.email,
+                                                                           password: this.password,
+                                                                           username: username})})
       .then(function(response) {
          return response.json();
        })
@@ -63,7 +63,7 @@ export default class Project extends User {
       dialog.querySelector('form').addEventListener('submit', function(event) {
         event.preventDefault();
         dialog.querySelector('button[type="submit"]').classList.add('is-loading');
-        fetch('/ajax/delete-project.php', { method: 'post', body: JSON.stringify({email: that.email,
+        fetch('/ajax/project/delete.php', { method: 'post', body: JSON.stringify({email: that.email,
                                                                                   password: that.password,
                                                                                   project: project_id})})
          .then(function(response) {
@@ -180,12 +180,12 @@ export default class Project extends User {
           const branch = tag_or_branch ? '' : name;
           console.log("branch = " + branch);
           console.log("tag = " + tag);
-          fetch('/ajax/project.php', { method: 'post', body: JSON.stringify({email: that.email,
-                                                                             password: that.password,
-                                                                             repository: repository,
-                                                                             folder: folder,
-                                                                             tag: tag,
-                                                                             branch: branch})})
+          fetch('/ajax/project/create.php', { method: 'post', body: JSON.stringify({email: that.email,
+                                                                                    password: that.password,
+                                                                                    repository: repository,
+                                                                                    folder: folder,
+                                                                                    tag: tag,
+                                                                                    branch: branch})})
            .then(function(response) {
               return response.json();
              })

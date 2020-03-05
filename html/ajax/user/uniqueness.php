@@ -7,7 +7,7 @@
   header('Content-Type: application/json');
   $json = file_get_contents('php://input');
   $data = json_decode($json);
-  require '../../php/database.php';
+  require '../../../php/database.php';
   $mysqli =  new mysqli($database_host, $database_username, $database_password, $database_name);
   if (!$mysqli)
     error("Can't connect to MySQL database: $mysqli->error");

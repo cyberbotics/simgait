@@ -157,7 +157,7 @@ export default class User extends Router {  // static class (e.g. only static me
         event.preventDefault();
         choose.querySelector('button[type="submit"]').classList.add('is-loading');
         that.sha256Hash(choose.querySelector('#choose-password').value + that.title).then(function(hash) {
-          fetch('/ajax/password.php', { method: 'post', body: JSON.stringify({id: id, token: token, password: hash})})
+          fetch('/ajax/user/password.php', { method: 'post', body: JSON.stringify({id: id, token: token, password: hash})})
             .then(function(response) {
               return response.json();
             })
@@ -230,7 +230,7 @@ export default class User extends Router {  // static class (e.g. only static me
         dialog.querySelector('form').addEventListener('submit', function(event) {
           event.preventDefault();
           dialog.querySelector('button[type="submit"]').classList.add('is-loading');
-          fetch('/ajax/delete.php', { method: 'post', body: JSON.stringify({email: that.email, password: that.password})})
+          fetch('/ajax/user/delete.php', { method: 'post', body: JSON.stringify({email: that.email, password: that.password})})
            .then(function(response) {
               return response.json();
              })
@@ -425,7 +425,7 @@ export default class User extends Router {  // static class (e.g. only static me
           return;
         }
         // check if this e-mail address is not already registered
-        fetch('/ajax/uniqueness.php', { method: 'post', body: JSON.stringify({field: 'email', value: email})})
+        fetch('/ajax/user/uniqueness.php', { method: 'post', body: JSON.stringify({field: 'email', value: email})})
          .then(function(response) {
             return response.json();
            })
@@ -466,7 +466,7 @@ export default class User extends Router {  // static class (e.g. only static me
           return;
         }
         // check if this username is not already registered
-        fetch('/ajax/uniqueness.php', { method: 'post', body: JSON.stringify({field: 'username', value: this.value})})
+        fetch('/ajax/user/uniqueness.php', { method: 'post', body: JSON.stringify({field: 'username', value: this.value})})
          .then(function(response) {
             return response.json();
            })
@@ -494,7 +494,7 @@ export default class User extends Router {  // static class (e.g. only static me
             category = input.value;
         });
         modal.querySelector('button[type="submit"]').classList.add('is-loading');
-        fetch('/ajax/sign-up.php', { method: 'post',
+        fetch('/ajax/user/sign-up.php', { method: 'post',
                                      body: JSON.stringify({email: email, username: username, category: category})})
           .then(function(response) {
              return response.json();
@@ -584,7 +584,7 @@ export default class User extends Router {  // static class (e.g. only static me
       document.querySelector('#log-in').style.display = 'none';
       document.querySelector('#sign-up').style.display = 'none';
       let that = this;
-      fetch('/ajax/authenticate.php', { method: 'post', body: JSON.stringify({email: this.email, password: this.password})})
+      fetch('/ajax/user/authenticate.php', { method: 'post', body: JSON.stringify({email: this.email, password: this.password})})
         .then(function(response) {
            return response.json();
          })
@@ -620,7 +620,7 @@ export default class User extends Router {  // static class (e.g. only static me
     return hashHex;
   }
   forgotPassword(email, callback = null) {
-    fetch('/ajax/forgot.php', { method: 'post', body: JSON.stringify({email: email})})
+    fetch('/ajax/user/forgot.php', { method: 'post', body: JSON.stringify({email: email})})
      .then(function(response) {
         return response.json();
        })
