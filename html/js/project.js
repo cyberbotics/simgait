@@ -6,29 +6,31 @@ export default class Project extends User {
     super(title, footer, routes);
   }
   dynamicPage(url, pushHistory) {
-    const username = url.pathname.substring(1);
-    console.log('username: ' + username);
     let that = this;
-    fetch('/ajax/project/user.php', {method: 'post', body: JSON.stringify({email: this.email,
-                                                                           password: this.password,
-                                                                           username: username})})
-      .then(function(response) {
-         return response.json();
-       })
-      .then(function(data) {
-         if (data.error)  // no such user
-           that.notFound();
-         else {
-           that.userPage(data);
-           that.postLoad();
-         }
-         if (pushHistory)
-           window.history.pushState(null, name, url.pathname + url.search + url.hash);
-       })
-      .catch((error) => console.log('ERROR: ' + error));
+    let promise = new Promise((resolve, reject) => {
+      const username = url.pathname.substring(1);
+      fetch('/ajax/project/user.php', {method: 'post', body: JSON.stringify({email: that.email,
+                                                                             password: that.password,
+                                                                             username: username})})
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
+          if (pushHistory)
+            window.history.pushState(null, name, url.pathname + url.search + url.hash);
+          if (data.error) {  // no such user
+            that.notFound();
+            resolve();
+          } else {
+            that.userPage(data);
+            resolve();
+          }
+        })
+        .catch((error) => console.log('ERROR: ' + error));
+    });
+    return promise;
   }
   userPage(data) {
-    console.log("user page");
     let that = this;
     function addProject(project) {
       let line = {};
@@ -56,7 +58,6 @@ export default class Project extends User {
       while (button.tagName != 'BUTTON')
         button = button.parentNode;
       const project_id = button.id.substring(7);
-      console.log("deleting project " + project_id);
       let dialog = new ModalDialog('Really delete project?',
                                    '<p>Note: this will not delete any data from your GitHub repository.</p>',
                                    'Cancel', 'Delete Project', 'is-danger');
@@ -125,7 +126,6 @@ export default class Project extends User {
       that.content.querySelector("#no-project").style.display = 'none';
     if (data.self !== false) {
       that.content.querySelector("#add-a-new-project").addEventListener('click', function(event) {
-        console.log("Add a new project");
         let content = {};
         content.innerHTML =
 `<div class="field">
@@ -178,8 +178,6 @@ export default class Project extends User {
           const name = modal.querySelector('#tag-or-branch-name').value;
           const tag = tag_or_branch ? name : '';
           const branch = tag_or_branch ? '' : name;
-          console.log("branch = " + branch);
-          console.log("tag = " + tag);
           fetch('/ajax/project/create.php', { method: 'post', body: JSON.stringify({email: that.email,
                                                                                     password: that.password,
                                                                                     repository: repository,
@@ -191,7 +189,7 @@ export default class Project extends User {
              })
            .then(function(data) {
               if (data.error)
-                console.log(data.error);
+                console.log('ERROR: ' + data.error);
               else {
                 modal.close();
                 if (project_count == 0)

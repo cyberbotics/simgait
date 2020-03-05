@@ -21,7 +21,6 @@ export default class Router {  // static class (e.g. only static methods)
             (element.pathname != document.location.pathname || document.location.hash == element.hash || element.hash == '')) {
           // same-origin navigation: a link within the site (we are skipping linking to the same page with possibly hashtags)
           event.preventDefault();  // prevent the browser from doing the navigation
-          console.log("pathname = " + element.pathname + element.hash);
           that.load(element.pathname + element.hash);
           if (element.hash == '')
             window.scrollTo(0, 0);
@@ -71,43 +70,53 @@ export default class Router {  // static class (e.g. only static methods)
     }
   }
   load(page = null, pushHistory = true) {
-    if (page == null)
-      page = window.location.pathname + window.location.search + window.location.hash;
-    console.log("loading " + page);
-    this.resetNavbar();
-    const url = new URL(window.location.origin + page);
-    if (url.pathname == '/404.php') {
-      this.notFound();
-      return;
-    }
-    for(let i = 0; i < this.routes.length; i++) {
-      if (url.pathname == this.routes[i].url) {
-        if (this.routes[i].setup(this)) {
-          if (pushHistory)
-            window.history.pushState(null, name, url.pathname + url.search + url.hash);
-          this.postLoad();
-          return;
+    let that = this;
+    let promise = new Promise((resolve, reject) => {
+      if (page == null)
+        page = window.location.pathname + window.location.search + window.location.hash;
+      that.resetNavbar();
+      const url = new URL(window.location.origin + page);
+      if (url.pathname == '/404.php') {
+        that.notFound();
+        resolve();
+      } else {
+        let found = false;
+        for(let i = 0; i < that.routes.length; i++) {
+          if (url.pathname == that.routes[i].url) {
+            if (that.routes[i].setup(that)) {
+              if (pushHistory)
+                window.history.pushState(null, name, url.pathname + url.search + url.hash);
+              resolve();
+              found = true;
+              break;
+            }
+          }
+        }
+        if (!found) {
+          that.dynamicPage(url, pushHistory).then(() => {
+            resolve();
+          });
         }
       }
-    }
-    this.dynamicPage(url, pushHistory);
-  }
-  postLoad() {
+    });
+    return promise;
   }
   dynamicPage(url, pushHistory) {
-    this.notFound();
-    if (pushHistory)
-      window.history.pushState(null, name, url.pathname + url.search + url.hash);
+    let that = this;
+    let promise = new Promise((resolve, reject) => {
+      that.notFound();
+      if (pushHistory)
+        window.history.pushState(null, name, url.pathname + url.search + url.hash);
+      resolve();
+    });
+    return promise;
   }
   notFound() {
-    console.log("Not found: " + window.location.href);
-    if (window.location.pathname != '/404.php') {
-      console.log("redirect to: " + '/404.php?pathname=' + window.location.pathname);
+    if (window.location.pathname != '/404.php')
       window.location.replace('/404.php?pathname=' + window.location.pathname);
-    } else {
+    else {
       const pathname = (window.location.search.startsWith('?pathname=') ? window.location.search.substring(10) : '/404');
       const url = window.location.origin + pathname;
-      console.log("url = " + url);
       window.history.pushState(null, '404 Not Found', url);
       const hostname = document.location.hostname;
       let content = {};
@@ -122,7 +131,6 @@ export default class Router {  // static class (e.g. only static methods)
 </div>
 </section>`;
       this.setup('page not found', [], content.innerHTML);
-      this.postLoad();
     }
     return true;
   }

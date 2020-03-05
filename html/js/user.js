@@ -6,6 +6,7 @@ export default class User extends Router {  // static class (e.g. only static me
     super(title, footer, routes);
     this.routes.push({url: '/settings', setup: settingsPage});
     this.username = '!';
+    this.redirected = false;
     let that = this;
     function findGetParameter(parameterName) {
       let result = null, tmp = [];
@@ -187,7 +188,6 @@ export default class User extends Router {  // static class (e.g. only static me
       });
     }
     function settingsPage() {
-      console.log("this = " + that.email);
       // we need to be logged in to view this page
       if (!that.password || !that.email)
         return false;
@@ -261,26 +261,24 @@ export default class User extends Router {  // static class (e.g. only static me
         resetPassword(id, token, email);
     }
   }
-  load(page, pushHistory) {
-    console.log("load");
-    super.load(page, pushHistory);
-  }
-  postLoad() {
-    console.log("postLoad ");
-    if (this.email && this.password) {
-      document.querySelector('#user-menu').style.display = 'flex';
-      document.querySelector('#log-in').style.display = 'none';
-      document.querySelector('#sign-up').style.display = 'none';
-    } else {
-      document.querySelector('#user-menu').style.display = 'none';
-      document.querySelector('#log-in').style.display = 'flex';
-      document.querySelector('#sign-up').style.display = 'flex';
-    }
-    if (this.username == '!')
-      this.login();
+  load(page = null, pushHistory = true) {
+    this.redirected = window.location.pathname == '/404.php';
+    let that = this;
+    super.load(page, pushHistory).then(() => {
+      if (that.email && that.password) {
+        document.querySelector('#user-menu').style.display = 'flex';
+        document.querySelector('#log-in').style.display = 'none';
+        document.querySelector('#sign-up').style.display = 'none';
+      } else {
+        document.querySelector('#user-menu').style.display = 'none';
+        document.querySelector('#log-in').style.display = 'flex';
+        document.querySelector('#sign-up').style.display = 'flex';
+      }
+      if (that.username == '!')
+        that.login();
+    });
   }
   setup(title, anchors, content) {
-    console.log("setup");
     super.setup(title, anchors, content);
     let navbarEnd = document.body.querySelector('.navbar-end');
     navbarEnd.parentNode.replaceChild(this.menu(), navbarEnd);
@@ -578,7 +576,6 @@ export default class User extends Router {  // static class (e.g. only static me
     return div;
   }
   login(error = null, success = null) {
-    console.log('login e-mail: ' + this.email + " - password: " + this.password);
     if (this.email && this.password) {
       document.querySelector('#user-menu').style.display = 'none';
       document.querySelector('#log-in').style.display = 'none';
@@ -604,7 +601,8 @@ export default class User extends Router {  // static class (e.g. only static me
              document.querySelector('#projects').href = '/' + data.username;
              document.querySelector('#username').innerHTML = data.username;
              that.username = data.username;
-             that.load();
+             if (!that.redirected)
+               that.load();
              if (success)
                success();
            }
