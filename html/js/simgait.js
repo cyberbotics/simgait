@@ -5,24 +5,22 @@ import Simulation from './simulation.js';
 document.addEventListener('DOMContentLoaded', function() {
   let simulation = new Simulation('webots');
   let project = new Project('SimGait', footer(), [{url: '/', setup: homePage},
-                                                  {url: '/simulation', setup: simulation.page, fullpage: true}]);
-});
-
-function footer() {
-  let template = document.createElement('template');
-  template.innerHTML =
+                                                  {url: '/simulation', setup: simulationPage, fullpage: true}]);
+  function footer() {
+    let template = document.createElement('template');
+    template.innerHTML =
 `<footer class="footer" style="background: linear-gradient(0deg, rgba(15,43,87,1) 0%, rgba(50,115,220,1) 100%);">
   <div class="content has-text-centered">
     <p><strong><a class="has-text-white" href="/">SimGait</a></strong></p>
     <p class="has-text-white">Simulation of human locomotion &ndash; a neuromechanical and machine learning approach.</p>
   </div>
 </footer>`;
-  return template.content.firstChild;
-}
+    return template.content.firstChild;
+  }
 
-function homePage(project) {
-  const template = document.createElement('template');
-  template.innerHTML =
+  function homePage(project) {
+    const template = document.createElement('template');
+    template.innerHTML =
 `<section class="hero" style="background: linear-gradient(0deg, rgba(15,43,87,1) 0%, rgba(50,115,220,1) 90%);">
   <div class="hero-body">
     <div class="container">
@@ -120,6 +118,12 @@ function homePage(project) {
     </div>
   </div>
 </section>`;
-  project.setup('home', ['Overview', 'Simulations', 'Partners'], template.innerHTML);
-  return true;
-}
+    project.setup('home', ['Overview', 'Simulations', 'Partners'], template.innerHTML);
+    return true;
+  }
+
+  function simulationPage(project) {
+    project.setup('simulation', [], simulation.content());
+    return true;
+  }
+});

@@ -6,7 +6,6 @@ export default class User extends Router {
     super(title, footer, routes);
     this.routes.push({url: '/settings', setup: settingsPage});
     this.username = '!';
-    this.redirected = false;
     let that = this;
     function findGetParameter(parameterName) {
       let result = null, tmp = [];
@@ -262,7 +261,6 @@ export default class User extends Router {
     }
   }
   load(page = null, pushHistory = true) {
-    this.redirected = window.location.pathname == '/404.php';
     let that = this;
     super.load(page, pushHistory).then(() => {
       if (document.querySelector('#user-menu')) {
@@ -571,13 +569,13 @@ export default class User extends Router {
             modal.querySelector('#log-in-help').innerHTML = error; // "Your e-mail or password is wrong, please try again.";
           }, function(success) {
             modal.close();
-          });
+          }, true);
         });
       });
     });
     return div;
   }
-  login(error = null, success = null) {
+  login(error = null, success = null, reload = false) {
     if (this.email && this.password) {
       document.querySelector('#user-menu').style.display = 'none';
       document.querySelector('#log-in').style.display = 'none';
@@ -603,7 +601,7 @@ export default class User extends Router {
              document.querySelector('#projects').href = '/' + data.username;
              document.querySelector('#username').innerHTML = data.username;
              that.username = data.username;
-             if (!that.redirected)
+             if (reload)  // the page content may need to be updated after loging in.
                that.load();
              if (success)
                success();

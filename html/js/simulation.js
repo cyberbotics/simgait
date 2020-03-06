@@ -1,5 +1,5 @@
 export default class Simulation {
-  page(rooter) {
+  content() {
     const template = document.createElement('template');
     template.innerHTML =
 `<section class="hero" style="background: linear-gradient(0deg, rgba(15,43,87,1) 0%, rgba(50,115,220,1) 90%);">
@@ -9,7 +9,6 @@ export default class Simulation {
     </div>
   </div>
 </section>`;
-    rooter.setup('simulation', [], template.innerHTML);
-    return true;
+    return template.innerHTML;
   }
 }
