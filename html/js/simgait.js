@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
   </div>
 </section>`;
-    project.setup('home', ['Overview', 'Simulations', 'Partners'], template.innerHTML);
+    project.setup('home', ['Overview', 'Simulations', 'Partners'], template.content);
     return true;
   }
 

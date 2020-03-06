@@ -191,34 +191,34 @@ export default class User extends Router {
       if (!that.password || !that.email)
         return false;
       const template = document.createElement('template');
-      template.innerHTML = `
-  <section class="section">
-      <div class="container">
-        <h1 class="title"><i class="fas fa-cog"></i> Settings</h1>
-        <h2 class="subtitle">Manage your account</h2>
+      template.innerHTML =
+`<section class="section">
+  <div class="container">
+    <h1 class="title"><i class="fas fa-cog"></i> Settings</h1>
+    <h2 class="subtitle">Manage your account</h2>
+  </div>
+</section>
+<section class="section">
+  <div class="container panel">
+    <p class="panel-heading">Change password</p>
+    <div class="panel-block">
+      We will send you a e-mail with a link to reset your password.
     </div>
-  </section>
-  <section class="section">
-    <div class="container panel">
-      <p class="panel-heading">Change password</p>
-      <div class="panel-block">
-        We will send you a e-mail with a link to reset your password.
-      </div>
-      <div class="panel-block">
-        <button class="button is-link" id="change-password">Change password</button>
-      </div>
+    <div class="panel-block">
+      <button class="button is-link" id="change-password">Change password</button>
     </div>
-    <div class="container panel">
-      <p class="panel-heading">Delete Account</p>
-      <div class="panel-block">
-        <i class="fas fa-exclamation-triangle"></i> &nbsp; Once you delete your account, there is no going back. Please be certain.
-      </div>
-      <div class="panel-block">
-        <button class="button is-danger" id="delete-account">Delete my account</button>
-      </div>
+  </div>
+  <div class="container panel">
+    <p class="panel-heading">Delete Account</p>
+    <div class="panel-block">
+      <i class="fas fa-exclamation-triangle"></i> &nbsp; Once you delete your account, there is no going back. Please be certain.
     </div>
-  </section>`;
-      that.setup('settings', [], template.innerHTML);
+    <div class="panel-block">
+      <button class="button is-danger" id="delete-account">Delete my account</button>
+    </div>
+  </div>
+</section>`;
+      that.setup('settings', [], template.content);
       document.querySelector('#change-password').addEventListener('click', function(event) {
         event.target.classList.add('is-loading');
         that.forgotPassword(that.email, function() { event.target.classList.remove('is-loading'); });

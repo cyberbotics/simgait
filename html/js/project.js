@@ -89,7 +89,7 @@ export default class Project extends User {
       button.innerHTML = `<button class="button is-link" id="add-a-new-project">Add a new project</button>`;
       head_end.innerHTML = `<td>Public</td><td></td>`;
     }
-    let content = {};
+    let template = document.createElement('template');
     let projects = {};
     let project_count = 0;
     projects.innerHTML = `<tr id="no-project"><td>(no project)</td></tr>`;
@@ -99,7 +99,7 @@ export default class Project extends User {
         projects.innerHTML += addProject(project);
       });
     }
-    content.innerHTML =
+    template.innerHTML =
 `<section class="section">
   <div class="container">
     <h1 class="title">Projects</h1>
@@ -116,7 +116,7 @@ export default class Project extends User {
     ${button.innerHTML}
   </div>
 </section>`;
-    that.setup('userpage', [], content.innerHTML);
+    that.setup('userpage', [], template.content);
     if (data.projects && data.projects.length > 0)
       that.content.querySelector("#no-project").style.display = 'none';
     if (data.self !== false) {

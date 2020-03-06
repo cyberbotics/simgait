@@ -150,6 +150,11 @@ export default class Router {
     for(let i = 0; i < anchors.length; i++)
       menu += `<a class="navbar-item" href="#${anchors[i].toLowerCase()}">${anchors[i]}</a>`;
     document.body.querySelector('.navbar-start').innerHTML = menu;
-    this.content.innerHTML = content;
+    this.content.innerHTML = '';
+    NodeList.prototype.forEach = Array.prototype.forEach
+    let that = this;
+    content.childNodes.forEach(function(item) {
+      that.content.appendChild(item);
+    });
   }
 }

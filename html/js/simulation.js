@@ -6,9 +6,12 @@ export default class Simulation {
   <div class="hero-body">
     <div class="container">
       <h1 class="title has-text-white">Simulation</h1>
+      <h2 id="status" class="subtitle has-text-white">Hello</h2>
     </div>
   </div>
 </section>`;
-    return template.innerHTML;
+    template.content.firstElementChild.querySelector('#status').innerHTML = 'Loading...';
+    //fetch('/ajax/simulation/setup.php').then();
+    return template.content;
   }
 }

@@ -4,6 +4,10 @@
   min-height:56px; /* needed to avoid heigth change when Log In and Sign Up buttons are hidden */
 }
 
+body footer .has-text-centered {
+  width:100%;
+}
+
 button::-moz-focus-inner { /* disable ugly dotted focus outlines in Firefox */
   border: 0;
 }
