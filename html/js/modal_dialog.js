@@ -22,7 +22,9 @@ export default class ModalDialog extends HTMLElement {
      <p>${text}</p>
     </section>
     <footer class="modal-card-foot">
-      ${actionButton}<button class="button cancel${closeClass}" type="button">${close}</button>
+      ${actionButton}
+      <button class="button cancel${closeClass}" type="button">${close}</button>
+      <div class="help is-danger"></div>
     </footer>
   </div>
 </form>`;
@@ -52,6 +54,12 @@ export default class ModalDialog extends HTMLElement {
     document.removeEventListener('keydown', ModalDialog._close);
     ModalDialog.current = null;
     this.remove();
+  }
+  error(message) {
+    this.querySelector('.modal-card-foot div').innerHTML = message;
+    let submit = this.querySelector('button[type="submit"]');
+    if (submit)
+      submit.classList.remove('is-loading');
   }
 }
 ModalDialog.current = null;

@@ -171,9 +171,10 @@ export default class Project extends User {
               return response.json();
              })
            .then(function(data) {
-              if (data.error)
-                console.log('ERROR: ' + data.error);
-              else {
+              if (data.error) {
+                console.log(data.error);
+                modal.error(data.error);
+              } else {
                 modal.close();
                 if (project_count == 0)
                   that.content.querySelector("#no-project").style.display = 'none';
@@ -188,7 +189,7 @@ export default class Project extends User {
                 that.content.querySelector('#delete-' + project.id).addEventListener('click', deleteProject);
               }
             })
-          /*.catch((error) => console.log('ERROR: ' + error))*/;
+          .catch((error) => console.log('ERROR: ' + error));
         });
       });
       if (data.projects && data.projects.length > 0)

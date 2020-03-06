@@ -50,15 +50,17 @@
     error('Wrong GitHub tag or branch');
   if ($folder !== '')
     $folder_formated = "/$folder";
+  else
+    $folder_formated = $folder;
   $project_json_url = "https://raw.githubusercontent.com/$username/$repository/$tag_or_branch" . "$folder_formated/project.json";
   $project_json = @file_get_contents($project_json_url);
   if ($project_json === false) {  # if the project.json file is not here, try to get the first world file (alphabetic order)
     $options = array('http'=>array('method'=>'GET', 'header'=>"User-Agent: PHP/file_get_contents\r\n"));
     $context = stream_context_create($options);
     $worlds_json_url = "https://api.github.com/repos/$username/$repository/contents$folder_formated/worlds?ref=$tag_or_branch";
-    $worlds_json = file_get_contents($worlds_json_url, false, $context);
+    $worlds_json = @file_get_contents($worlds_json_url, false, $context);
     if ($worlds_json === false)
-      error("Failed to fetch worlds directory at $world_json_url");
+      error("No worlds directory found in $url");
     $worlds = json_decode($worlds_json);
     $files = array();
     foreach($worlds as $world) {
