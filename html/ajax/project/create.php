@@ -7,6 +7,7 @@
   $json = file_get_contents('php://input');
   $data = json_decode($json);
   require '../../../php/database.php';
+  require '../../../php/simulation.php';
   $mysqli =  new mysqli($database_host, $database_username, $database_password, $database_name);
   if (!$mysqli)
     error("Can't connect to MySQL database: $mysqli->error");
@@ -24,40 +25,16 @@
       error('The password you entered is wrong.');
   } else
     error('You need to be authenticated to create a new project.');
-  if (substr($url, 0, 19) !== 'https://github.com/')
-    error('The url should start with https://github.com/');
-  $exploded = explode('/', substr($url, 19));
-  $count = count($exploded);
-  if ($count < 4)
-    error('Wrong GitHub URL');
-  $username = $exploded[0];
-  $repository = $exploded[1];
-  if (!preg_match('/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i', $username))
-    error('Wrong GitHub username');
-  if (!preg_match('/^[a-z\d_.-]{1,100}$/i', $repository))
-    error('Wrong GitHub repository');
-  if ($exploded[2] != 'tree')
-    error('Missing "tree" folder in URL');
-  $tag_or_branch = $exploded[3];
-  $folder = implode('/', array_slice($exploded, 4));
-  if ($folder !=='' and
-      (!preg_match('/^[a-z\d_.-\/]{1,100}$/i', $folder)  # no fancy folder name
-       or substr($folder, 0, 1) === '/'                  # doesn't start with slash
-       or strstr($folder, '//')                          # no double slashes
-       or substr($folder, -1) === '/'))                  # doesn't end with slash
-    error('Wrong folder name');
-  if (!preg_match('/^[a-z\d_.-]{0,100}$/i', $tag_or_branch))
-    error('Wrong GitHub tag or branch');
-  if ($folder !== '')
-    $folder_formated = "/$folder";
-  else
-    $folder_formated = $folder;
-  $project_json_url = "https://raw.githubusercontent.com/$username/$repository/$tag_or_branch" . "$folder_formated/project.json";
+  $check_url = simulation_check_url($url);
+  if (!is_array($check_url))
+    error($check_url);
+  list($username, $repository, $tag_or_branch, $folder) = $check_url;
+  $project_json_url = "https://raw.githubusercontent.com/$username/$repository/$tag_or_branch" . "$folder/project.json";
   $project_json = @file_get_contents($project_json_url);
   if ($project_json === false) {  # if the project.json file is not here, try to get the first world file (alphabetic order)
     $options = array('http'=>array('method'=>'GET', 'header'=>"User-Agent: PHP/file_get_contents\r\n"));
     $context = stream_context_create($options);
-    $worlds_json_url = "https://api.github.com/repos/$username/$repository/contents$folder_formated/worlds?ref=$tag_or_branch";
+    $worlds_json_url = "https://api.github.com/repos/$username/$repository/contents$folder/worlds?ref=$tag_or_branch";
     $worlds_json = @file_get_contents($worlds_json_url, false, $context);
     if ($worlds_json === false)
       error("No worlds directory found in $url");
@@ -82,7 +59,7 @@
       error("Missing default property in $project");
     $default = $project->{'default'};
   }
-  $world_url = "https://raw.githubusercontent.com/$username/$repository/$tag_or_branch" . "$folder_formated/worlds/$default";
+  $world_url = "https://raw.githubusercontent.com/$username/$repository/$tag_or_branch" . "$folder/worlds/$default";
   $world = @file_get_contents($world_url);
   if ($world === false)
     error("Failed to fetch world file at $world_url");
