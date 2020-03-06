@@ -1,6 +1,6 @@
 import ModalDialog from './modal_dialog.js';
 
-export default class Router {  // static class (e.g. only static methods)
+export default class Router {
   constructor(title, footer, routes) {
     this.title = title;
     this.content = document.createElement('div');

@@ -1,7 +1,7 @@
 import ModalDialog from './modal_dialog.js';
 import Router from './router.js';
 
-export default class User extends Router {  // static class (e.g. only static methods)
+export default class User extends Router {
   constructor(title, footer, routes) {
     super(title, footer, routes);
     this.routes.push({url: '/settings', setup: settingsPage});
@@ -265,17 +265,19 @@ export default class User extends Router {  // static class (e.g. only static me
     this.redirected = window.location.pathname == '/404.php';
     let that = this;
     super.load(page, pushHistory).then(() => {
-      if (that.email && that.password) {
-        document.querySelector('#user-menu').style.display = 'flex';
-        document.querySelector('#log-in').style.display = 'none';
-        document.querySelector('#sign-up').style.display = 'none';
-      } else {
-        document.querySelector('#user-menu').style.display = 'none';
-        document.querySelector('#log-in').style.display = 'flex';
-        document.querySelector('#sign-up').style.display = 'flex';
+      if (document.querySelector('#user-menu')) {
+        if (that.email && that.password) {
+          document.querySelector('#user-menu').style.display = 'flex';
+          document.querySelector('#log-in').style.display = 'none';
+          document.querySelector('#sign-up').style.display = 'none';
+        } else {
+          document.querySelector('#user-menu').style.display = 'none';
+          document.querySelector('#log-in').style.display = 'flex';
+          document.querySelector('#sign-up').style.display = 'flex';
+        }
+        if (that.username == '!')
+          that.login();
       }
-      if (that.username == '!')
-        that.login();
     });
   }
   setup(title, anchors, content) {
