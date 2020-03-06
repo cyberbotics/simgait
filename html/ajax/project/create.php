@@ -13,10 +13,7 @@
   $mysqli->set_charset('utf8');
   $email = $mysqli->escape_string($data->{'email'});
   $password = $mysqli->escape_string($data->{'password'});
-  $repository = $mysqli->escape_string($data->{'repository'});
-  $folder = $mysqli->escape_string($data->{'folder'});
-  $tag = $mysqli->escape_string($data->{'tag'});
-  $branch = $mysqli->escape_string($data->{'branch'});
+  $url = $mysqli->escape_string($data->{'url'});
   if ($email && $password) {
     $result = $mysqli->query("SELECT id, password FROM user WHERE email=\"$email\"") or error($mysqli->error);
     $user = $result->fetch_assoc();
@@ -27,42 +24,41 @@
       error('The password you entered is wrong.');
   } else
     error('You need to be authenticated to create a new project.');
-  if (substr($repository, 0, 19) !== 'https://github.com/')
-    error('The repository should start with https://github.com/');
-  $exploded = explode('/', substr($repository, 19));
-  if (count($exploded) != 2)
+  if (substr($url, 0, 19) !== 'https://github.com/')
+    error('The url should start with https://github.com/');
+  $exploded = explode('/', substr($url, 19));
+  $count = count($exploded);
+  if ($count < 4)
     error('Wrong GitHub URL');
   $username = $exploded[0];
-  $repository_name = $exploded[1];
+  $repository = $exploded[1];
   if (!preg_match('/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i', $username))
     error('Wrong GitHub username');
-  if (!preg_match('/^[a-z\d_.-]{1,100}$/i', $repository_name))
-    error('Wrong GitHub repository name');
+  if (!preg_match('/^[a-z\d_.-]{1,100}$/i', $repository))
+    error('Wrong GitHub repository');
+  if ($exploded[2] != 'tree')
+    error('Missing "tree" folder in URL');
+  $tag_or_branch = $exploded[3];
+  $folder = implode('/', array_slice($exploded, 4));
   if ($folder !=='' and
       (!preg_match('/^[a-z\d_.-\/]{1,100}$/i', $folder)  # no fancy folder name
        or substr($folder, 0, 1) === '/'                  # doesn't start with slash
        or strstr($folder, '//')                          # no double slashes
        or substr($folder, -1) === '/'))                  # doesn't end with slash
     error('Wrong folder name');
-  if (!preg_match('/^[a-z\d_.-]{0,100}$/i', $tag))
-    error('Wrong GitHub tag');
-  if (!preg_match('/^[a-z\d_.-]{0,100}$/i', $branch))
-    error('Wrong GitHub branch');
-  if ($branch === '' and $tag === '')
-    error('A branch or a tag should be specified');
-  if ($branch !== '' and $tag !== '')
-    error('Either a branch or a tag should be specified, but not both');
+  if (!preg_match('/^[a-z\d_.-]{0,100}$/i', $tag_or_branch))
+    error('Wrong GitHub tag or branch');
   if ($folder !== '')
     $folder_formated = "/$folder";
-  $url = "https://raw.githubusercontent.com/$username/$repository_name/$tag$branch" . "$folder_formated/project.json";
-  $project_json = @file_get_contents($url);
+  $project_json_url = "https://raw.githubusercontent.com/$username/$repository/$tag_or_branch" . "$folder_formated/project.json";
+  $project_json = @file_get_contents($project_json_url);
   if ($project_json === false) {  # if the project.json file is not here, try to get the first world file (alphabetic order)
     $options = array('http'=>array('method'=>'GET', 'header'=>"User-Agent: PHP/file_get_contents\r\n"));
     $context = stream_context_create($options);
-    $url = "https://api.github.com/repos/$username/$repository_name/contents$folder_formated/worlds?ref=$tag$branch";
-    $worlds_json = file_get_contents($url, false, $context);
+    $worlds_json_url = "https://api.github.com/repos/$username/$repository/contents$folder_formated/worlds?ref=$tag_or_branch";
+    $worlds_json = file_get_contents($worlds_json_url, false, $context);
     if ($worlds_json === false)
-      error("Failed to fetch worlds directory at $url");
+      error("Failed to fetch worlds directory at $world_json_url");
     $worlds = json_decode($worlds_json);
     $files = array();
     foreach($worlds as $world) {
@@ -79,15 +75,15 @@
   } else {
     $project = json_decode($project_json);
     if ($project === null)
-      error("Cannot decode JSON data from $url: " . json_last_error());
+      error("Cannot decode JSON data from $world_json_url: " . json_last_error());
     if (!property_exists($project, 'default'))
       error("Missing default property in $project");
     $default = $project->{'default'};
   }
-  $url = "https://raw.githubusercontent.com/$username/$repository_name/$tag$branch" . "$folder_formated/worlds/$default";
-  $world = @file_get_contents($url);
+  $world_url = "https://raw.githubusercontent.com/$username/$repository/$tag_or_branch" . "$folder_formated/worlds/$default";
+  $world = @file_get_contents($world_url);
   if ($world === false)
-    error("Failed to fetch world file at $url");
+    error("Failed to fetch world file at $world_url");
   # retrieve the title from the WorldInfo node (assuming the default tabulation from a Webots saved world file)
   $n = strpos($world, "\nWorldInfo {\n");
   if ($n === false)
@@ -100,9 +96,7 @@
   if ($m === false)
     error("Missing closing double quote for WorldInfo.title in $default world file");
   $title = substr($world, $n, $m - $n);
-  $repository =
-  $query = "INSERT INTO project(title, user, repository, branch, tag, folder, public) VALUES(\"$title\", $user[id], " .
-           "\"$repository\", \"$branch\", \"$tag\", \"$folder\", 0)";
+  $query = "INSERT INTO project(title, user, url, public) VALUES(\"$title\", $user[id], \"$url\", 0)";
   $mysqli->query($query) or error($mysqli->error);
   $answer = array();
   $answer['id'] = $mysqli->insert_id;

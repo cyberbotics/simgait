@@ -35,8 +35,6 @@ export default class Project extends User {
     function addProject(project) {
       let line = {};
       const checked = project.public == "1" ? ' checked' : '';
-      const separator = project.folder == '' ? '' : '/';
-      const url = project.repository + '/tree/' + project.branch + project.tag + separator + project.folder;
       line.innerHTML =
 `<tr id="project-${project.id}">
   <td>
@@ -44,10 +42,7 @@ export default class Project extends User {
       <span class="icon"><i class="fas fa-play fa-lg"></i></span>
     </button>
   </td>
-  <td><a href="${url}" target="_blank">${project.title}</a></td>
-  <td><a href="${project.repository}" target="_blank">${project.repository}</a></td>
-  <td><a href="${url}" target="_blank">${project.folder}</a></td>
-  <td>${project.tag}${project.branch}</td>
+  <td><a href="${project.url}" target="_blank">${project.title}</a></td>
   <td style="text-align:center"><input type="checkbox"${checked}></td>
   <td><button class="button is-small is-outlined is-danger" title="delete this project" id="delete-${project.id}"><span class="icon"><i class="fas fa-times fa-lg"></i></span></button></td>
 </tr>`;
@@ -111,7 +106,7 @@ export default class Project extends User {
     <table id="project-table" class="table">
       <thead>
         <tr>
-          <tr><td></td><td>Title</td><td>Repository</td><td>Folder</td><td>Tag / Branch</td>${head_end.innerHTML}
+          <tr><td></td><td>Title</td>${head_end.innerHTML}
         </tr>
       </thead>
       <tbody>
@@ -139,30 +134,22 @@ export default class Project extends User {
   <div class="help">This Git repository should be available over HTTPS without authentication.</div>
 </div>
 <div class="field">
-  <label class="label">Folder</label>
+  <label class="label">Project Folder</label>
   <div class="control has-icons-left">
     <input id="folder" class="input" placeholder="my_simualtions/my_wonderful_simulation" maxlen="2048">
     <span class="icon is-small is-left">
       <i class="fas fa-folder"></i>
     </span>
   </div>
-  <div class="help">Folder in which your project is located.</div>
+  <div class="help">Webots project folder in your Git repository (leave empty if at root).</div>
 </div>
 <div class="field">
-  <label class="label">Tag / Branch</label>
+  <label class="label">Tag or Branch</label>
   <div class="control has-icons-left">
-    <input id="tag-or-branch-name" class="input" required placeholder="tag or branch name" maxlen="40" value="master">
+    <input id="tag-or-branch" class="input" required placeholder="tag or branch name" maxlen="40" value="master">
     <span class="icon is-small is-left">
       <i class="fas fa-code-branch"></i>
     </span>
-  </div>
-  <div class="control">
-    <label class="radio">
-      <input type="radio" name="tag-or-branch" value="tag" required> Tag
-    </label>
-    <label class="radio">
-      <input type="radio" name="tag-or-branch" value="branch" required checked> Branch
-    </label>
   </div>
 </div>`;
         let modal = new ModalDialog('Add project', content.innerHTML, 'Cancel', 'Add');
@@ -174,16 +161,12 @@ export default class Project extends User {
           modal.querySelector('button[type="submit"]').classList.add('is-loading');
           const repository = modal.querySelector('#repository').value;
           const folder = modal.querySelector('#folder').value;
-          const tag_or_branch = modal.querySelector('input[name="tag-or-branch"]').checked;
-          const name = modal.querySelector('#tag-or-branch-name').value;
-          const tag = tag_or_branch ? name : '';
-          const branch = tag_or_branch ? '' : name;
+          const tag_or_branch = modal.querySelector('#tag-or-branch').value;
+          const separator = folder == '' ? '' : '/';
+          const url = repository + '/tree/' + tag_or_branch + separator + folder;
           fetch('/ajax/project/create.php', { method: 'post', body: JSON.stringify({email: that.email,
                                                                                     password: that.password,
-                                                                                    repository: repository,
-                                                                                    folder: folder,
-                                                                                    tag: tag,
-                                                                                    branch: branch})})
+                                                                                    url: url})})
            .then(function(response) {
               return response.json();
              })
@@ -197,10 +180,7 @@ export default class Project extends User {
                 let project = {};
                 project.id = data.id;
                 project.title = data.title;
-                project.repository = repository;
-                project.folder = folder;
-                project.tag = tag;
-                project.branch = branch;
+                project.url = url;
                 let template = document.createElement('template');
                 template.innerHTML = addProject(project);
                 project_count++;
@@ -208,7 +188,7 @@ export default class Project extends User {
                 that.content.querySelector('#delete-' + project.id).addEventListener('click', deleteProject);
               }
             })
-           .catch((error) => console.log('ERROR: ' + error));
+          /*.catch((error) => console.log('ERROR: ' + error))*/;
         });
       });
       if (data.projects && data.projects.length > 0)
