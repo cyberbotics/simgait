@@ -82,8 +82,18 @@ export default class Router {
       } else {
         let found = false;
         for(let i = 0; i < that.routes.length; i++) {
-          if (url.pathname == that.routes[i].url) {
-            if (that.routes[i].setup(that)) {
+          const route = that.routes[i];
+          if (url.pathname == route.url) {
+            if (route.setup(that)) {
+              if (route.fullpage) {
+                document.querySelector('body footer').style.display = 'none';
+                document.querySelector('body nav').style.display = 'none';
+                document.querySelector('body').classList.remove('has-navbar-fixed-top');
+              } else {
+                document.querySelector('body footer').style.display = 'flex';
+                document.querySelector('body nav').style.display = 'flex';
+                document.querySelector('body').classList.add('has-navbar-fixed-top');
+              }
               if (pushHistory)
                 window.history.pushState(null, name, url.pathname + url.search + url.hash);
               resolve();

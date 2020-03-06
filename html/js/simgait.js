@@ -1,8 +1,11 @@
 import ModalDialog from './modal_dialog.js';
 import Project from './project.js';
+import Simulation from './simulation.js';
 
 document.addEventListener('DOMContentLoaded', function() {
-  let project = new Project('SimGait', footer(), [{url: '/', setup: homePage}]);
+  let simulation = new Simulation('webots');
+  let project = new Project('SimGait', footer(), [{url: '/', setup: homePage},
+                                                  {url: '/simulation', setup: simulation.page, fullpage: true}]);
 });
 
 function footer() {
@@ -19,8 +22,8 @@ function footer() {
 
 function homePage(project) {
   const template = document.createElement('template');
-  template.innerHTML = `
-<section class="hero" style="background: linear-gradient(0deg, rgba(15,43,87,1) 0%, rgba(50,115,220,1) 90%);">
+  template.innerHTML =
+`<section class="hero" style="background: linear-gradient(0deg, rgba(15,43,87,1) 0%, rgba(50,115,220,1) 90%);">
   <div class="hero-body">
     <div class="container">
       <h1 class="title has-text-white">SimGait</h1>
