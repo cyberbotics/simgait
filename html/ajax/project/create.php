@@ -15,6 +15,7 @@
   $email = $mysqli->escape_string($data->{'email'});
   $password = $mysqli->escape_string($data->{'password'});
   $url = $mysqli->escape_string($data->{'url'});
+  $tag = intval($data->{'tag'});
   if ($email && $password) {
     $result = $mysqli->query("SELECT id, password FROM user WHERE email=\"$email\"") or error($mysqli->error);
     $user = $result->fetch_assoc();
@@ -75,7 +76,7 @@
   if ($m === false)
     error("Missing closing double quote for WorldInfo.title in $default world file");
   $title = substr($world, $n, $m - $n);
-  $query = "INSERT INTO project(title, user, url, public) VALUES(\"$title\", $user[id], \"$url\", 0)";
+  $query = "INSERT INTO project(title, user, url, tag, public) VALUES(\"$title\", $user[id], \"$url\", $tag, 0)";
   $mysqli->query($query) or error($mysqli->error);
   $answer = array();
   $answer['id'] = $mysqli->insert_id;

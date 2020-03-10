@@ -151,6 +151,14 @@ export default class Project extends User {
       <i class="fas fa-code-branch"></i>
     </span>
   </div>
+  <div class="control">
+    <label class="radio">
+      <input type="radio" name="tag" id="tag" required> Tag
+    </label>
+    <label class="radio">
+      <input type="radio" name="tag" required checked> Branch
+    </label>
+  </div>
 </div>`;
         let modal = new ModalDialog('Add project', content.innerHTML, 'Cancel', 'Add');
         let input = modal.querySelector('#repository');
@@ -161,12 +169,14 @@ export default class Project extends User {
           modal.querySelector('button[type="submit"]').classList.add('is-loading');
           const repository = modal.querySelector('#repository').value;
           const folder = modal.querySelector('#folder').value;
-          const tag_or_branch = modal.querySelector('#tag-or-branch').value;
+          const tag_or_branch_name = modal.querySelector('#tag-or-branch').value;
+          const tag = modal.querySelector('input[type="radio"]').checked ? 1 : 0;
           const separator = folder == '' ? '' : '/';
-          const url = repository + '/tree/' + tag_or_branch + separator + folder;
+          const url = repository + '/tree/' + tag_or_branch_name + separator + folder;
           fetch('/ajax/project/create.php', { method: 'post', body: JSON.stringify({email: that.email,
                                                                                     password: that.password,
-                                                                                    url: url})})
+                                                                                    url: url,
+                                                                                    tag: tag})})
            .then(function(response) {
               return response.json();
              })
