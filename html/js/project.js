@@ -25,8 +25,7 @@ export default class Project extends User {
             that.userPage(data);
             resolve();
           }
-        })
-        .catch((error) => console.log('ERROR: ' + error));
+        });
     });
     return promise;
   }
@@ -38,13 +37,20 @@ export default class Project extends User {
       line.innerHTML =
 `<tr id="project-${project.id}">
   <td>
-    <button class="button is-small is-outlined is-link" title="run this project">
+    <button class="button is-small is-outlined is-link" id="run-${project.id}"title="run this project">
       <span class="icon"><i class="fas fa-play fa-lg"></i></span>
     </button>
   </td>
-  <td><a href="${project.url}" target="_blank">${project.title}</a></td>
-  <td style="text-align:center"><input type="checkbox"${checked}></td>
-  <td><button class="button is-small is-outlined is-danger" title="delete this project" id="delete-${project.id}"><span class="icon"><i class="fas fa-times fa-lg"></i></span></button></td>
+  <td><a href="${project.url}" target="_blank" id="url-${project.id}">${project.title}</a></td>
+  <td style="text-align:center">
+    <input type="checkbox"${checked}>
+    <input type="hidden" id="tag-${project.id}" value="${project.tag}">
+  </td>
+  <td>
+    <button class="button is-small is-outlined is-danger" title="delete this project" id="delete-${project.id}">
+      <span class="icon"><i class="fas fa-times fa-lg"></i></span>
+    </button>
+  </td>
 </tr>`;
       return line.innerHTML;
     }
@@ -76,9 +82,19 @@ export default class Project extends User {
               if (project_count == 0)
                 that.content.querySelector("#no-project").style.display = 'flex';
             }
-          })
-         .catch((error) => console.log('ERROR: ' + error));
+          });
       });
+    }
+    function runProject(event) {
+      let button = event.target;
+      while (button.tagName != 'BUTTON')
+        button = button.parentNode;
+      const project_id = button.id.substring(4);
+      console.log('#tag-' + project_id);
+      const tag = document.querySelector('#tag-' + project_id).value;
+      const github_url = document.querySelector('#url-' + project_id).href;
+      let url = '/simulation?url=' + github_url + '&tag=' + tag;
+      that.load(url);
     }
     let button = {}
     let head_end = {};
@@ -191,20 +207,22 @@ export default class Project extends User {
                 let project = {};
                 project.id = data.id;
                 project.title = data.title;
+                project.tag = tag;
                 project.url = url;
                 let template = document.createElement('template');
                 template.innerHTML = addProject(project);
                 project_count++;
                 that.content.querySelector('#project-table').appendChild(template.content.firstChild);
                 that.content.querySelector('#delete-' + project.id).addEventListener('click', deleteProject);
+                that.content.querySelector('#run-' + project.id).addEventListener('click', runProject);
               }
-            })
-          .catch((error) => console.log('ERROR: ' + error));
+            });
         });
       });
       if (data.projects && data.projects.length > 0)
         data.projects.forEach(function(project, index) {
           that.content.querySelector('#delete-' + project.id).addEventListener('click', deleteProject);
+          that.content.querySelector('#run-' + project.id).addEventListener('click', runProject);
         });
     }
   }
