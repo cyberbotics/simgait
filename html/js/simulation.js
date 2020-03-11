@@ -11,6 +11,9 @@ export default class Simulation {
       return result;
     }
     const url = findGetParameter('url');
+    const tag = findGetParameter('tag');
+    if (tag == null)
+      tag = '0';
     const template = document.createElement('template');
     template.innerHTML =
 `<section class="hero" style="background: linear-gradient(0deg, rgba(15,43,87,1) 0%, rgba(50,115,220,1) 90%);">
@@ -28,12 +31,24 @@ export default class Simulation {
     else if (!url.startsWith('https://github.com/'))
       status.innerHTML = 'Wrong url: ' + url;
     else {
-      status.innerHTML = 'Fetching ' + url;
-      let i = 1;
-      window.setInterval(function() {
-        status.innerHTML = "Done " + i;
-        i++;
+      status.innerHTML = 'Fetching ' + url + '<div class="is-size-7">Running for 0 second</div>';
+      let timer = 0;
+      let interval = window.setInterval(function() {
+        timer++;
+        let plural = timer > 1 ? 's' : '';
+        status.innerHTML = "Fetching " + url + '<div class="is-size-7">Running for ' + timer + ' second' + plural + '</div>';
       }, 1000);
+      fetch('/ajax/simulation/download.php', { method: 'post', body: JSON.stringify({url: url, tag: tag})})
+       .then(function(response) {
+          return response.json();
+         })
+       .then(function(data) {
+          if (data.error)
+            status.innerHTML = 'Error: ' + data.error;
+          else
+            status.innerHTML = 'OK';
+          window.clearInterval(interval);
+        });
     }
     return template.content;
   }
