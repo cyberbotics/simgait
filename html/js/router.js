@@ -84,22 +84,12 @@ export default class Router {
         for(let i = 0; i < that.routes.length; i++) {
           const route = that.routes[i];
           if (url.pathname == route.url) {
-            if (route.setup(that)) {
-              if (route.fullpage) {
-                document.querySelector('body footer').style.display = 'none';
-                document.querySelector('body nav').style.display = 'none';
-                document.querySelector('body').classList.remove('has-navbar-fixed-top');
-              } else {
-                document.querySelector('body footer').style.display = 'flex';
-                document.querySelector('body nav').style.display = 'flex';
-                document.querySelector('body').classList.add('has-navbar-fixed-top');
-              }
-              if (pushHistory)
-                window.history.pushState(null, name, url.pathname + url.search + url.hash);
-              resolve();
-              found = true;
-              break;
-            }
+            if (pushHistory)
+              window.history.pushState(null, name, url.pathname + url.search + url.hash);
+            route.setup(that);
+            found = true;
+            resolve();
+            break;
           }
         }
         if (!found) {
@@ -142,9 +132,8 @@ export default class Router {
 </section>`;
       this.setup('page not found', [], content.innerHTML);
     }
-    return true;
   }
-  setup(title, anchors, content) {
+  setup(title, anchors, content, fullpage=false) {
     document.head.querySelector('#title').innerHTML = this.title + ' - ' + title;
     let menu = '';
     for(let i = 0; i < anchors.length; i++)
@@ -156,5 +145,14 @@ export default class Router {
     content.childNodes.forEach(function(item) {
       that.content.appendChild(item);
     });
+    if (fullpage) {
+      document.querySelector('body footer').style.display = 'none';
+      document.querySelector('body nav').style.display = 'none';
+      document.querySelector('body').classList.remove('has-navbar-fixed-top');
+    } else {
+      document.querySelector('body footer').style.display = 'flex';
+      document.querySelector('body nav').style.display = 'flex';
+      document.querySelector('body').classList.add('has-navbar-fixed-top');
+    }
   }
 }

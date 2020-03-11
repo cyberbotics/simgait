@@ -2,7 +2,7 @@ export default class Simulation {
   content() {
     function findGetParameter(parameterName) {
       let result = null, tmp = [];
-      let items = location.search.substr(1).split('&');
+      let items = window.location.search.substr(1).split('&');
       for(let index = 0; index < items.length; index++) {
         tmp = items[index].split('=');
         if (tmp[0] === parameterName)

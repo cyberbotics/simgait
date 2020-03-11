@@ -5,7 +5,7 @@ import Simulation from './simulation.js';
 document.addEventListener('DOMContentLoaded', function() {
   let simulation = new Simulation('webots');
   let project = new Project('SimGait', footer(), [{url: '/', setup: homePage},
-                                                  {url: '/simulation', setup: simulationPage, fullpage: true}]);
+                                                  {url: '/simulation', setup: simulationPage}]);
   function footer() {
     let template = document.createElement('template');
     template.innerHTML =
@@ -119,11 +119,9 @@ document.addEventListener('DOMContentLoaded', function() {
   </div>
 </section>`;
     project.setup('home', ['Overview', 'Simulations', 'Partners'], template.content);
-    return true;
   }
 
   function simulationPage(project) {
-    project.setup('simulation', [], simulation.content());
-    return true;
+    project.setup('simulation', [], simulation.content(), true);
   }
 });

@@ -181,8 +181,7 @@ export default class User extends Router {
                 that.password = hash;
                 that.login();
               }
-            })
-            .catch((error) => console.log('ERROR: ' + error));
+            });
         });
       });
     }
@@ -244,11 +243,9 @@ export default class User extends Router {
                 that.email = null;
                 that.load('/');
               }
-            })
-           .catch((error) => console.log('ERROR: ' + error));
+            });
         });
       });
-      return true;
     }
     this.load();
     // account creation: entering the password
@@ -278,8 +275,8 @@ export default class User extends Router {
       }
     });
   }
-  setup(title, anchors, content) {
-    super.setup(title, anchors, content);
+  setup(title, anchors, content, fullpage=false) {
+    super.setup(title, anchors, content, fullpage);
     let navbarEnd = document.body.querySelector('.navbar-end');
     navbarEnd.parentNode.replaceChild(this.menu(), navbarEnd);
   }
@@ -438,8 +435,7 @@ export default class User extends Router {
               help.classList.add('is-success');
               help.classList.remove('is-danger');
             }
-          })
-         .catch((error) => console.log('ERROR: ' + error));
+          });
       });
       modal.querySelector('#sign-up-username').addEventListener('focus', function(event) {
         let username = event.target;
@@ -479,8 +475,7 @@ export default class User extends Router {
               help.classList.add('is-success');
               help.classList.remove('is-danger');
             }
-          })
-         .catch((error) => console.log('ERROR: ' + error));
+          });
       });
       modal.querySelector('form').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -505,8 +500,7 @@ export default class User extends Router {
                new ModalDialog('Thank you!',
                                'An e-mail was just sent to you to verify your address.<br />' +
                                'Click on the link in the e-mail to set a password and activate your ' + category + ' account.');
-           })
-          .catch((error) => console.log('ERROR: ' + error));
+           });
       });
     });
 
@@ -606,8 +600,7 @@ export default class User extends Router {
              if (success)
                success();
            }
-         })
-        .catch((error) => console.log('ERROR: ' + error));
+         });
     }
   }
   async sha256Hash(text) {
@@ -630,8 +623,7 @@ export default class User extends Router {
         else
           new ModalDialog('Password reset',
                           'An e-mail with a password reset link was just sent to you.<br />Check your inbox now.');
-      })
-     .catch((error) => console.log('ERROR: ' + error));
+      });
   }
   get email() {
     return window.localStorage.getItem('email');
