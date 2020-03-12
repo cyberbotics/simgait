@@ -19,7 +19,31 @@ The following software is installed:
 - Ubuntu 18.04 Desktop with `apache2`, `php`, `git` and `webots` (from the snap store).
 
 A letsencrypt certificate was installed on enable https.
-Apache was configured with a rewrite rule to redirect all traffic from http to the https.
+Apache was configured with rewrite rules to:
+
+1. Redirect all traffic from http to the https.
+2. Redirect WebSocket traffic from `wss://servername/<port_number>` to `ws://servername:<port_number>`.
+
+```
+LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so  # to enable WebSocket redirection
+
+<VirtualHost *:443>
+  ServerName simgait.org
+
+  [ ... ]
+
+  RewriteEngine on
+
+  RewriteCond %{SERVER_NAME} =%{SERVER_NAME} [OR]
+  RewriteCond %{SERVER_NAME} =www.%{SERVER_NAME}
+  RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+
+  RewriteCond %{HTTP:Upgrade} websocket [NC]
+  RewriteCond %{HTTP:Connection} upgrade [NC]
+  RewriteRule ^/(\d*)$ "ws://%{SERVER_NAME}:$1/" [P,L]
+
+</VirtualHost>
+```
 
 We plan to install [CodeIgniter4](/codeigniter4/codeigniter4/) to use it as a PHP web framework.
 
