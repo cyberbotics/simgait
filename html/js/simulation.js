@@ -32,17 +32,21 @@ export default class Simulation {
           if (data.error)
             status.innerHTML = 'Error: ' + data.error;
           else
-            compile(url);
+            compile(url, tag);
         });
     }
-    function compile(url) {
+    function compile(url, tag) {
       let timer = run_timer('Sending WebSocket...');
-      let socket = new WebSocket("wss://localhost/3000/client");
+      let socket = new WebSocket("wss://localhost/2000/client");
       socket.onmessage = function(event) {
         console.log("WebSocket received: " + event.data);
       }
       socket.onopen = function(event) {
-        socket.send("Hello World\n");
+        let start = {};
+        start.url = url;
+        start.tag = tag;
+        console.log(JSON.stringify(start));
+        socket.send(JSON.stringify(start));
       }
     }
     const url = findGetParameter('url');
@@ -66,7 +70,7 @@ export default class Simulation {
     else if (!url.startsWith('https://github.com/'))
       status.innerHTML = 'Wrong url: ' + url;
     else
-      download(url, tag);
+      compile(url, tag);
     return template.content;
   }
 }
