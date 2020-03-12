@@ -25,10 +25,9 @@ Apache was configured with rewrite rules to:
 2. Redirect WebSocket traffic from `wss://servername/<port_number>` to `ws://servername:<port_number>`.
 
 ```
-LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so  # to enable WebSocket redirection
-
-<VirtualHost *:443>
+<VirtualHost *:80>
   ServerName simgait.org
+  ServerAlias www.simgait.org
 
   [ ... ]
 
@@ -37,10 +36,24 @@ LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so  # to enable WebS
   RewriteCond %{SERVER_NAME} =%{SERVER_NAME} [OR]
   RewriteCond %{SERVER_NAME} =www.%{SERVER_NAME}
   RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+</VirtualHost>
+
+LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so  # to enable WebSocket redirection
+
+<VirtualHost *:443>
+  ServerName simgait.org
+  ServerAlias www.simgait.org
+
+  [ ... ]
+
+  RewriteEngine on
+
+  RewriteCond %{SERVER_NAME} =www.simgait.org
+  RewriteRule ^ https://simgait.org%{REQUEST_URI} [END,NE,R=permanent]
 
   RewriteCond %{HTTP:Upgrade} websocket [NC]
   RewriteCond %{HTTP:Connection} upgrade [NC]
-  RewriteRule ^/(\d*)$ "ws://%{SERVER_NAME}:$1/" [P,L]
+  RewriteRule ^/(\d*)/(.*)$ "ws://%{SERVER_NAME}:$1/$2" [P,L]
 
 </VirtualHost>
 ```

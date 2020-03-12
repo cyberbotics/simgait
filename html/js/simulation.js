@@ -37,7 +37,7 @@ export default class Simulation {
     }
     function compile(url) {
       let timer = run_timer('Sending WebSocket...');
-      let socket = new WebSocket("wss://localhost/3000");
+      let socket = new WebSocket("wss://localhost/3000/client");
       socket.onmessage = function(event) {
         console.log("WebSocket received: " + event.data);
       }
