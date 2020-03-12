@@ -10,6 +10,41 @@ export default class Simulation {
       }
       return result;
     }
+    function display_timer(message, time_count_reset = false) {
+      if (time_count_reset)
+        display_timer.time_count = 0
+      let plural = display_timer.time_count > 1 ? 's' : '';
+      status.innerHTML = message + ' <span class="is-size-7">(' + display_timer.time_count + ' second' + plural + ')<span>';
+      display_timer.time_count++;
+    }
+    function run_timer(message) {
+      display_timer(message, true);
+      return window.setInterval(display_timer, 1000, message, false);
+    }
+    function download(url, tag) {
+      let timer = run_timer('Fetching ' + url);
+      fetch('/ajax/simulation/download.php', { method: 'post', body: JSON.stringify({url: url, tag: tag})})
+       .then(function(response) {
+          return response.json();
+        })
+       .then(function(data) {
+          window.clearInterval(timer);
+          if (data.error)
+            status.innerHTML = 'Error: ' + data.error;
+          else
+            compile(url);
+        });
+    }
+    function compile(url) {
+      let timer = run_timer('Sending WebSocket...');
+      let socket = new WebSocket("wss://localhost/3000");
+      socket.onmessage = function(event) {
+        console.log("WebSocket received: " + event.data);
+      }
+      socket.onopen = function(event) {
+        socket.send("Hello World\n");
+      }
+    }
     const url = findGetParameter('url');
     const tag = findGetParameter('tag');
     if (tag == null)
@@ -30,26 +65,8 @@ export default class Simulation {
                          '?url=https://github.com/user/repo/tree/tag/simulation</div>';
     else if (!url.startsWith('https://github.com/'))
       status.innerHTML = 'Wrong url: ' + url;
-    else {
-      status.innerHTML = 'Fetching ' + url + '<div class="is-size-7">Running for 0 second</div>';
-      let timer = 0;
-      let interval = window.setInterval(function() {
-        timer++;
-        let plural = timer > 1 ? 's' : '';
-        status.innerHTML = "Fetching " + url + '<div class="is-size-7">Running for ' + timer + ' second' + plural + '</div>';
-      }, 1000);
-      fetch('/ajax/simulation/download.php', { method: 'post', body: JSON.stringify({url: url, tag: tag})})
-       .then(function(response) {
-          return response.json();
-         })
-       .then(function(data) {
-          if (data.error)
-            status.innerHTML = 'Error: ' + data.error;
-          else
-            status.innerHTML = 'OK';
-          window.clearInterval(interval);
-        });
-    }
+    else
+      download(url, tag);
     return template.content;
   }
 }
