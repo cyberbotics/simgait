@@ -42,11 +42,12 @@ export default class Simulation {
         console.log("WebSocket received: " + event.data);
       }
       socket.onopen = function(event) {
-        let start = {};
-        start.url = url;
-        start.tag = tag;
-        console.log(JSON.stringify(start));
-        socket.send(JSON.stringify(start));
+        let message = {};
+        message.start = {};
+        message.start.url = url;
+        message.start.tag = tag;
+        console.log(JSON.stringify(message));
+        socket.send(JSON.stringify(message));
       }
     }
     const url = findGetParameter('url');
