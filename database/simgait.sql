@@ -30,15 +30,21 @@ CREATE TABLE `user` (
 ALTER TABLE `project`
   ADD PRIMARY KEY (`id`),
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `project`
   ADD KEY `user` (`user`);
 
 ALTER TABLE `request`
   ADD PRIMARY KEY (`id`),
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `request`
   ADD KEY `user` (`user`);
 
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `user`
   ADD UNIQUE KEY `email` (`email`),
   ADD UNIQUE KEY `username` (`username`);
