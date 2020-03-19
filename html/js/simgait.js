@@ -1,11 +1,11 @@
-import ModalDialog from './modal_dialog.js';
 import Project from './project.js';
 import Simulation from './simulation.js';
 
 document.addEventListener('DOMContentLoaded', function() {
   let simulation = new Simulation('webots');
-  let project = new Project('SimGait', footer(), [{url: '/', setup: homePage},
-                                                  {url: '/simulation', setup: simulationPage}]);
+  Project('SimGait', footer(), [
+    {url: '/', setup: homePage},
+    {url: '/simulation', setup: simulationPage}]);
   function footer() {
     let template = document.createElement('template');
     template.innerHTML =

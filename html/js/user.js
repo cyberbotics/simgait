@@ -8,9 +8,10 @@ export default class User extends Router {
     this.username = '!';
     let that = this;
     function findGetParameter(parameterName) {
-      let result = null, tmp = [];
+      let result = null;
+      let tmp = [];
       let items = location.search.substr(1).split('&');
-      for(let index = 0; index < items.length; index++) {
+      for (let index = 0; index < items.length; index++) {
         tmp = items[index].split('=');
         if (tmp[0] === parameterName)
           result = decodeURIComponent(tmp[1]);
@@ -64,12 +65,12 @@ export default class User extends Router {
       function checkPasswordMatchInput(event) {
         const password = choose.querySelector('#choose-password').value;
         const confirm = choose.querySelector('#choose-confirm-password').value;
-        if (confirm.length == 0) {
-          choose.querySelector('#choose-confirm-help').innerHTML = '&nbsp;'
+        if (confirm.length === 0) {
+          choose.querySelector('#choose-confirm-help').innerHTML = '&nbsp;';
           testPasswordMatch = false;
           choose.querySelector('button[type="submit"]').disabled = true;
         }
-        if (confirm.length == password.length || testPasswordMatch) {
+        if (confirm.length === password.length || testPasswordMatch) {
           testPasswordMatch = true;
           checkPasswordMatch(event);
         }
@@ -77,7 +78,7 @@ export default class User extends Router {
       function checkPasswordMatch(event) {
         const password = choose.querySelector('#choose-password').value;
         const confirm = choose.querySelector('#choose-confirm-password').value;
-        if (event.type == 'input') {
+        if (event.type === 'input') {
           let length = password.length;
           let message = '';
           if (length < 8)
@@ -85,31 +86,34 @@ export default class User extends Router {
           let numberCount = 0;
           let uppercaseCount = 0;
           let lowercaseCount = 0;
-          for(let i = 0; i < length; i++)
+          for (let i = 0; i < length; i++) {
             if (password[i] >= '0' && password[i] <= '9')
               numberCount++;
             else if (password[i] >= 'A' && password[i] <= 'Z')
               uppercaseCount++;
             else if (password[i] >= 'a' && password[i] <= 'z')
               lowercaseCount++;
+          }
           let symbolCount = length - numberCount - uppercaseCount - lowercaseCount;
-          if (lowercaseCount == 0 || uppercaseCount == 0 || numberCount == 0 || symbolCount == 0)
-            if (message == '')
+          if (lowercaseCount === 0 || uppercaseCount === 0 || numberCount === 0 || symbolCount === 0) {
+            if (message === '')
               message = 'Missing ';
             else
               message += ', including at least ';
-          if (lowercaseCount == 0)
+          }
+          if (lowercaseCount === 0)
             message += 'a lowercase letter';
-          if (uppercaseCount == 0) {
-            if (lowercaseCount == 0)
+          if (uppercaseCount === 0) {
+            if (lowercaseCount === 0) {
               if (numberCount > 0 && symbolCount > 0)
                 message += ' and ';
               else
-                message += ', '
+                message += ', ';
+            }
             message += 'an uppercase letter';
           }
-          if (numberCount == 0) {
-            if (lowercaseCount == 0 || uppercaseCount == 0) {
+          if (numberCount === 0) {
+            if (lowercaseCount === 0 || uppercaseCount === 0) {
               if (symbolCount > 0)
                 message += ' and ';
               else
@@ -117,13 +121,13 @@ export default class User extends Router {
             }
             message += 'a number';
           }
-          if (symbolCount == 0) {
-            if (lowercaseCount == 0 || uppercaseCount == 0 || numberCount == 0)
+          if (symbolCount === 0) {
+            if (lowercaseCount === 0 || uppercaseCount === 0 || numberCount === 0)
               message += ' and ';
             message += 'a symbol';
           }
           const help = choose.querySelector('#choose-password-help');
-          if (message == '') {
+          if (message === '') {
             validPassword = true;
             message = 'Valid password.';
             help.classList.remove('is-danger');
@@ -140,15 +144,15 @@ export default class User extends Router {
           return;
         const help = choose.querySelector('#choose-confirm-help');
         const button = choose.querySelector('button[type="submit"]');
-        if (password != confirm) {
+        if (password !== confirm) {
           help.classList.add('is-danger');
           help.classList.remove('is-success');
-          help.innerHTML = "Passwords mismatch: please re-enter carefully your password.";
+          help.innerHTML = 'Passwords mismatch: please re-enter carefully your password.';
           button.disabled = true;
         } else {
           help.classList.remove('is-danger');
           help.classList.add('is-success');
-          help.innerHTML = "Confirmed password.";
+          help.innerHTML = 'Confirmed password.';
           if (validPassword)
             button.disabled = false;
         }
@@ -164,19 +168,19 @@ export default class User extends Router {
             .then(function(data) {
               choose.close();
               if (data.error)
-                new ModalDialog('Account activation error', data.error);
+                ModalDialog('Account activation error', data.error);
               else {
-                if (data.type == 'reset')
-                  new ModalDialog('Password reset',
-                                  '<p>Your password was successfully reset.</p>');
-                else if (data.type == 'sign up')
-                  if (data.enabled == 1)
-                    new ModalDialog('Welcome to ' + that.title,
-                                    '<p>Your new account is up-and-ready.</p>');
-                  else
-                    new ModalDialog('Welcome to ' + that.title,
-                                  '<p>Your new account will be validated by our administrator in the next few hours.</p>' +
-                                  '<p>You will receive an e-mail notification about it.</p>');
+                if (data.type === 'reset')
+                  ModalDialog('Password reset', '<p>Your password was successfully reset.</p>');
+                else if (data.type === 'sign up') {
+                  if (data.enabled === 1)
+                    ModalDialog('Welcome to ' + that.title, '<p>Your new account is up-and-ready.</p>');
+                  else {
+                    ModalDialog('Welcome to ' + that.title,
+                      '<p>Your new account will be validated by our administrator in the next few hours.</p>' +
+                      '<p>You will receive an e-mail notification about it.</p>');
+                  }
+                }
                 that.email = email;
                 that.password = hash;
                 that.login();
@@ -229,16 +233,16 @@ export default class User extends Router {
           event.preventDefault();
           dialog.querySelector('button[type="submit"]').classList.add('is-loading');
           fetch('/ajax/user/delete.php', { method: 'post', body: JSON.stringify({email: that.email, password: that.password})})
-           .then(function(response) {
+            .then(function(response) {
               return response.json();
-             })
-           .then(function(data) {
+            })
+            .then(function(data) {
               dialog.close();
               if (data.error)
-                new ModalDialog('Error', data.error);
+                ModalDialog('Error', data.error);
               else {
-                new ModalDialog('Account deleted',
-                                '<p>Your account was successfully deleted.</p><p>All you data was erased.</p>');
+                ModalDialog('Account deleted',
+                  '<p>Your account was successfully deleted.</p><p>All you data was erased.</p>');
                 that.password = null;
                 that.email = null;
                 that.load('/');
@@ -270,12 +274,12 @@ export default class User extends Router {
           document.querySelector('#log-in').style.display = 'flex';
           document.querySelector('#sign-up').style.display = 'flex';
         }
-        if (that.username == '!')
+        if (that.username === '!')
           that.login();
       }
     });
   }
-  setup(title, anchors, content, fullpage=false) {
+  setup(title, anchors, content, fullpage = false) {
     super.setup(title, anchors, content, fullpage);
     let navbarEnd = document.body.querySelector('.navbar-end');
     navbarEnd.parentNode.replaceChild(this.menu(), navbarEnd);
@@ -307,7 +311,7 @@ export default class User extends Router {
 
     div.querySelector('a#log-out').addEventListener('click', function(event) {
       that.password = null;
-      if (window.location.pathname == '/settings')
+      if (window.location.pathname === '/settings')
         that.load('/');
       else
         that.load();
@@ -361,7 +365,7 @@ export default class User extends Router {
         input.checked = false;
         input.addEventListener('change', function(event) {
           const item = event.target.value;
-          switch(item) {
+          switch (item) {
             case 'developer':
               help.innerHTML = 'Modify simulations: neuromechanical models, environments and locomotion controllers.';
               break;
@@ -381,26 +385,29 @@ export default class User extends Router {
         function isAlphaNumeric(code) {
           return ((code > 47 && code < 58) || // numeric (0-9)
                   (code > 64 && code < 91) || // upper alpha (A-Z)
-                  (code > 96 && code < 123))  // lower alpha (a-z)
+                  (code > 96 && code < 123)); // lower alpha (a-z)
         }
         // step 1: convert to lowercase
         let username1 = username.toLowerCase();
         // step 2: replace non alphanumeric characters with hypens
         let username2 = '';
-        for(let i = 0; i < username1.length; i++)
+        for (let i = 0; i < username1.length; i++) {
           if (isAlphaNumeric(username1.charCodeAt(i)))
             username2 += username1[i];
           else
             username2 += '-';
+        }
         // step 3: remove leading and trailing hyphens
-        let begin = username2.length, end = username2.length;
-        for(let i = 0; i < username2.length; i++)
-          if (username2[i] != '-') {
+        let begin = username2.length;
+        let end = username2.length;
+        for (let i = 0; i < username2.length; i++) {
+          if (username2[i] !== '-') {
             if (!typing)
               end = i;
-            if (begin == username2.length)
+            if (begin === username2.length)
               begin = i;
           }
+        }
         let username3 = username2.substring(begin, end + 1);
         // step 4: remove multiple consecutive hyphens
         let username4 = username3.replace(/-{2,}/g, '-');
@@ -412,7 +419,7 @@ export default class User extends Router {
         const email = event.target.value;
         const help = modal.querySelector('#sign-up-email-help');
         // check if e-mail address is valid
-        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!re.test(String(email).toLowerCase())) {
           help.innerHTML = 'This e-mail address is invalid.';
           help.classList.add('is-danger');
@@ -421,16 +428,16 @@ export default class User extends Router {
         }
         // check if this e-mail address is not already registered
         fetch('/ajax/user/uniqueness.php', { method: 'post', body: JSON.stringify({field: 'email', value: email})})
-         .then(function(response) {
+          .then(function(response) {
             return response.json();
-           })
-         .then(function(data) {
+          })
+          .then(function(data) {
             if (data.error) {
               help.innerHTML = data.error;
               event.target.setCustomValidity(data.error);
               help.classList.add('is-danger');
               help.classList.remove('is-success');
-            } else if (data.status == 'OK') {
+            } else if (data.status === 'OK') {
               help.innerHTML = 'This e-mail address is available for registration.';
               help.classList.add('is-success');
               help.classList.remove('is-danger');
@@ -439,7 +446,7 @@ export default class User extends Router {
       });
       modal.querySelector('#sign-up-username').addEventListener('focus', function(event) {
         let username = event.target;
-        if (username.value != '')
+        if (username.value !== '')
           return;
         const email = modal.querySelector('#sign-up-email').value;
         username.value = cleanupUsername(email.split('@')[0]);
@@ -452,25 +459,25 @@ export default class User extends Router {
         this.value = cleanupUsername(this.value);
         event.target.setCustomValidity('');
         let help = modal.querySelector('#sign-up-username-help');
-        if (this.value == '') {
-          help.innerHTML = 'Use only lowercase alphanumeric or hyphen. No consecutive hyphens. '
-                         + 'No hyphen at the beginning or at the end.';
+        if (this.value === '') {
+          help.innerHTML = 'Use only lowercase alphanumeric or hyphen. No consecutive hyphens. ' +
+                           'No hyphen at the beginning or at the end.';
           help.classList.remove('is-danger');
           help.classList.remove('is-success');
           return;
         }
         // check if this username is not already registered
         fetch('/ajax/user/uniqueness.php', { method: 'post', body: JSON.stringify({field: 'username', value: this.value})})
-         .then(function(response) {
+          .then(function(response) {
             return response.json();
-           })
-         .then(function(data) {
+          })
+          .then(function(data) {
             if (data.error) {
               help.innerHTML = data.error;
               event.target.setCustomValidity(data.error);
               help.classList.add('is-danger');
               help.classList.remove('is-success');
-            } else if (data.status == 'OK') {
+            } else if (data.status === 'OK') {
               help.innerHTML = 'This username is available for registration.';
               help.classList.add('is-success');
               help.classList.remove('is-danger');
@@ -487,20 +494,22 @@ export default class User extends Router {
             category = input.value;
         });
         modal.querySelector('button[type="submit"]').classList.add('is-loading');
-        fetch('/ajax/user/sign-up.php', { method: 'post',
-                                     body: JSON.stringify({email: email, username: username, category: category})})
+        fetch('/ajax/user/sign-up.php', {
+          method: 'post',
+          body: JSON.stringify({email: email, username: username, category: category})})
           .then(function(response) {
-             return response.json();
-           })
+            return response.json();
+          })
           .then(function(data) {
-             modal.close();
-             if (data.error)
-               new ModalDialog('Error', data.error);
-             else
-               new ModalDialog('Thank you!',
-                               'An e-mail was just sent to you to verify your address.<br />' +
-                               'Click on the link in the e-mail to set a password and activate your ' + category + ' account.');
-           });
+            modal.close();
+            if (data.error)
+              ModalDialog('Error', data.error);
+            else {
+              ModalDialog('Thank you!',
+                'An e-mail was just sent to you to verify your address.<br />' +
+                'Click on the link in the e-mail to set a password and activate your ' + category + ' account.');
+            }
+          });
       });
     });
 
@@ -577,30 +586,30 @@ export default class User extends Router {
       let that = this;
       fetch('/ajax/user/authenticate.php', { method: 'post', body: JSON.stringify({email: this.email, password: this.password})})
         .then(function(response) {
-           return response.json();
-         })
+          return response.json();
+        })
         .then(function(data) {
-           if (data.error) {
-             that.password = null;
-             if (error)
-               error(data.error);
-             else
-               new ModalDialog("Error", data.error);
-             that.username = '!';
-             that.load('/');
-           } else {
-             document.querySelector('#user-menu').style.display = 'flex';
-             document.querySelector('#log-in').style.display = 'none';
-             document.querySelector('#sign-up').style.display = 'none';
-             document.querySelector('#projects').href = '/' + data.username;
-             document.querySelector('#username').innerHTML = data.username;
-             that.username = data.username;
-             if (reload)  // the page content may need to be updated after loging in.
-               that.load();
-             if (success)
-               success();
-           }
-         });
+          if (data.error) {
+            that.password = null;
+            if (error)
+              error(data.error);
+            else
+              ModalDialog('Error', data.error);
+            that.username = '!';
+            that.load('/');
+          } else {
+            document.querySelector('#user-menu').style.display = 'flex';
+            document.querySelector('#log-in').style.display = 'none';
+            document.querySelector('#sign-up').style.display = 'none';
+            document.querySelector('#projects').href = '/' + data.username;
+            document.querySelector('#username').innerHTML = data.username;
+            that.username = data.username;
+            if (reload) // the page content may need to be updated after loging in.
+              that.load();
+            if (success)
+              success();
+          }
+        });
     }
   }
   async sha256Hash(text) {
@@ -612,17 +621,18 @@ export default class User extends Router {
   }
   forgotPassword(email, callback = null) {
     fetch('/ajax/user/forgot.php', { method: 'post', body: JSON.stringify({email: email})})
-     .then(function(response) {
+      .then(function(response) {
         return response.json();
-       })
-     .then(function(data) {
+      })
+      .then(function(data) {
         if (callback)
           callback();
         if (data.error)
-          new ModalDialog('Error', data.error);
-        else
-          new ModalDialog('Password reset',
-                          'An e-mail with a password reset link was just sent to you.<br />Check your inbox now.');
+          ModalDialog('Error', data.error);
+        else {
+          ModalDialog('Password reset',
+            'An e-mail with a password reset link was just sent to you.<br />Check your inbox now.');
+        }
       });
   }
   get email() {
@@ -641,6 +651,6 @@ export default class User extends Router {
     if (value === null)
       window.localStorage.removeItem('password');
     else
-     window.localStorage.setItem('password', value);
+      window.localStorage.setItem('password', value);
   }
 }

@@ -1,5 +1,5 @@
 export default class ModalDialog extends HTMLElement {
-  constructor(title, text, close='Ok', action='', actionType = 'is-success') {
+  constructor(title, text, close = 'Ok', action = '', actionType = 'is-success') {
     super();
     this.classList.add('modal');
     let actionButton, closeClass;
@@ -34,7 +34,7 @@ export default class ModalDialog extends HTMLElement {
     document.querySelector('html').classList.add('is-clipped');
     this.classList.add('is-active');
     ModalDialog.current = this;
-    this.querySelectorAll('p.help').forEach((p) => p.innerHTML = '&nbsp;');
+    this.querySelectorAll('p.help').forEach(function(p) { p.innerHTML = '&nbsp;'; });
     document.addEventListener('keydown', ModalDialog.closeEvent);
     let submit = this.querySelector('button[type="submit"]');
     if (submit)
@@ -44,7 +44,7 @@ export default class ModalDialog extends HTMLElement {
     this.querySelector('.modal-background').addEventListener('click', ModalDialog.closeEvent);
   }
   static closeEvent(event) {
-    if (event.type == 'click' || (event.type == 'keydown' && event.keyCode == 27)) {
+    if (event.type === 'click' || (event.type === 'keydown' && event.keyCode === 27)) {
       event.preventDefault();
       ModalDialog.current.close();
     }

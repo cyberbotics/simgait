@@ -2,23 +2,23 @@ import ModalDialog from './modal_dialog.js';
 import User from './user.js';
 
 export default class Project extends User {
-  constructor(title, footer, routes) {
-    super(title, footer, routes);
-  }
   dynamicPage(url, pushHistory) {
     let that = this;
     let promise = new Promise((resolve, reject) => {
       const username = url.pathname.substring(1);
-      fetch('/ajax/project/user.php', {method: 'post', body: JSON.stringify({email: that.email,
-                                                                             password: that.password,
-                                                                             username: username})})
+      fetch('/ajax/project/user.php', {
+        method: 'post',
+        body: JSON.stringify({
+          email: that.email,
+          password: that.password,
+          username: username})})
         .then(function(response) {
           return response.json();
         })
         .then(function(data) {
           if (pushHistory)
             window.history.pushState(null, name, url.pathname + url.search + url.hash);
-          if (data.error) {  // no such user
+          if (data.error) { // no such user
             that.notFound();
             resolve();
           } else {
@@ -33,7 +33,7 @@ export default class Project extends User {
     let that = this;
     function addProject(project) {
       let line = {};
-      const checked = project.public == "1" ? ' checked' : '';
+      const checked = project.public === '1' ? ' checked' : '';
       line.innerHTML =
 `<tr id="project-${project.id}">
   <td>
@@ -55,30 +55,34 @@ export default class Project extends User {
       return line.innerHTML;
     }
     function updateProjectCount() {
-      that.content.querySelector("#no-project").style.display = projectCount == 0 ? '' : 'none';
-      that.content.querySelector("#header-line").style.display = projectCount == 0 ? 'none' : '';
+      that.content.querySelector('#no-project').style.display = projectCount === 0 ? '' : 'none';
+      that.content.querySelector('#header-line').style.display = projectCount === 0 ? 'none' : '';
     }
     function deleteProject(event) {
       let button = event.target;
-      while (button.tagName != 'BUTTON')
+      while (button.tagName !== 'BUTTON')
         button = button.parentNode;
       const projectId = button.id.substring(7);
-      let dialog = new ModalDialog('Really delete project?',
-                                   '<p>Note: this will not delete any data from your GitHub repository.</p>',
-                                   'Cancel', 'Delete Project', 'is-danger');
+      let dialog = new ModalDialog(
+        'Really delete project?',
+        '<p>Note: this will not delete any data from your GitHub repository.</p>',
+        'Cancel', 'Delete Project', 'is-danger');
       dialog.querySelector('form').addEventListener('submit', function(event) {
         event.preventDefault();
         dialog.querySelector('button[type="submit"]').classList.add('is-loading');
-        fetch('/ajax/project/delete.php', { method: 'post', body: JSON.stringify({email: that.email,
-                                                                                  password: that.password,
-                                                                                  project: projectId})})
-         .then(function(response) {
+        fetch('/ajax/project/delete.php', {
+          method: 'post',
+          body: JSON.stringify({
+            email: that.email,
+            password: that.password,
+            project: projectId})})
+          .then(function(response) {
             return response.json();
-           })
-         .then(function(data) {
+          })
+          .then(function(data) {
             dialog.close();
             if (data.error)
-              new ModalDialog('Error', data.error);
+              ModalDialog('Error', data.error);
             else {
               const row = that.content.querySelector('#project-' + projectId);
               row.parentNode.removeChild(row);
@@ -90,7 +94,7 @@ export default class Project extends User {
     }
     function runProject(event) {
       let button = event.target;
-      while (button.tagName != 'BUTTON')
+      while (button.tagName !== 'BUTTON')
         button = button.parentNode;
       const projectId = button.id.substring(4);
       const tag = document.querySelector('#tag-' + projectId).value;
@@ -98,7 +102,7 @@ export default class Project extends User {
       let url = '/simulation?url=' + githubUrl + '&tag=' + tag;
       that.load(url);
     }
-    let button = {}
+    let button = {};
     let headEnd = {};
     if (data.self === false) {
       button.innerHTML = ``;
@@ -137,7 +141,7 @@ export default class Project extends User {
     that.setup('userpage', [], template.content);
     updateProjectCount();
     if (data.self !== false) {
-      that.content.querySelector("#add-a-new-project").addEventListener('click', function(event) {
+      that.content.querySelector('#add-a-new-project').addEventListener('click', function(event) {
         let content = {};
         content.innerHTML =
 `<div class="field">
@@ -188,16 +192,19 @@ export default class Project extends User {
           const folder = modal.querySelector('#folder').value;
           const tagOrBranchName = modal.querySelector('#tag-or-branch').value;
           const tag = modal.querySelector('input[type="radio"]').checked ? 1 : 0;
-          const separator = folder == '' ? '' : '/';
+          const separator = folder === '' ? '' : '/';
           const url = repository + '/tree/' + tagOrBranchName + separator + folder;
-          fetch('/ajax/project/create.php', { method: 'post', body: JSON.stringify({email: that.email,
-                                                                                    password: that.password,
-                                                                                    url: url,
-                                                                                    tag: tag})})
-           .then(function(response) {
+          fetch('/ajax/project/create.php', {
+            method: 'post',
+            body: JSON.stringify({
+              email: that.email,
+              password: that.password,
+              url: url,
+              tag: tag})})
+            .then(function(response) {
               return response.json();
-             })
-           .then(function(data) {
+            })
+            .then(function(data) {
               if (data.error) {
                 console.log(data.error);
                 modal.error(data.error);
@@ -219,11 +226,12 @@ export default class Project extends User {
             });
         });
       });
-      if (data.projects && data.projects.length > 0)
+      if (data.projects && data.projects.length > 0) {
         data.projects.forEach(function(project, index) {
           that.content.querySelector('#delete-' + project.id).addEventListener('click', deleteProject);
           that.content.querySelector('#run-' + project.id).addEventListener('click', runProject);
         });
+      }
     }
   }
 }

@@ -1,11 +1,11 @@
 {
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 8,
+    "sourceType": "module"
   },
 
   "env": {
     "browser": true,
-    "jquery": true,
     "es6": true
   },
 
@@ -13,9 +13,6 @@
     "document": false,
     "navigator": false,
     "window": false
-  },
-  "parserOptions": {
-    "sourceType": "module"
   },
   "rules": {
     "accessor-pairs": "error",
