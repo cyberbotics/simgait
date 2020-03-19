@@ -3,9 +3,10 @@ import Simulation from './simulation.js';
 
 document.addEventListener('DOMContentLoaded', function() {
   let simulation = new Simulation('webots');
-  Project('SimGait', footer(), [
+  let project = new Project('SimGait', footer(), [
     {url: '/', setup: homePage},
     {url: '/simulation', setup: simulationPage}]);
+
   function footer() {
     let template = document.createElement('template');
     template.innerHTML =

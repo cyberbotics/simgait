@@ -168,15 +168,15 @@ export default class User extends Router {
             .then(function(data) {
               choose.close();
               if (data.error)
-                ModalDialog('Account activation error', data.error);
+                new ModalDialog('Account activation error', data.error);
               else {
                 if (data.type === 'reset')
-                  ModalDialog('Password reset', '<p>Your password was successfully reset.</p>');
+                  new ModalDialog('Password reset', '<p>Your password was successfully reset.</p>');
                 else if (data.type === 'sign up') {
                   if (data.enabled === 1)
-                    ModalDialog('Welcome to ' + that.title, '<p>Your new account is up-and-ready.</p>');
+                    new ModalDialog('Welcome to ' + that.title, '<p>Your new account is up-and-ready.</p>');
                   else {
-                    ModalDialog('Welcome to ' + that.title,
+                    new ModalDialog('Welcome to ' + that.title,
                       '<p>Your new account will be validated by our administrator in the next few hours.</p>' +
                       '<p>You will receive an e-mail notification about it.</p>');
                   }
@@ -239,9 +239,9 @@ export default class User extends Router {
             .then(function(data) {
               dialog.close();
               if (data.error)
-                ModalDialog('Error', data.error);
+                new ModalDialog('Error', data.error);
               else {
-                ModalDialog('Account deleted',
+                new ModalDialog('Account deleted',
                   '<p>Your account was successfully deleted.</p><p>All you data was erased.</p>');
                 that.password = null;
                 that.email = null;
@@ -503,9 +503,9 @@ export default class User extends Router {
           .then(function(data) {
             modal.close();
             if (data.error)
-              ModalDialog('Error', data.error);
+              new ModalDialog('Error', data.error);
             else {
-              ModalDialog('Thank you!',
+              new ModalDialog('Thank you!',
                 'An e-mail was just sent to you to verify your address.<br />' +
                 'Click on the link in the e-mail to set a password and activate your ' + category + ' account.');
             }
@@ -594,7 +594,7 @@ export default class User extends Router {
             if (error)
               error(data.error);
             else
-              ModalDialog('Error', data.error);
+              new ModalDialog('Error', data.error);
             that.username = '!';
             that.load('/');
           } else {
@@ -628,9 +628,9 @@ export default class User extends Router {
         if (callback)
           callback();
         if (data.error)
-          ModalDialog('Error', data.error);
+          new ModalDialog('Error', data.error);
         else {
-          ModalDialog('Password reset',
+          new ModalDialog('Password reset',
             'An e-mail with a password reset link was just sent to you.<br />Check your inbox now.');
         }
       });

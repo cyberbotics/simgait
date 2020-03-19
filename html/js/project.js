@@ -82,7 +82,7 @@ export default class Project extends User {
           .then(function(data) {
             dialog.close();
             if (data.error)
-              ModalDialog('Error', data.error);
+              new ModalDialog('Error', data.error);
             else {
               const row = that.content.querySelector('#project-' + projectId);
               row.parentNode.removeChild(row);
