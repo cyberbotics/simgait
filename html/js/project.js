@@ -2,6 +2,9 @@ import ModalDialog from './modal_dialog.js';
 import User from './user.js';
 
 export default class Project extends User {
+  static run(title, footer, routes) {
+    return new Project(title, footer, routes);
+  }
   dynamicPage(url, pushHistory) {
     let that = this;
     let promise = new Promise((resolve, reject) => {
@@ -63,7 +66,7 @@ export default class Project extends User {
       while (button.tagName !== 'BUTTON')
         button = button.parentNode;
       const projectId = button.id.substring(7);
-      let dialog = new ModalDialog(
+      let dialog = ModalDialog.run(
         'Really delete project?',
         '<p>Note: this will not delete any data from your GitHub repository.</p>',
         'Cancel', 'Delete Project', 'is-danger');
@@ -82,7 +85,7 @@ export default class Project extends User {
           .then(function(data) {
             dialog.close();
             if (data.error)
-              new ModalDialog('Error', data.error);
+              ModalDialog.run('Error', data.error);
             else {
               const row = that.content.querySelector('#project-' + projectId);
               row.parentNode.removeChild(row);
@@ -181,7 +184,7 @@ export default class Project extends User {
     </label>
   </div>
 </div>`;
-        let modal = new ModalDialog('Add project', content.innerHTML, 'Cancel', 'Add');
+        let modal = ModalDialog.run('Add project', content.innerHTML, 'Cancel', 'Add');
         let input = modal.querySelector('#repository');
         input.focus();
         input.selectionStart = input.selectionEnd = input.value.length;

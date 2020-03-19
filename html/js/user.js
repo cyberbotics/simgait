@@ -52,7 +52,7 @@ export default class User extends Router {
 </div>
 <div id="choose-confirm-help" class="help">&nbsp;</div>
 </div>`;
-      let choose = new ModalDialog('Choose a password', content.innerHTML, 'Cancel', 'Ok');
+      let choose = ModalDialog.run('Choose a password', content.innerHTML, 'Cancel', 'Ok');
       choose.querySelector('#choose-password').focus();
       choose.querySelector('button[type="submit"]').disabled = true;
       choose.querySelector('#choose-password').value = '';
@@ -168,15 +168,15 @@ export default class User extends Router {
             .then(function(data) {
               choose.close();
               if (data.error)
-                new ModalDialog('Account activation error', data.error);
+                ModalDialog.run('Account activation error', data.error);
               else {
                 if (data.type === 'reset')
-                  new ModalDialog('Password reset', '<p>Your password was successfully reset.</p>');
+                  ModalDialog.run('Password reset', '<p>Your password was successfully reset.</p>');
                 else if (data.type === 'sign up') {
                   if (data.enabled === 1)
-                    new ModalDialog('Welcome to ' + that.title, '<p>Your new account is up-and-ready.</p>');
+                    ModalDialog.run('Welcome to ' + that.title, '<p>Your new account is up-and-ready.</p>');
                   else {
-                    new ModalDialog('Welcome to ' + that.title,
+                    ModalDialog.run('Welcome to ' + that.title,
                       '<p>Your new account will be validated by our administrator in the next few hours.</p>' +
                       '<p>You will receive an e-mail notification about it.</p>');
                   }
@@ -227,7 +227,7 @@ export default class User extends Router {
         that.forgotPassword(that.email, function() { event.target.classList.remove('is-loading'); });
       });
       document.querySelector('#delete-account').addEventListener('click', function(event) {
-        let dialog = new ModalDialog('Really delete account?', '<p>All your data will be deleted from our database.</p>' +
+        let dialog = ModalDialog.run('Really delete account?', '<p>All your data will be deleted from our database.</p>' +
                                      '<p>There is no way to recover deleted data.</p>', 'Cancel', 'Delete Account', 'is-danger');
         dialog.querySelector('form').addEventListener('submit', function(event) {
           event.preventDefault();
@@ -239,9 +239,9 @@ export default class User extends Router {
             .then(function(data) {
               dialog.close();
               if (data.error)
-                new ModalDialog('Error', data.error);
+                ModalDialog.run('Error', data.error);
               else {
-                new ModalDialog('Account deleted',
+                ModalDialog.run('Account deleted',
                   '<p>Your account was successfully deleted.</p><p>All you data was erased.</p>');
                 that.password = null;
                 that.email = null;
@@ -358,7 +358,7 @@ export default class User extends Router {
     <p id="sign-up-category-help" class="help"></p>
   </div>
 </div>`;
-      let modal = new ModalDialog('Sign up', content.innerHTML, 'Cancel', 'Sign up');
+      let modal = ModalDialog.run('Sign up', content.innerHTML, 'Cancel', 'Sign up');
       modal.querySelector('#sign-up-email').focus();
       let help = modal.querySelector('#sign-up-category-help');
       modal.querySelectorAll('input[name="category"]').forEach((input) => {
@@ -503,9 +503,9 @@ export default class User extends Router {
           .then(function(data) {
             modal.close();
             if (data.error)
-              new ModalDialog('Error', data.error);
+              ModalDialog.run('Error', data.error);
             else {
-              new ModalDialog('Thank you!',
+              ModalDialog.run('Thank you!',
                 'An e-mail was just sent to you to verify your address.<br />' +
                 'Click on the link in the e-mail to set a password and activate your ' + category + ' account.');
             }
@@ -537,7 +537,7 @@ export default class User extends Router {
   <div class="has-text-right"><a id="log-in-forgot" class="help">Forgot your password?</a></div>
 </div>
 <p id="log-in-help" class="help"></p>`;
-      let modal = new ModalDialog('Log in', content.innerHTML, 'Cancel', 'Log in');
+      let modal = ModalDialog.run('Log in', content.innerHTML, 'Cancel', 'Log in');
       modal.querySelector('#log-in-email').focus();
       modal.querySelector('#log-in-forgot').addEventListener('click', function(event) {
         modal.close();
@@ -553,7 +553,7 @@ export default class User extends Router {
     </span>
   </div>
 </div>`;
-        let forgot = new ModalDialog('Forgot your password?', content.innerHTML, 'Cancel', 'Reset Password');
+        let forgot = ModalDialog.run('Forgot your password?', content.innerHTML, 'Cancel', 'Reset Password');
         forgot.querySelector('#forgot-email').focus();
         forgot.querySelector('form').addEventListener('submit', function(event) {
           event.preventDefault();
@@ -594,7 +594,7 @@ export default class User extends Router {
             if (error)
               error(data.error);
             else
-              new ModalDialog('Error', data.error);
+              ModalDialog.run('Error', data.error);
             that.username = '!';
             that.load('/');
           } else {
@@ -628,9 +628,9 @@ export default class User extends Router {
         if (callback)
           callback();
         if (data.error)
-          new ModalDialog('Error', data.error);
+          ModalDialog.run('Error', data.error);
         else {
-          new ModalDialog('Password reset',
+          ModalDialog.run('Password reset',
             'An e-mail with a password reset link was just sent to you.<br />Check your inbox now.');
         }
       });

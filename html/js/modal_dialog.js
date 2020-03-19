@@ -61,6 +61,9 @@ export default class ModalDialog extends HTMLElement {
     if (submit)
       submit.classList.remove('is-loading');
   }
+  static run(title, text, close = 'Ok', action = '', actionType = 'is-success') {
+    return new ModalDialog(title, text, close, action, actionType);
+  }
 }
 ModalDialog.current = null;
 

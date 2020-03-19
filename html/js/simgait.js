@@ -3,7 +3,7 @@ import Simulation from './simulation.js';
 
 document.addEventListener('DOMContentLoaded', function() {
   let simulation = new Simulation('webots');
-  let project = new Project('SimGait', footer(), [
+  Project.run('SimGait', footer(), [
     {url: '/', setup: homePage},
     {url: '/simulation', setup: simulationPage}]);
 
