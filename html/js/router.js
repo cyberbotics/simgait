@@ -119,8 +119,8 @@ export default class Router {
       const url = window.location.origin + pathname;
       window.history.pushState(null, '404 Not Found', url);
       const hostname = document.location.hostname;
-      let content = {};
-      content.innerHTML =
+      let template = document.createElement('template');
+      template.innerHTML =
 `<section class="hero is-danger">
 <div class="hero-body">
 <div class="container">
@@ -130,7 +130,7 @@ export default class Router {
 </div>
 </div>
 </section>`;
-      this.setup('page not found', [], content.innerHTML);
+      this.setup('page not found', [], template.content);
     }
   }
   setup(title, anchors, content, fullpage=false) {
@@ -142,9 +142,10 @@ export default class Router {
     this.content.innerHTML = '';
     NodeList.prototype.forEach = Array.prototype.forEach
     let that = this;
-    content.childNodes.forEach(function(item) {
-      that.content.appendChild(item);
-    });
+    if (content.childNodes)
+      content.childNodes.forEach(function(item) {
+        that.content.appendChild(item);
+      });
     if (fullpage) {
       document.querySelector('body footer').style.display = 'none';
       document.querySelector('body nav').style.display = 'none';
