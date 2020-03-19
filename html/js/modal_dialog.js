@@ -51,7 +51,7 @@ export default class ModalDialog extends HTMLElement {
   }
   close() {
     document.querySelector('html').classList.remove('is-clipped');
-    document.removeEventListener('keydown', ModalDialog._close);
+    document.removeEventListener('keydown', ModalDialog.closeEvent);
     ModalDialog.current = null;
     this.remove();
   }

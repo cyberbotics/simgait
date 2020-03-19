@@ -54,11 +54,15 @@ export default class Project extends User {
 </tr>`;
       return line.innerHTML;
     }
+    function updateProjectCount() {
+      that.content.querySelector("#no-project").style.display = projectCount == 0 ? '' : 'none';
+      that.content.querySelector("#header-line").style.display = projectCount == 0 ? 'none' : '';
+    }
     function deleteProject(event) {
       let button = event.target;
       while (button.tagName != 'BUTTON')
         button = button.parentNode;
-      const project_id = button.id.substring(7);
+      const projectId = button.id.substring(7);
       let dialog = new ModalDialog('Really delete project?',
                                    '<p>Note: this will not delete any data from your GitHub repository.</p>',
                                    'Cancel', 'Delete Project', 'is-danger');
@@ -67,7 +71,7 @@ export default class Project extends User {
         dialog.querySelector('button[type="submit"]').classList.add('is-loading');
         fetch('/ajax/project/delete.php', { method: 'post', body: JSON.stringify({email: that.email,
                                                                                   password: that.password,
-                                                                                  project: project_id})})
+                                                                                  project: projectId})})
          .then(function(response) {
             return response.json();
            })
@@ -76,11 +80,10 @@ export default class Project extends User {
             if (data.error)
               new ModalDialog('Error', data.error);
             else {
-              const row = that.content.querySelector('#project-' + project_id);
+              const row = that.content.querySelector('#project-' + projectId);
               row.parentNode.removeChild(row);
-              project_count--;
-              if (project_count == 0)
-                that.content.querySelector("#no-project").style.display = 'flex';
+              projectCount--;
+              updateProjectCount();
             }
           });
       });
@@ -89,28 +92,28 @@ export default class Project extends User {
       let button = event.target;
       while (button.tagName != 'BUTTON')
         button = button.parentNode;
-      const project_id = button.id.substring(4);
-      console.log('#tag-' + project_id);
-      const tag = document.querySelector('#tag-' + project_id).value;
-      const github_url = document.querySelector('#url-' + project_id).href;
-      let url = '/simulation?url=' + github_url + '&tag=' + tag;
+      const projectId = button.id.substring(4);
+      console.log('#tag-' + projectId);
+      const tag = document.querySelector('#tag-' + projectId).value;
+      const githubUrl = document.querySelector('#url-' + projectId).href;
+      let url = '/simulation?url=' + githubUrl + '&tag=' + tag;
       that.load(url);
     }
     let button = {}
-    let head_end = {};
+    let headEnd = {};
     if (data.self === false) {
       button.innerHTML = ``;
-      head_end.innerHTML = ``;
+      headEnd.innerHTML = ``;
     } else {
       button.innerHTML = `<button class="button is-link" id="add-a-new-project">Add a new project</button>`;
-      head_end.innerHTML = `<td>Public</td><td></td>`;
+      headEnd.innerHTML = `<th>Public</th><th></th>`;
     }
     let template = document.createElement('template');
     let projects = {};
-    let project_count = 0;
+    let projectCount = 0;
     projects.innerHTML = `<tr id="no-project"><td>(no project)</td></tr>`;
     if (data.projects && data.projects.length > 0) {
-      project_count = data.projects.length;
+      projectCount = data.projects.length;
       data.projects.forEach(function(project, index) {
         projects.innerHTML += addProject(project);
       });
@@ -121,8 +124,8 @@ export default class Project extends User {
     <h1 class="title">Projects</h1>
     <table id="project-table" class="table">
       <thead>
-        <tr>
-          <tr><td></td><td>Title</td>${head_end.innerHTML}
+        <tr id="header-line">
+          <th></th><th>Title</th>${headEnd.innerHTML}
         </tr>
       </thead>
       <tbody>
@@ -133,8 +136,7 @@ export default class Project extends User {
   </div>
 </section>`;
     that.setup('userpage', [], template.content);
-    if (data.projects && data.projects.length > 0)
-      that.content.querySelector("#no-project").style.display = 'none';
+    updateProjectCount();
     if (data.self !== false) {
       that.content.querySelector("#add-a-new-project").addEventListener('click', function(event) {
         let content = {};
@@ -185,10 +187,10 @@ export default class Project extends User {
           modal.querySelector('button[type="submit"]').classList.add('is-loading');
           const repository = modal.querySelector('#repository').value;
           const folder = modal.querySelector('#folder').value;
-          const tag_or_branch_name = modal.querySelector('#tag-or-branch').value;
+          const tagOrBranchName = modal.querySelector('#tag-or-branch').value;
           const tag = modal.querySelector('input[type="radio"]').checked ? 1 : 0;
           const separator = folder == '' ? '' : '/';
-          const url = repository + '/tree/' + tag_or_branch_name + separator + folder;
+          const url = repository + '/tree/' + tagOrBranchName + separator + folder;
           fetch('/ajax/project/create.php', { method: 'post', body: JSON.stringify({email: that.email,
                                                                                     password: that.password,
                                                                                     url: url,
@@ -202,8 +204,6 @@ export default class Project extends User {
                 modal.error(data.error);
               } else {
                 modal.close();
-                if (project_count == 0)
-                  that.content.querySelector("#no-project").style.display = 'none';
                 let project = {};
                 project.id = data.id;
                 project.title = data.title;
@@ -211,10 +211,11 @@ export default class Project extends User {
                 project.url = url;
                 let template = document.createElement('template');
                 template.innerHTML = addProject(project);
-                project_count++;
                 that.content.querySelector('#project-table').appendChild(template.content.firstChild);
                 that.content.querySelector('#delete-' + project.id).addEventListener('click', deleteProject);
                 that.content.querySelector('#run-' + project.id).addEventListener('click', runProject);
+                projectCount++;
+                updateProjectCount();
               }
             });
         });

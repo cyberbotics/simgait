@@ -10,19 +10,19 @@ export default class Simulation {
       }
       return result;
     }
-    function display_timer(message, time_count_reset = false) {
-      if (time_count_reset)
-        display_timer.time_count = 0
-      let plural = display_timer.time_count > 1 ? 's' : '';
-      status.innerHTML = message + ' <span class="is-size-7">(' + display_timer.time_count + ' second' + plural + ')<span>';
-      display_timer.time_count++;
+    function displayTimer(message, timeCountReset = false) {
+      if (timeCountReset)
+        displayTimer.timeCount = 0
+      let plural = displayTimer.timeCount > 1 ? 's' : '';
+      status.innerHTML = message + ' <span class="is-size-7">(' + displayTimer.timeCount + ' second' + plural + ')<span>';
+      displayTimer.timeCount++;
     }
-    function run_timer(message) {
-      display_timer(message, true);
-      return window.setInterval(display_timer, 1000, message, false);
+    function runTimer(message) {
+      displayTimer(message, true);
+      return window.setInterval(displayTimer, 1000, message, false);
     }
     function download(url, tag) {
-      let timer = run_timer('Fetching ' + url);
+      let timer = runTimer('Fetching ' + url);
       fetch('/ajax/simulation/download.php', { method: 'post', body: JSON.stringify({url: url, tag: tag})})
        .then(function(response) {
           return response.json();
@@ -36,7 +36,7 @@ export default class Simulation {
         });
     }
     function compile(url, tag) {
-      let timer = run_timer('Sending WebSocket...');
+      let timer = runTimer('Sending WebSocket...');
       let socket = new WebSocket("wss://localhost/2000/client");
       socket.onmessage = function(event) {
         console.log("WebSocket received: " + event.data);

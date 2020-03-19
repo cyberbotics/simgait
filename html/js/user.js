@@ -82,43 +82,43 @@ export default class User extends Router {
           let message = '';
           if (length < 8)
             message = '8 characters minimum';
-          let number_count = 0;
-          let uppercase_count = 0;
-          let lowercase_count = 0;
+          let numberCount = 0;
+          let uppercaseCount = 0;
+          let lowercaseCount = 0;
           for(let i = 0; i < length; i++)
             if (password[i] >= '0' && password[i] <= '9')
-              number_count++;
+              numberCount++;
             else if (password[i] >= 'A' && password[i] <= 'Z')
-              uppercase_count++;
+              uppercaseCount++;
             else if (password[i] >= 'a' && password[i] <= 'z')
-              lowercase_count++;
-          let symbol_count = length - number_count - uppercase_count - lowercase_count;
-          if (lowercase_count == 0 || uppercase_count == 0 || number_count == 0 || symbol_count == 0)
+              lowercaseCount++;
+          let symbolCount = length - numberCount - uppercaseCount - lowercaseCount;
+          if (lowercaseCount == 0 || uppercaseCount == 0 || numberCount == 0 || symbolCount == 0)
             if (message == '')
               message = 'Missing ';
             else
               message += ', including at least ';
-          if (lowercase_count == 0)
+          if (lowercaseCount == 0)
             message += 'a lowercase letter';
-          if (uppercase_count == 0) {
-            if (lowercase_count == 0)
-              if (number_count > 0 && symbol_count > 0)
+          if (uppercaseCount == 0) {
+            if (lowercaseCount == 0)
+              if (numberCount > 0 && symbolCount > 0)
                 message += ' and ';
               else
                 message += ', '
             message += 'an uppercase letter';
           }
-          if (number_count == 0) {
-            if (lowercase_count == 0 || uppercase_count == 0) {
-              if (symbol_count > 0)
+          if (numberCount == 0) {
+            if (lowercaseCount == 0 || uppercaseCount == 0) {
+              if (symbolCount > 0)
                 message += ' and ';
               else
                 message += ', ';
             }
             message += 'a number';
           }
-          if (symbol_count == 0) {
-            if (lowercase_count == 0 || uppercase_count == 0 || number_count == 0)
+          if (symbolCount == 0) {
+            if (lowercaseCount == 0 || uppercaseCount == 0 || numberCount == 0)
               message += ' and ';
             message += 'a symbol';
           }
