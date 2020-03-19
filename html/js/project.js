@@ -93,7 +93,6 @@ export default class Project extends User {
       while (button.tagName != 'BUTTON')
         button = button.parentNode;
       const projectId = button.id.substring(4);
-      console.log('#tag-' + projectId);
       const tag = document.querySelector('#tag-' + projectId).value;
       const githubUrl = document.querySelector('#url-' + projectId).href;
       let url = '/simulation?url=' + githubUrl + '&tag=' + tag;
