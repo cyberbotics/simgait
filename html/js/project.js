@@ -3,7 +3,8 @@ import User from './user.js';
 
 export default class Project extends User {
   static run(title, footer, routes) {
-    return new Project(title, footer, routes);
+    Project.current = new Project(title, footer, routes);
+    return Project.current;
   }
   dynamicPage(url, pushHistory) {
     let that = this;
@@ -238,3 +239,4 @@ export default class Project extends User {
     }
   }
 }
+Project.current = null;
