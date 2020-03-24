@@ -55,8 +55,8 @@ LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
 
   RewriteCond %{HTTP:Upgrade} websocket [NC]
   RewriteCond %{HTTP:Connection} upgrade [NC]
-  RewriteRule ^/(\d*)/(.*)$ "ws://%{SERVER_NAME}:$1/$2" [P,L]
-
+  RewriteRule ^/session "ws://%{SERVER_NAME}:1999" [P,L]       # session_server.py
+  RewriteRule ^/(\d*)/(.*)$ "ws://%{SERVER_NAME}:$1/$2" [P,L]  # simulation_server.py and webots
 </VirtualHost>
 ```
 
