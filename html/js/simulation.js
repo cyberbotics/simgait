@@ -1,3 +1,5 @@
+/* global webots */
+
 export default class Simulation {
   content() {
     function findGetParameter(parameterName) {
@@ -64,7 +66,9 @@ export default class Simulation {
       <h2 id="status" class="subtitle has-text-white">Fetching ${url}</h2>
     </div>
   </div>
-</section>`;
+</section>
+<div id="webots-view">
+</div>`;
     let status = template.content.firstElementChild.querySelector('#status');
     if (url == null) {
       status.innerHTML = 'Missing GET parameter: url<div class="is-size-6">Example: ' +
@@ -72,8 +76,17 @@ export default class Simulation {
                          '?url=https://github.com/user/repo/tree/tag/simulation</div>';
     } else if (!url.startsWith('https://github.com/'))
       status.innerHTML = 'Wrong url: ' + url;
-    else
-      compile(url, tag);
+    else {
+      // let webotsView = template.content.querySelector('#webots-view');
+    }
     return template.content;
+  }
+  run() {
+    let webotsView = document.body.querySelector('#webots-view');
+    let view = new webots.View(webotsView, 0);
+    // view.open('wss://localhost/1999/open?url=' + url + '&tag=' + tag);
+    // console.log('opening wss://localhost/1999/open?url=' + url + '&tag=' + tag);
+    console.log('opening ws://localhost:2001');
+    view.open('ws://localhost:2001');
   }
 }
