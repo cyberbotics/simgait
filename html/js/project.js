@@ -103,7 +103,6 @@ export default class Project extends User {
       const projectId = button.id.substring(4);
       const branch = document.querySelector('#branch-' + projectId).value;
       const githubUrl = document.querySelector('#url-' + projectId).href;
-      // let url = '/session?url=' + githubUrl + '&branch=' + branch;
       let url = '/simulation?url=' + githubUrl + '&branch=' + branch;
       that.load(url);
     }
