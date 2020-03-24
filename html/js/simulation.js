@@ -58,27 +58,12 @@ export default class Simulation {
     if (tag == null)
       tag = '0';
     const template = document.createElement('template');
-    template.innerHTML =
-`<section class="hero" style="background: linear-gradient(0deg, rgba(15,43,87,1) 0%, rgba(50,115,220,1) 90%);">
-  <div class="hero-body">
-    <div class="container">
-      <h1 class="title has-text-white">Simulation</h1>
-      <h2 id="status" class="subtitle has-text-white">Fetching ${url}</h2>
-    </div>
-  </div>
-</section>
-<div id="webots-view">
-</div>`;
-    let status = template.content.firstElementChild.querySelector('#status');
+    template.innerHTML = `<div id="webots-view" style="height:100vh;"></div>`;
     if (url == null) {
-      status.innerHTML = 'Missing GET parameter: url<div class="is-size-6">Example: ' +
-                         window.location.href +
-                         '?url=https://github.com/user/repo/tree/tag/simulation</div>';
+      console.log('Missing GET parameter: url<div class="is-size-6">Example: ' + window.location.href +
+                  '?url=https://github.com/user/repo/tree/tag/simulation');
     } else if (!url.startsWith('https://github.com/'))
-      status.innerHTML = 'Wrong url: ' + url;
-    else {
-      // let webotsView = template.content.querySelector('#webots-view');
-    }
+      console.log('Wrong url: ' + url);
     return template.content;
   }
   run() {
