@@ -48,7 +48,7 @@ export default class Project extends User {
   <td><a href="${project.url}" target="_blank" id="url-${project.id}">${project.title}</a></td>
   <td style="text-align:center">
     <input type="checkbox"${checked}>
-    <input type="hidden" id="tag-${project.id}" value="${project.tag}">
+    <input type="hidden" id="branch-${project.id}" value="${project.branch}">
   </td>
   <td>
     <button class="button is-small is-outlined is-danger" title="delete this project" id="delete-${project.id}">
@@ -101,9 +101,10 @@ export default class Project extends User {
       while (button.tagName !== 'BUTTON')
         button = button.parentNode;
       const projectId = button.id.substring(4);
-      const tag = document.querySelector('#tag-' + projectId).value;
+      const branch = document.querySelector('#branch-' + projectId).value;
       const githubUrl = document.querySelector('#url-' + projectId).href;
-      let url = '/simulation?url=' + githubUrl + '&tag=' + tag;
+      // let url = '/session?url=' + githubUrl + '&branch=' + branch;
+      let url = '/simulation?url=' + githubUrl + '&branch=' + branch;
       that.load(url);
     }
     let button = {};
@@ -178,10 +179,10 @@ export default class Project extends User {
   </div>
   <div class="control">
     <label class="radio">
-      <input type="radio" name="tag" id="tag" required> Tag
+      <input type="radio" name="branch" required> Tag
     </label>
     <label class="radio">
-      <input type="radio" name="tag" required checked> Branch
+      <input type="radio" name="branch" required checked> Branch
     </label>
   </div>
 </div>`;
@@ -195,7 +196,7 @@ export default class Project extends User {
           const repository = modal.querySelector('#repository').value;
           const folder = modal.querySelector('#folder').value;
           const tagOrBranchName = modal.querySelector('#tag-or-branch').value;
-          const tag = modal.querySelector('input[type="radio"]').checked ? 1 : 0;
+          const branch = modal.querySelector('input[type="radio"]').checked ? 0 : 1;
           const separator = folder === '' ? '' : '/';
           const url = repository + '/tree/' + tagOrBranchName + separator + folder;
           fetch('/ajax/project/create.php', {
@@ -204,7 +205,7 @@ export default class Project extends User {
               email: that.email,
               password: that.password,
               url: url,
-              tag: tag})})
+              branch: branch})})
             .then(function(response) {
               return response.json();
             })
@@ -217,7 +218,7 @@ export default class Project extends User {
                 let project = {};
                 project.id = data.id;
                 project.title = data.title;
-                project.tag = tag;
+                project.branch = branch;
                 project.url = url;
                 let template = document.createElement('template');
                 template.innerHTML = addProject(project);
