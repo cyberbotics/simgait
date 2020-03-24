@@ -1,5 +1,9 @@
 /* bulma classes */
 
+html { /* hides the vertical scroll bar if it is not needed */
+  overflow-y: auto;
+}
+
 .navbar {
   min-height:56px; /* needed to avoid heigth change when Log In and Sign Up buttons are hidden */
 }
