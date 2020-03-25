@@ -31,11 +31,10 @@ export default class Simulation {
       webotsView.innerHTML = 'Wrong url: ' + url;
     else {
       let view = new webots.View(webotsView, 0);
-      const protocol = window.location.protocol === 'https' ? 'wss' : 'ws';
-      const u = protocol + '://' + window.location.hostname + '/session' + '?url=' + url + '&branch=' + branch;
-      console.log('opening ' + u);
-      // view.open(u);
-      view.open('ws://localhost:2001');
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const u = protocol + '//' + window.location.hostname + '/session' + '?url=' + url + '&branch=' + branch;
+      console.log('opening ' + u + ' protocol = ' + window.location.protocol);
+      view.open(u);
     }
   }
 }
