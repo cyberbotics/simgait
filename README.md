@@ -53,10 +53,12 @@ LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
   RewriteCond %{SERVER_NAME} =www.simgait.org
   RewriteRule ^ https://simgait.org%{REQUEST_URI} [END,NE,R=permanent]
 
+  # port redirection rules (for session_server.py, simulation_server.py and webots)
+  RewriteRule ^/(\d*)/(.*)$ "http://%{SERVER_NAME}:$1/$2" [P,L]
+  # websockets (may not be needed)
   RewriteCond %{HTTP:Upgrade} websocket [NC]
   RewriteCond %{HTTP:Connection} upgrade [NC]
-  RewriteRule ^/session "ws://%{SERVER_NAME}:1999" [P,L]       # session_server.py
-  RewriteRule ^/(\d*)/(.*)$ "ws://%{SERVER_NAME}:$1/$2" [P,L]  # simulation_server.py and webots
+  RewriteRule ^/(\d*)/(.*)$ "ws://%{SERVER_NAME}:$1/$2" [P,L]
 </VirtualHost>
 ```
 
