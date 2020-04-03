@@ -149,43 +149,33 @@ export default class Project extends User {
         let content = {};
         content.innerHTML =
 `<div class="field">
-  <label class="label">Git Repository</label>
+  <label class="label">Webots world file</label>
   <div class="control has-icons-left">
-    <input id="repository" class="input" type="url" required placeholder="https://github.com/my_name/my_project" value="https://github.com/">
+    <input id="repository" class="input" type="url" required placeholder="https://github.com/my_name/my_project/blob/tag_or_branch/worlds/file.wbt" value="https://github.com/">
     <span class="icon is-small is-left">
       <i class="fab fa-github"></i>
     </span>
   </div>
-  <div class="help">This Git repository should be available over HTTPS without authentication.</div>
+  <div class="help">Blob reference in a public GitHub repository, including tag or branch information, for example:<br>
+    <a target="_blank" href="https://github.com/cyberbotics/webots/blob/R2020a/projects/languages/python/worlds/example.wbt">
+      https://github.com/cyberbotics/webots/blob/R2020a/projects/languages/python/worlds/example.wbt
+    </a>
+  </div>
 </div>
 <div class="field">
-  <label class="label">Project Folder</label>
-  <div class="control has-icons-left">
-    <input id="folder" class="input" placeholder="my_simualtions/my_wonderful_simulation" maxlen="2048">
-    <span class="icon is-small is-left">
-      <i class="fas fa-folder"></i>
-    </span>
-  </div>
-  <div class="help">Webots project folder in your Git repository (leave empty if at root).</div>
-</div>
-<div class="field">
-  <label class="label">Tag or Branch</label>
-  <div class="control has-icons-left">
-    <input id="tag-or-branch" class="input" required placeholder="tag or branch name" maxlen="40" value="master">
-    <span class="icon is-small is-left">
-      <i class="fas fa-code-branch"></i>
-    </span>
-  </div>
+  <label class="label">Tag or Branch?</label>
   <div class="control">
+    <span class="icon is-small is-left"><i class="fas fa-code-branch"></i></span><span> &nbsp; </span>
     <label class="radio">
-      <input type="radio" name="branch" required> Tag
+      <input type="radio" name="branch" required checked> Tag
     </label>
     <label class="radio">
-      <input type="radio" name="branch" required checked> Branch
+      <input type="radio" name="branch" required> Branch
     </label>
   </div>
+  <div class="help">Specify if the above blob corresponds to a git tag (recommended) or a git branch.</div>
 </div>`;
-        let modal = ModalDialog.run('Add project', content.innerHTML, 'Cancel', 'Add');
+        let modal = ModalDialog.run('Add a project', content.innerHTML, 'Cancel', 'Add');
         let input = modal.querySelector('#repository');
         input.focus();
         input.selectionStart = input.selectionEnd = input.value.length;
