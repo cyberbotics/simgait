@@ -62,7 +62,20 @@ LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
 </VirtualHost>
 ```
 
-We plan to install [CodeIgniter4](/codeigniter4/codeigniter4/) to use it as a PHP web framework.
+## Reference to a simulation hosted on github
+
+In order to refer to a specific simulation hosted on a github repository, we should the following protocol:
+
+`github/user/repo/type/name/folder/subfolder/[...]/subsubfolder/worlds/world.wbt`
+
+Examples:
+
+Referring to the `master` branch: [github/cyberbotics/webots/branch/master/projects/samples/robotbenchmark/humanoid_sprint/worlds/humanoid_sprint.wbt](https://github.com/cyberbotics/webots/tree/master/projects/samples/robotbenchmark/humanoid_sprint/worlds/humanoid_sprint.wbt)
+
+Referring to the `R2020a-rev1` tag: [github/cyberbotics/webots/tag/R2020a-rev1/projects/samples/robotbenchmark/inverted_pendulum/worlds/inverted_pendulum.wbt](https://github.com/cyberbotics/webots/tree/R2020a-rev1/projects/samples/robotbenchmark/inverted_pendulum/worlds/inverted_pendulum.wbt)
+
+When speficied this way, the whole project will be downloaded (e.g., not only the world file, but all the project folder, including controllers, protos, plugins, etc.).
+
 
 ## Automatic git synchronization and testing website
 
