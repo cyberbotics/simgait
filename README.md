@@ -74,7 +74,7 @@ Referring to the `master` branch: [webots://github.com/cyberbotics/webots/branch
 
 Referring to the `R2020a-rev1` tag: [webots://github.com/cyberbotics/webots/tag/R2020a-rev1/projects/samples/robotbenchmark/inverted_pendulum/worlds/inverted_pendulum.wbt](https://github.com/cyberbotics/webots/tree/R2020a-rev1/projects/samples/robotbenchmark/inverted_pendulum/worlds/inverted_pendulum.wbt)
 
-When speficied this way, the whole project will be downloaded (e.g., not only the world file, but all the project folder, including controllers, protos, plugins, etc.).
+When specified this way, the whole project will be downloaded (e.g., not only the world file, but all the project folder, including controllers, protos, plugins, etc.).
 
 
 ## Automatic git synchronization and testing website

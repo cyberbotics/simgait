@@ -10,12 +10,15 @@ export default class Project extends User {
     let that = this;
     let promise = new Promise((resolve, reject) => {
       const username = url.pathname.substring(1);
-      fetch('/ajax/project/user.php', {
+      const content = {
         method: 'post',
         body: JSON.stringify({
           email: that.email,
           password: that.password,
-          username: username})})
+          username: username
+        })
+      };
+      fetch('/ajax/project/user.php', content)
         .then(function(response) {
           return response.json();
         })
@@ -35,17 +38,30 @@ export default class Project extends User {
   }
   userPage(data) {
     let that = this;
+
+    function githubUrl(webotsUrl) {
+      let a = webotsUrl.substr(9).split('/');
+      let url = 'https://';
+      a.forEach(function(v, i) {
+        if (i === 3)
+          url += 'blob/';
+        else
+          url += v + '/';
+      });
+      return url.slice(0, -1); // remove the final '/'
+    }
+
     function addProject(project) {
       let line = {};
       const checked = project.public === '1' ? ' checked' : '';
       line.innerHTML =
-`<tr id="project-${project.id}">
+        `<tr id="project-${project.id}">
   <td>
     <button class="button is-small is-outlined is-link" id="run-${project.id}"title="run this project">
       <span class="icon"><i class="fas fa-play fa-lg"></i></span>
     </button>
   </td>
-  <td><a href="${project.url}" target="_blank" id="url-${project.id}">${project.title}</a></td>
+  <td><a href="${githubUrl(project.url)}" target="_blank" id="url-${project.id}">${project.title}</a></td>
   <td style="text-align:center">
     <input type="checkbox"${checked}>
     <input type="hidden" id="branch-${project.id}" value="${project.branch}">
@@ -58,10 +74,12 @@ export default class Project extends User {
 </tr>`;
       return line.innerHTML;
     }
+
     function updateProjectCount() {
       that.content.querySelector('#no-project').style.display = projectCount === 0 ? '' : 'none';
       that.content.querySelector('#header-line').style.display = projectCount === 0 ? 'none' : '';
     }
+
     function deleteProject(event) {
       let button = event.target;
       while (button.tagName !== 'BUTTON')
@@ -74,12 +92,15 @@ export default class Project extends User {
       dialog.querySelector('form').addEventListener('submit', function(event) {
         event.preventDefault();
         dialog.querySelector('button[type="submit"]').classList.add('is-loading');
-        fetch('/ajax/project/delete.php', {
+        const content = {
           method: 'post',
           body: JSON.stringify({
             email: that.email,
             password: that.password,
-            project: projectId})})
+            project: projectId
+          })
+        };
+        fetch('/ajax/project/delete.php', content)
           .then(function(response) {
             return response.json();
           })
@@ -96,15 +117,14 @@ export default class Project extends User {
           });
       });
     }
+
     function runProject(event) {
       let button = event.target;
       while (button.tagName !== 'BUTTON')
         button = button.parentNode;
       const projectId = button.id.substring(4);
-      const branch = document.querySelector('#branch-' + projectId).value;
-      const githubUrl = document.querySelector('#url-' + projectId).href;
-      let url = '/simulation?url=' + githubUrl + '&branch=' + branch;
-      that.load(url);
+      const url = document.querySelector('#url-' + projectId).href;
+      that.load('/simulation?url=' + url);
     }
     let button = {};
     let headEnd = {};
@@ -126,7 +146,7 @@ export default class Project extends User {
       });
     }
     template.innerHTML =
-`<section class="section">
+      `<section class="section">
   <div class="container">
     <h1 class="title">Projects</h1>
     <table id="project-table" class="table">
@@ -148,10 +168,10 @@ export default class Project extends User {
       that.content.querySelector('#add-a-new-project').addEventListener('click', function(event) {
         let content = {};
         content.innerHTML =
-`<div class="field">
+          `<div class="field">
   <label class="label">Webots world file</label>
   <div class="control has-icons-left">
-    <input id="repository" class="input" type="url" required placeholder="https://github.com/my_name/my_project/blob/tag_or_branch/worlds/file.wbt" value="https://github.com/">
+    <input id="world-file" class="input" type="url" required placeholder="https://github.com/my_name/my_project/blob/tag_or_branch/worlds/file.wbt" value="https://github.com/">
     <span class="icon is-small is-left">
       <i class="fab fa-github"></i>
     </span>
@@ -176,25 +196,29 @@ export default class Project extends User {
   <div class="help">Specify if the above blob corresponds to a git tag (recommended) or a git branch.</div>
 </div>`;
         let modal = ModalDialog.run('Add a project', content.innerHTML, 'Cancel', 'Add');
-        let input = modal.querySelector('#repository');
+        let input = modal.querySelector('#world-file');
         input.focus();
         input.selectionStart = input.selectionEnd = input.value.length;
         modal.querySelector('form').addEventListener('submit', function(event) {
           event.preventDefault();
           modal.querySelector('button[type="submit"]').classList.add('is-loading');
-          const repository = modal.querySelector('#repository').value;
-          const folder = modal.querySelector('#folder').value;
-          const tagOrBranchName = modal.querySelector('#tag-or-branch').value;
-          const branch = modal.querySelector('input[type="radio"]').checked ? 0 : 1;
-          const separator = folder === '' ? '' : '/';
-          const url = repository + '/tree/' + tagOrBranchName + separator + folder;
-          fetch('/ajax/project/create.php', {
+          const worldFile = modal.querySelector('#world-file').value.trim();
+          if (!worldFile.startsWith('https://github.com/')) {
+            modal.error('The world file should start with "https://github.com/".');
+            return;
+          }
+          const branchOrTag = modal.querySelector('input[type="radio"]').checked ? 'tag' : 'branch';
+          const n = worldFile.split('/', 5).join('/').length;
+          const url = 'webots' + worldFile.substring(5, n + 1) + branchOrTag + worldFile.substring(n + 5); // skipping "/blob"
+          const content = {
             method: 'post',
             body: JSON.stringify({
               email: that.email,
               password: that.password,
-              url: url,
-              branch: branch})})
+              url: url
+            })
+          };
+          fetch('/ajax/project/create.php', content)
             .then(function(response) {
               return response.json();
             })
@@ -207,8 +231,7 @@ export default class Project extends User {
                 let project = {};
                 project.id = data.id;
                 project.title = data.title;
-                project.branch = branch;
-                project.url = url;
+                project.url = githubUrl(data.url);
                 let template = document.createElement('template');
                 template.innerHTML = addProject(project);
                 that.content.querySelector('#project-table').appendChild(template.content.firstChild);
