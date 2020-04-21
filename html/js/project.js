@@ -40,7 +40,8 @@ export default class Project extends User {
     let that = this;
 
     function githubUrl(webotsUrl) {
-      let a = webotsUrl.substr(9).split('/');
+      console.log(webotsUrl);
+      const a = webotsUrl.substr(9).split('/');
       let url = 'https://';
       a.forEach(function(v, i) {
         if (i === 3)
@@ -231,7 +232,7 @@ export default class Project extends User {
                 let project = {};
                 project.id = data.id;
                 project.title = data.title;
-                project.url = githubUrl(data.url);
+                project.url = githubUrl(url);
                 let template = document.createElement('template');
                 template.innerHTML = addProject(project);
                 that.content.querySelector('#project-table').appendChild(template.content.firstChild);
