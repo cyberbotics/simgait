@@ -26,8 +26,8 @@ export default class Simulation {
       branch = '0';
     if (url == null) {
       webotsView.innerHTML = 'Missing GET parameter: url<div class="is-size-6">Example: ' + window.location.href +
-                             '?url=https://github.com/user/repo/tree/tag/simulation';
-    } else if (!url.startsWith('https://github.com/'))
+        '?url=webots://github.com/user/repo/tag/R2020a-rev1/simulation/folder/worlds/my_world.wbt';
+    } else if (!url.startsWith('webots://github.com/'))
       webotsView.innerHTML = 'Wrong url: ' + url;
     else {
       let view = new webots.View(webotsView, 0);

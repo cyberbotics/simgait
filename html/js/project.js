@@ -61,8 +61,9 @@ export default class Project extends User {
     <button class="button is-small is-outlined is-link" id="run-${project.id}"title="run this project">
       <span class="icon"><i class="fas fa-play fa-lg"></i></span>
     </button>
+    <input type="hidden" id="url-${project.id}" value="${project.url}">
   </td>
-  <td><a href="${githubUrl(project.url)}" target="_blank" id="url-${project.id}">${project.title}</a></td>
+  <td><a href="${githubUrl(project.url)}" target="_blank">${project.title}</a></td>
   <td style="text-align:center">
     <input type="checkbox"${checked}>
     <input type="hidden" id="branch-${project.id}" value="${project.branch}">
@@ -124,7 +125,7 @@ export default class Project extends User {
       while (button.tagName !== 'BUTTON')
         button = button.parentNode;
       const projectId = button.id.substring(4);
-      const url = document.querySelector('#url-' + projectId).href;
+      const url = document.querySelector('#url-' + projectId).value;
       that.load('/simulation?url=' + url);
     }
     let button = {};
