@@ -64,6 +64,8 @@ LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
 </VirtualHost>
 ```
 
+In addition subversion should be installed as it is used by the new version of `simulation_server.py`: `sudo apt install subversion`
+
 ## Reference to a simulation hosted on github
 
 In order to refer to a specific simulation hosted on a github repository, we should the following protocol:
