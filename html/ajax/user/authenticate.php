@@ -8,9 +8,11 @@
   $json = file_get_contents('php://input');
   $data = json_decode($json);
   require '../../../php/database.php';
-  $mysqli =  new mysqli($database_host, $database_username, $database_password, $database_name);
+  @$mysqli = new mysqli($database_host, $database_username, $database_password, $database_name);
   if (!$mysqli)
     error("Can't connect to MySQL database: $mysqli->error");
+  if (mysqli_connect_errno())
+    error(sprintf("[%d] %s", mysqli_connect_errno(), mysqli_connect_error()));
   $mysqli->set_charset('utf8');
   $email = $mysqli->escape_string($data->{'email'});
   $password = $mysqli->escape_string($data->{'password'});
