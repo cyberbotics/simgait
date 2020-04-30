@@ -2,7 +2,6 @@
 
 export default class Simulation {
   content() {
-    // FIXME: remove /ajax/simulation/download.php
     const template = document.createElement('template');
     template.innerHTML = `<div id="webots-view" style="height:100vh;"></div>`;
     return template.content;
