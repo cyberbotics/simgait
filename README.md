@@ -54,13 +54,43 @@ LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
   RewriteRule ^ https://simgait.org%{REQUEST_URI} [END,NE,R=permanent]
 
   # port redirection rules (for session_server.py, simulation_server.py and webots)
-  RewriteRule ^/(\d*)/(.*)$ "http://%{SERVER_NAME}:$1/$2" [P,L]
-  # websockets (may not be needed)
+  # websockets (should come first)
   RewriteCond %{HTTP:Upgrade} websocket [NC]
   RewriteCond %{HTTP:Connection} upgrade [NC]
   RewriteRule ^/(\d*)/(.*)$ "ws://%{SERVER_NAME}:$1/$2" [P,L]
+  # http traffic (should come after websocket)
+  RewriteRule ^/(\d*)/(.*)$ "http://%{SERVER_NAME}:$1/$2" [P,L]
+  
 </VirtualHost>
 ```
+
+In addition subversion should be installed as it is used by the new version of `simulation_server.py`: `sudo apt install subversion`.
+
+The session server should be configured with `simgait.json`:
+```
+  "port": 1999,
+  "portRewrite": true,
+  "server": "simgait.org",
+  "administrator": "webmaster@cyberbotics.com",
+  "mailServer": "mail.infomaniak.com",
+  "mailServerPort": 587,
+  "mailSender": "support@cyberbotics.com",
+  "mailSenderPassword": "********",
+  "simulationServers": [
+    "simgait.org/2000"
+  ]
+```
+
+The simulation server should be configured with `simgait.json`:
+```
+{
+  "port": 2000,
+  "logDir": "log/",
+  "portRewrite": true,
+  "debug": true
+}
+```
+
 
 ## Reference to a simulation hosted on github
 
