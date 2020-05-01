@@ -19,10 +19,7 @@ export default class Simulation {
       return result;
     }
     const url = findGetParameter('url');
-    let branch = findGetParameter('branch');
     let webotsView = document.body.querySelector('#webots-view');
-    if (branch == null)
-      branch = '0';
     if (url == null) {
       webotsView.innerHTML = 'Missing GET parameter: url<div class="is-size-6">Example: ' + window.location.href +
         '?url=webots://github.com/user/repo/tag/R2020a-rev1/simulation/folder/worlds/my_world.wbt';
@@ -31,7 +28,7 @@ export default class Simulation {
     else {
       let view = new webots.View(webotsView, 0);
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const u = protocol + '//' + window.location.hostname + '/1999/session?url=' + url + '&branch=' + branch;
+      const u = protocol + '//' + window.location.hostname + '/1999/session?url=' + url;
       console.log('opening ' + u + ' protocol = ' + window.location.protocol);
       view.open(u);
     }

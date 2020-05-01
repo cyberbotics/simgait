@@ -66,7 +66,6 @@ export default class Project extends User {
   <td><a href="${githubUrl(project.url)}" target="_blank">${project.title}</a></td>
   <td style="text-align:center">
     <input type="checkbox"${checked}>
-    <input type="hidden" id="branch-${project.id}" value="${project.branch}">
   </td>
   <td>
     <button class="button is-small is-outlined is-danger" title="delete this project" id="delete-${project.id}">
