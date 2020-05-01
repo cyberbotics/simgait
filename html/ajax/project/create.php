@@ -36,14 +36,14 @@
   # retrieve the title from the WorldInfo node (assuming the default tabulation from a Webots saved world file)
   $n = strpos($world, "\nWorldInfo {\n");
   if ($n === false)
-    error("Missing WorldInfo in $default world file");
+    error("Missing WorldInfo in $world world file");
   $n = strpos($world, "\n  title \"", $n);
   if ($n === false)
-    error("Missing WorldInfo.title in $default world file");
+    error("Missing WorldInfo.title in $world world file");
   $n += 10;
   $m = strpos($world, "\"\n", $n);
   if ($m === false)
-    error("Missing closing double quote for WorldInfo.title in $default world file");
+    error("Missing closing double quote for WorldInfo.title in $world world file");
   $title = substr($world, $n, $m - $n);
   $query = "INSERT INTO project(title, user, url, public) VALUES(\"$title\", $user[id], \"$url\", 0)";
   $mysqli->query($query) or error($mysqli->error);
