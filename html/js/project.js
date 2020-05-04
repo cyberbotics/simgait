@@ -232,7 +232,7 @@ export default class Project extends User {
                 let project = {};
                 project.id = data.id;
                 project.title = data.title;
-                project.url = githubUrl(url);
+                project.url = url;
                 let template = document.createElement('template');
                 template.innerHTML = addProject(project);
                 that.content.querySelector('#project-table').appendChild(template.content.firstChild);
