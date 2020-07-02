@@ -32,14 +32,10 @@ LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
 <VirtualHost *:80>
   ServerName simgait.org
   ServerAlias www.simgait.org
-
-  [ ... ]
-
-  RewriteEngine on
-
-  RewriteCond %{SERVER_NAME} =%{SERVER_NAME} [OR]
-  RewriteCond %{SERVER_NAME} =www.%{SERVER_NAME}
-  RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+  ServerAdmin Olivier.Michel@cyberbotics.com
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+  Redirect permanent / https://simgait.org
 </VirtualHost>
 
 <VirtualHost *:443>
