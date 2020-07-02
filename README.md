@@ -32,7 +32,7 @@ LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
 <VirtualHost *:80>
   ServerName simgait.org
   ServerAlias www.simgait.org
-  ServerAdmin Olivier.Michel@cyberbotics.com
+  ServerAdmin info@simgait.org
   ErrorLog ${APACHE_LOG_DIR}/error.log
   CustomLog ${APACHE_LOG_DIR}/access.log combined
   Redirect permanent / https://simgait.org
