@@ -22,7 +22,7 @@ export default class Simulation {
     let webotsView = document.body.querySelector('#webots-view');
     if (url == null) {
       webotsView.innerHTML = 'Missing GET parameter: url<div class="is-size-6">Example: ' + window.location.href +
-        '?url=webots://github.com/user/repo/tag/R2020a-rev1/simulation/folder/worlds/my_world.wbt';
+        '?url=webots://github.com/user/repo/tag/R2020b/simulation/folder/worlds/my_world.wbt';
     } else if (!url.startsWith('webots://github.com/'))
       webotsView.innerHTML = 'Wrong url: ' + url;
     else {
