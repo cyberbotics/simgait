@@ -128,7 +128,7 @@ export default class Project extends User {
       let button = event.target;
       while (button.tagName !== 'BUTTON')
         button = button.parentNode;
-      const projectId = button.id.substring(6);
+      const projectId = button.id.substring(10);
       let url = '/simulation?url=' + document.querySelector('#url-' + projectId).value;
       if (button.id.startsWith('run-mjpeg-'))
         url += '&mode=mjpeg';
