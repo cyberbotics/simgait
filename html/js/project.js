@@ -58,10 +58,15 @@ export default class Project extends User {
       line.innerHTML =
         `<tr id="project-${project.id}">
   <td>
-    <button class="button is-small is-outlined is-link" id="run-${project.id}"title="run this project">
+    <button class="button is-small is-outlined is-link" id="run-x3d---${project.id}" title="run this project (x3d mode)">
       <span class="icon"><i class="fas fa-play fa-lg"></i></span>
     </button>
     <input type="hidden" id="url-${project.id}" value="${project.url}">
+  </td>
+  <td>
+    <button class="button is-small is-outlined is-link" id="run-mjpeg-${project.id}" title="run this project (mjpeg mode)">
+      <span class="icon"><i class="fab fa-youtube"></i></span>
+    </button>
   </td>
   <td><a href="${githubUrl(project.url)}" target="_blank">${project.title}</a></td>
   <td style="text-align:center">
@@ -123,9 +128,11 @@ export default class Project extends User {
       let button = event.target;
       while (button.tagName !== 'BUTTON')
         button = button.parentNode;
-      const projectId = button.id.substring(4);
-      const url = document.querySelector('#url-' + projectId).value;
-      that.load('/simulation?url=' + url);
+      const projectId = button.id.substring(6);
+      let url = '/simulation?url=' + document.querySelector('#url-' + projectId).value;
+      if button.id.startsWith('run-mjpeg-')
+        url += '&mode=mjpeg';
+      that.load(url);
     }
     let button = {};
     let headEnd = {};
@@ -237,7 +244,8 @@ export default class Project extends User {
                 template.innerHTML = addProject(project);
                 that.content.querySelector('#project-table').appendChild(template.content.firstChild);
                 that.content.querySelector('#delete-' + project.id).addEventListener('click', deleteProject);
-                that.content.querySelector('#run-' + project.id).addEventListener('click', runProject);
+                that.content.querySelector('#run-x3d---' + project.id).addEventListener('click', runProject);
+                that.content.querySelector('#run-mjpeg-' + project.id).addEventListener('click', runProject);
                 projectCount++;
                 updateProjectCount();
               }
@@ -247,7 +255,8 @@ export default class Project extends User {
       if (data.projects && data.projects.length > 0) {
         data.projects.forEach(function(project, index) {
           that.content.querySelector('#delete-' + project.id).addEventListener('click', deleteProject);
-          that.content.querySelector('#run-' + project.id).addEventListener('click', runProject);
+          that.content.querySelector('#run-x3d---' + project.id).addEventListener('click', runProject);
+          that.content.querySelector('#run-mjpeg-' + project.id).addEventListener('click', runProject);
         });
       }
     }
