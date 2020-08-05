@@ -32,10 +32,11 @@ export default class Simulation {
       let view = new webots.View(webotsView, 0);
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       let u = protocol + '//' + window.location.hostname + '/1999/session?url=' + url;
-      if (mode)
-        u += '&mode=' + mode;
       console.log('opening ' + u + ' protocol = ' + window.location.protocol);
-      view.open(u);
+      if (mode)
+        view.open(u, mode);
+      else
+        view.open(u);
     }
   }
 }
