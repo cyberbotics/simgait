@@ -160,7 +160,7 @@ export default class Project extends User {
     <table id="project-table" class="table">
       <thead>
         <tr id="header-line">
-          <th></th><th>Title</th>${headEnd.innerHTML}
+          <th><small>X3D</small></th><th><small>MJPEG</small></th><th>Title</th>${headEnd.innerHTML}
         </tr>
       </thead>
       <tbody>
