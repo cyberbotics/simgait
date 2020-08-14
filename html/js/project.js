@@ -65,7 +65,7 @@ export default class Project extends User {
   </td>
   <td>
     <button class="button is-small is-outlined is-link" id="run-mjpeg-${project.id}" title="run this project (mjpeg mode)">
-      <span class="icon"><i class="fab fa-youtube"></i></span>
+      <span class="icon"><i class="fas fa-video fa-lg"></i></span>
     </button>
   </td>
   <td><a href="${githubUrl(project.url)}" target="_blank">${project.title}</a></td>
