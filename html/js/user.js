@@ -194,6 +194,26 @@ export default class User extends Router {
       if (!that.password || !that.email)
         return false;
       const template = document.createElement('template');
+      let developer = '';
+      let clinician = '';
+      let educator = '';
+      if (that.category === 'developer')
+        developer = 'checked';
+      else if (that.category === 'clinician')
+        clinician = 'checked';
+      else if (that.category === 'educator')
+        educator = 'checked';
+      const originalCategory = window.localStorage.getItem('originalCategory');
+      if (originalCategory !== 'developer') {
+        if (developer !== '')
+          developer += ' ';
+        developer += 'disabled';
+      }
+      if (originalCategory === 'educator') {
+        if (clinician !== '')
+          clinician += ' ';
+        clinician += 'disabled';
+      }
       template.innerHTML =
 `<section class="section">
   <div class="container">
@@ -202,6 +222,23 @@ export default class User extends Router {
   </div>
 </section>
 <section class="section">
+  <div class="container panel">
+    <p class="panel-heading">Category</p>
+    <div class="panel-block">
+      <div class="control">
+        <label class="radio">
+          <input type="radio" id="developer" name="category" ${developer}> <i class="${that.categoryIcon('developer')}"></i> developer
+        </label>
+        <label class="radio">
+          <input type="radio" id="clinician" name="category" ${clinician}> <i class="${that.categoryIcon('clinician')}"></i> clinician
+        </label>
+        <label class="radio">
+          <input type="radio" id="educator" name="category" ${educator}> <i class="${that.categoryIcon('educator')}"></i> educator
+        </label>
+        <p id="sign-up-category-help" class="help"></p>
+      </div>
+    </div>
+  </div>
   <div class="container panel">
     <p class="panel-heading">Change password</p>
     <div class="panel-block">
@@ -222,6 +259,11 @@ export default class User extends Router {
   </div>
 </section>`;
       that.setup('settings', [], template.content);
+      document.querySelectorAll('input[name="category"]').forEach(function(radio) {
+        radio.addEventListener('click', function(event) {
+          that.category = event.target.id;
+        });
+      });
       document.querySelector('#change-password').addEventListener('click', function(event) {
         event.target.classList.add('is-loading');
         that.forgotPassword(that.email, function() { event.target.classList.remove('is-loading'); });
@@ -260,6 +302,15 @@ export default class User extends Router {
       if (id && email)
         resetPassword(id, token, email);
     }
+  }
+  categoryIcon(category = this.category) {
+    if (category === 'developer')
+      return 'fas fa-user-cog';
+    if (category === 'clinician')
+      return 'fas fa-user-md';
+    if (category === 'educator')
+      return 'fas fa-chalkboard-teacher';
+    return '';
   }
   load(page = null, pushHistory = true) {
     let that = this;
@@ -347,13 +398,13 @@ export default class User extends Router {
   <label class="label">Category</label>
   <div class="control">
     <label class="radio">
-      <input type="radio" name="category" value="developer" required> Developer
+      <input type="radio" name="category" value="developer" required> <i class="${that.categoryIcon('developer')}"></i> developer
     </label>
     <label class="radio">
-      <input type="radio" name="category" value="clinician"> Clinician
+      <input type="radio" name="category" value="clinician"> <i class="${that.categoryIcon('clinician')}"></i> clinician
     </label>
     <label class="radio">
-      <input type="radio" name="category" value="educator"> Educator
+      <input type="radio" name="category" value="educator"> <i class="${that.categoryIcon('educator')}"></i> educator
     </label>
     <p id="sign-up-category-help" class="help"></p>
   </div>
@@ -604,6 +655,8 @@ export default class User extends Router {
             document.querySelector('#projects').href = '/' + data.username;
             document.querySelector('#username').innerHTML = data.username;
             that.username = data.username;
+            window.localStorage.setItem('originalCategory', data.category);
+            that.category = data.category;
             if (reload) // the page content may need to be updated after loging in.
               that.load();
             if (success)
@@ -652,5 +705,14 @@ export default class User extends Router {
       window.localStorage.removeItem('password');
     else
       window.localStorage.setItem('password', value);
+  }
+  get category() {
+    return window.localStorage.getItem('category');
+  }
+  set category(value) {
+    if (value === null)
+      window.localStorage.removeItem('category');
+    else
+      window.localStorage.setItem('category', value);
   }
 }
