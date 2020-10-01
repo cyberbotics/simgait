@@ -70,7 +70,7 @@ export default class Project extends User {
   </td>
   <td><a href="${githubUrl(project.url)}" target="_blank">${project.title}</a></td>
   <td style="text-align:center">
-    <input type="checkbox"${checked}>
+    <input type="checkbox"${checked} name="public-checkbox" id="public-${project.id}">
   </td>
   <td>
     <button class="button is-small is-outlined is-danger" title="delete this project" id="delete-${project.id}">
@@ -172,6 +172,30 @@ export default class Project extends User {
 </section>`;
     that.setup('userpage', [], template.content);
     updateProjectCount();
+    let checkboxes = that.content.querySelectorAll('input[name="public-checkbox"]');
+    checkboxes.forEach(function(checkbox) {
+      checkbox.addEventListener('click', function(event) {
+        const projectId = event.target.id.substring(7); // remove the "public-" prefix
+        const checked = event.target.checked ? '1' : '0';
+        const content = {
+          method: 'post',
+          body: JSON.stringify({
+            email: that.email,
+            password: that.password,
+            project: projectId,
+            public: checked
+          })
+        };
+        fetch('/ajax/project/public.php', content)
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(data) {
+            if (data.error)
+              console.log('Error: ' + data.error);
+          });
+      });
+    });
     if (data.self !== false) {
       that.content.querySelector('#add-a-new-project').addEventListener('click', function(event) {
         let content = {};

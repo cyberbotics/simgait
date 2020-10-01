@@ -1,5 +1,5 @@
 <?php
-  // This script deletes a project
+  // This script update the public status of a project
   function error($message) {
     die("{\"error\":\"$message\"}");
   }
@@ -14,6 +14,7 @@
   $email = $mysqli->escape_string($data->{'email'});
   $password = $mysqli->escape_string($data->{'password'});
   $project_id = intval($data->{'project'});
+  $public = intval($data->{'public'});
   $result = $mysqli->query("SELECT id, password FROM user WHERE email=\"$email\"") or error($mysqli->error);
   $user = $result->fetch_assoc();
   $result->free();
@@ -21,8 +22,8 @@
     error("Wrong e-mail");
   if ($user['password'] != $password)
     error('Wrong password');
-  $mysqli->query("DELETE FROM project WHERE user=$user[id] AND id=$project_id");
+  $mysqli->query("UPDATE project SET public=$public WHERE user=$user[id] AND id=$project_id");
   if ($mysqli->affected_rows == 0)
-    error("Could not delete project $project_id");
+    error("Could not update project $project_id");
   die('{"status": "success"}');
  ?>
