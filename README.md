@@ -18,6 +18,9 @@ The following software is installed:
 
 - Ubuntu 18.04 Desktop with `apache2`, `php`, `git` and `webots` (from the snap store).
 
+- Add `ServerName 127.0.0.1` at the beginning of `/etc/apache2/apache2.conf`.
+- Enable SSL: `sudo a2ensite default-ssl`, `sudo a2enmod ssl`, `sudo systemctl restart apache2`.
+
 A letsencrypt certificate was installed to enable https.
 Apache was configured with rewrite rules to:
 
