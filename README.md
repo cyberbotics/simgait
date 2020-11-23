@@ -18,7 +18,7 @@ The following software is installed:
 
 - Ubuntu 18.04 Desktop with `apache2`, `php`, `git` and `webots` (from the snap store).
 
-A letsencrypt certificate was installed on enable https.
+A letsencrypt certificate was installed to enable https.
 Apache was configured with rewrite rules to:
 
 1. Redirect all traffic from http to the https.
