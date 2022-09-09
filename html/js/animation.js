@@ -10,7 +10,6 @@ export default class Animation extends Project {
     super(title, footer, routes);
     routes.push({url: '/animation', setup: animationPage});
     let that = this;
-    this.load();
     function animationPage() {
       const template = document.createElement('template');
       template.innerHTML = `<section class="section">
