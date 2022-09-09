@@ -2,10 +2,6 @@ import ModalDialog from './modal_dialog.js';
 import User from './user.js';
 
 export default class Project extends User {
-  static run(title, footer, routes) {
-    Project.current = new Project(title, footer, routes);
-    return Project.current;
-  }
   dynamicPage(url, pushHistory) {
     let that = this;
     let promise = new Promise((resolve, reject) => {
@@ -286,4 +282,3 @@ export default class Project extends User {
     }
   }
 }
-Project.current = null;
