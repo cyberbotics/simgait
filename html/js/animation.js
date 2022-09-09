@@ -3,8 +3,8 @@ import Project from './project.js';
 
 export default class Animation extends Project {
   static run(title, footer, routes) {
-    Animation.current = new Animation(title, footer, routes);
-    return Animation.current;
+    let animation = new Animation(title, footer, routes);
+    animation.load();
   }
   constructor(title, footer, routes) {
     super(title, footer, routes);
@@ -117,4 +117,3 @@ export default class Animation extends Project {
     }
   }
 }
-Animation.current = null;

@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let simulation = new Simulation('webots');
   Animation.run('SimGait', footer(), [
     {url: '/', setup: homePage},
-    {url: '/simulation', setup: simulationPage}]).load();
+    {url: '/simulation', setup: simulationPage}]);
 
   function footer() {
     let template = document.createElement('template');
