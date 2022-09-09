@@ -8,9 +8,9 @@ export default class Animation extends Project {
   }
   constructor(title, footer, routes) {
     super(title, footer, routes);
-    routes.push({url: '/animation', setup: animationPage});
+    routes.push({url: '/animation', setup: setup, cleanup: cleanup});
     let that = this;
-    function animationPage() {
+    function setup() {
       const template = document.createElement('template');
       template.innerHTML = `<section class="section">
       <div class="container">
@@ -111,11 +111,16 @@ export default class Animation extends Project {
           </div>
         </div>
       </div>
-      <div class="webots-view-container">
-        <webots-view data-thumbnail=storage/camera/camera.jpg data-scene=storage/camera/camera.x3d data-animation=storage/camera/camera.json></webots-view>
-      </div>
     </section>`;
       that.setup('animation', [], template.content);
+      let container = document.querySelector('.webots-view-container');
+      document.querySelector('.section').appendChild(container);
+      container.style.removeProperty('display');
+    }
+    function cleanup() {
+      let container = document.querySelector('.webots-view-container');
+      container.style.display = 'none';
+      document.querySelector('body').appendChild(container);
     }
   }
 }

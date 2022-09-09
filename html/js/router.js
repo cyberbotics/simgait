@@ -70,6 +70,13 @@ export default class Router {
   load(page = null, pushHistory = true) {
     let that = this;
     let promise = new Promise((resolve, reject) => {
+      for (let i = 0; i < that.routes.length; i++) {
+        const route = that.routes[i];
+        if (that.pathname === route.url && route.hasOwnProperty('cleanup')) {
+          route.cleanup();
+          break;
+        }
+      }
       if (page == null)
         page = window.location.pathname + window.location.search + window.location.hash;
       that.resetNavbar();
@@ -85,6 +92,7 @@ export default class Router {
             if (pushHistory)
               window.history.pushState(null, name, url.pathname + url.search + url.hash);
             route.setup(that);
+            that.pathname = url.pathname
             found = true;
             resolve();
             break;
