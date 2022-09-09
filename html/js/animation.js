@@ -78,7 +78,6 @@ export default class Animation extends Project {
           </div>
         </div>
 
-
         <div class="field is-horizontal">
           <div class="field-label">
             <label class="label">Cost function measure:</label>
@@ -106,11 +105,14 @@ export default class Animation extends Project {
           <div class="field-body">
             <div class="field">
               <div class="control">
-                <button id="run" class="button is-link">View Animation</button>
+                <button id="run" class="button is-link">Update Animation</button>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div class="webots-view-container">
+        <webots-view data-thumbnail=storage/camera/camera.jpg data-scene=storage/camera/camera.x3d data-animation=storage/camera/camera.json></webots-view>
       </div>
     </section>`;
       that.setup('animation', [], template.content);
