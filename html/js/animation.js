@@ -116,6 +116,7 @@ export default class Animation extends Project {
       let container = document.querySelector('.webots-view-container');
       document.querySelector('.section').appendChild(container);
       container.style.removeProperty('display');
+      document.querySelector('webots-view').resize();
     }
     function cleanup() {
       let container = document.querySelector('.webots-view-container');
