@@ -129,10 +129,14 @@ export default class Animation extends Project {
                        controller.value + '_' +
                        document.querySelector('#cost').value;
         console.log('Folder: ' + folder);
+        let view = document.querySelector('webots-view');
+        view.loadAnimation('storage/gait/model.x3d', 'storage/gait/animation.json', true);
         button.classList.toggle('is-loading');
-        setTimeout(function() {
+        button.disabled = true;
+        view.onready = function() {
           button.classList.toggle('is-loading');
-        }, 2000);
+          button.disabled = false;
+        };
       });
       number.addEventListener('change', function(event) {
         if (event.target.value == '14') {  // Millard
