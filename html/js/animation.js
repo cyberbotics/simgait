@@ -22,7 +22,7 @@ export default class Animation extends Project {
             <div class="field is-horizontal">
               <div class="control">
                 <div class="select">
-                  <select>
+                  <select id="gait">
                     <option>Healthy</option>
                   </select>
                 </div>
@@ -51,9 +51,9 @@ export default class Animation extends Project {
           </div>
           <div class="field-body">
             <div class="field is-horizontal">
-              <div class="control" id="type">
-                <label class="radio"><input type="radio" name="type" value="Millard" checked> Millard </label>
-                <label class="radio"><input type="radio" name="type" value="Thelen" disabled> Thelen </label>
+              <div class="control" id="muscle">
+                <label class="radio"><input type="radio" name="muscle" value="Millard" checked> Millard </label>
+                <label class="radio"><input type="radio" name="muscle" value="Thelen" disabled> Thelen </label>
               </div>
             </div>
           </div>
@@ -70,7 +70,7 @@ export default class Animation extends Project {
                   <select id="controller">
                     <option value="Geyer2010">Geyer 2010</option>
                     <option value="Ong2019">Ong 2019</option>
-                    <option value="spinal_controller">Spinal Controller</option>
+                    <option value="SpinalController">Spinal Controller</option>
                   </select>
                 </div>
               </div>
@@ -86,7 +86,7 @@ export default class Animation extends Project {
             <div class="field is-horizontal">
               <div class="control">
                 <div class="select">
-                  <select>
+                  <select id="cost">
                     <option>0</option>
                     <option>5</option>
                     <option>8</option>
@@ -113,6 +113,45 @@ export default class Animation extends Project {
       </div>
     </section>`;
       that.setup('animation', [], template.content);
+
+      // add the logic for the animation selection, e.g., some options will set
+      // some constraints on some others.
+
+      let button = document.querySelector('#run');
+      let number = document.querySelector('#number');
+      let muscle = document.querySelector('#muscle');
+      let controller = document.querySelector('#controller');
+
+      button.addEventListener('click', function(event) {
+        const folder = document.querySelector('#gait').value + '_' +
+                       number.querySelector('input[name="number"]:checked').value + '_' +
+                       muscle.querySelector('input[name="muscle"]:checked').value + '_' +
+                       controller.value + '_' +
+                       document.querySelector('#cost').value;
+        console.log('Folder: ' + folder);
+        button.classList.toggle('is-loading');
+        setTimeout(function() {
+          button.classList.toggle('is-loading');
+        }, 2000);
+      });
+      number.addEventListener('change', function(event) {
+        if (event.target.value == '14') {  // Millard
+          muscle.querySelectorAll('input')[0].checked = true;
+          muscle.querySelectorAll('input')[1].checked = false;
+          muscle.querySelectorAll('input')[1].disabled = true;
+          controller.querySelector('option[value="Geyer2010"]').disabled = false;
+          controller.querySelector('option[value="Ong2019"]').disabled = true;
+          if (controller.value == 'Ong2019')
+            controller.value = 'Geyer2010';
+        } else { // '18'
+          muscle.querySelectorAll('input')[1].disabled = false;  // Thelen
+          controller.querySelector('option[value="Geyer2010"]').disabled = true;
+          controller.querySelector('option[value="Ong2019"]').disabled = false;
+          if (controller.value == 'Geyer2010')
+            controller.value = 'Ong2019';
+        }
+      });
+
       let container = document.querySelector('.webots-view-container');
       document.querySelector('.section').appendChild(container);
       container.style.removeProperty('display');
