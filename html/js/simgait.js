@@ -1,9 +1,9 @@
-import Project from './project.js';
+import Animation from './animation.js';
 import Simulation from './simulation.js';
 
 document.addEventListener('DOMContentLoaded', function() {
   let simulation = new Simulation('webots');
-  Project.run('SimGait', footer(), [
+  Animation.run('SimGait', footer(), [
     {url: '/', setup: homePage},
     {url: '/simulation', setup: simulationPage}]);
 

@@ -16,14 +16,14 @@ button::-moz-focus-inner { /* disable ugly dotted focus outlines in Firefox */
   border: 0;
 }
 
-
 /* simgait classes */
 
 .brand-logo-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  padding: 2em; }
+  padding: 2em;
+}
 
 .brand-logo {
   width: 10vw;
@@ -37,10 +37,29 @@ button::-moz-focus-inner { /* disable ugly dotted focus outlines in Firefox */
   /* IE6-9 */
   filter: gray;
   /* Google Chrome & Safari 6+ */
-  -webkit-filter: grayscale(1); }
+  -webkit-filter: grayscale(1);
+}
 
 .brand-logo:hover {
   filter: none;
   -webkit-filter: none;
   transform: scale(1.2);
-  z-index: 10; }
+  z-index: 10;
+}
+
+/* webots.js classes */
+
+.webots-view-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0 0;
+  height: calc(0.8 * (100vh - 115px));
+  width: calc(100% + 2px);
+}
+
+webots-view {
+  width: 100%;
+  display: block;
+  position: relative;
+}
