@@ -130,7 +130,7 @@ export default class Animation extends Project {
                        document.querySelector('#cost').value;
         console.log('Folder: ' + folder);
         let view = document.querySelector('webots-view');
-        view.loadAnimation('storage/gait/model.x3d', 'storage/gait/animation.json', true);
+        view.loadAnimation('storage/gait/model.x3d', 'storage/gait/animation.json', true, false, 'storage/gait/gait.jpg');
         button.classList.toggle('is-loading');
         button.disabled = true;
         view.onready = function() {
