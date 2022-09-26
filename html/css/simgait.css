@@ -63,3 +63,16 @@ webots-view {
   display: block;
   position: relative;
 }
+
+.chart-container {
+  position: absolute;
+  height: calc(50% - 26px);
+  width: calc(50% - 4px);;
+}
+
+.menu-div {
+  height: 20px;
+  width: 100%;
+  text-align: right;
+  color: white;
+}
