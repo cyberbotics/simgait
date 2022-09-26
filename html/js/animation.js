@@ -135,7 +135,8 @@ export default class Animation extends Project {
         const labels = [];
         const dataPoints = [[], [], [], [], [], [], []];
         view.onready = () => {
-          console.log("onready")
+          button.classList.toggle('is-loading');
+          button.disabled = false;
           new Promise((resolve, reject) => {
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('GET', 'angles.json', true);
@@ -319,10 +320,6 @@ export default class Animation extends Project {
         view.loadAnimation('storage/gait/model.x3d', 'storage/gait/animation.json', true, false, 'storage/gait/gait.jpg');
         button.classList.toggle('is-loading');
         button.disabled = true;
-        view.onready = function() {
-          button.classList.toggle('is-loading');
-          button.disabled = false;
-        };
       });
       number.addEventListener('change', function(event) {
         if (event.target.value === '14') { // Millard
