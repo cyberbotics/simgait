@@ -204,7 +204,7 @@ export default class Animation extends Project {
       };
       return new Chart(document.getElementById('chart' + index), config);
     }
-    
+
     function setup() {
       const template = document.createElement('template');
       template.innerHTML = `<section class="section">
@@ -327,7 +327,6 @@ export default class Animation extends Project {
           fillCustomWindow();
           button.classList.toggle('is-loading');
           button.disabled = false;
-          console.log('recursion warning')
         };
 
         view.loadAnimation('storage/gait/model.x3d', 'storage/gait/animation.json', true, false, 'storage/gait/gait.jpg');
