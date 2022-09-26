@@ -15,13 +15,16 @@ export default class Animation extends Project {
     document.getElementsByClassName('webots-view-container')[0].appendChild(view);
     view.showCustomWindow = true;
     let basicTimeStep;
-    const myCharts = [];
-    const labels = [];
-    const dataPoints = [[], [], [], [], [], [], []];
+    let myCharts;
+    let labels;
+    let dataPoints;
     view.onready = () => fillCustomWindow();
     view.loadAnimation('storage/gait/model.x3d', 'storage/gait/animation.json', false, undefined, 'storage/gait/gait.jpg');
 
     function fillCustomWindow() {
+      myCharts = [];
+      labels = [];
+      dataPoints = [[], [], [], [], [], [], []];
       new Promise((resolve, reject) => {
         let xmlhttp = new XMLHttpRequest();
         xmlhttp.open('GET', 'storage/gait/angles.json', true);
