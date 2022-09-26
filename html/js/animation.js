@@ -113,7 +113,7 @@ export default class Animation extends Project {
 
           let customWindow = document.getElementById('custom-window');
           if (customWindow)
-            customWindow.style.minWidth = '300px';
+            customWindow.style.minWidth = '310px';
 
           const names = json.names;
           for (let i = 0; i < names.length; i++) {
