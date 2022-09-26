@@ -135,6 +135,7 @@ export default class Animation extends Project {
         const labels = [];
         const dataPoints = [[], [], [], [], [], [], []];
         view.onready = () => {
+          console.log("onready")
           new Promise((resolve, reject) => {
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('GET', 'angles.json', true);
