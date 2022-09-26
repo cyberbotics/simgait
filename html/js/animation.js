@@ -1,4 +1,5 @@
 import Project from './project.js';
+import WebotsView from 'https://cyberbotics.com/wwi/R2023a/WebotsView.js';
 
 export default class Animation extends Project {
   static run(title, footer, routes) {
@@ -9,6 +10,7 @@ export default class Animation extends Project {
     super(title, footer, routes);
     routes.push({url: '/animation', setup: setup, cleanup: cleanup});
     let that = this;
+
     function setup() {
       const template = document.createElement('template');
       template.innerHTML = `<section class="section">
@@ -113,6 +115,18 @@ export default class Animation extends Project {
     </section>`;
       that.setup('animation', [], template.content);
 
+      // create the animation (hidden)
+
+      const view = new WebotsView();
+      document.getElementsByClassName('webots-view-container')[0].appendChild(view);
+      view.showCustomWindow = true;
+      let basicTimeStep;
+      const myCharts = [];
+      const labels = [];
+      const dataPoints = [[], [], [], [], [], [], []];
+      view.onready = () => fillCustomWindow();
+      view.loadAnimation('storage/gait/model.x3d', 'storage/gait/animation.json', false, undefined, 'storage/gait/gait.jpg');
+
       // add the logic for the animation selection, e.g., some options will set
       // some constraints on some others.
 
@@ -128,35 +142,51 @@ export default class Animation extends Project {
                        controller.value + '_' +
                        document.querySelector('#cost').value;
         console.log('Folder: ' + folder);
-        let view = document.querySelector('webots-view');
-        view.showCustomWindow = true;
-        let basicTimeStep;
-        const myCharts = [];
-        const labels = [];
-        const dataPoints = [[], [], [], [], [], [], []];
-        view.onready = () => {
-          button.classList.toggle('is-loading');
-          button.disabled = false;
-          new Promise((resolve, reject) => {
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('GET', 'storage/gait/angles.json', true);
-            xmlhttp.overrideMimeType('application/json');
-            xmlhttp.onload = () => {
-              if (xmlhttp.status === 200 || xmlhttp.status === 0)
-                resolve(JSON.parse(xmlhttp.responseText));
-              else
-                reject(xmlhttp.statusText);
-            };
-            xmlhttp.send();
-          }).then(json => {
-            basicTimeStep = json.basicTimeStep;
-            createGraphs(json);
-            view.setAnimationStepCallback((time) => {
-              if (time % 2 === 0)
-                updateCharts(time / basicTimeStep);
-            });
+
+        view.loadAnimation('storage/gait/model.x3d', 'storage/gait/animation.json', true, false, 'storage/gait/gait.jpg');
+        button.classList.toggle('is-loading');
+        button.disabled = true;
+      });
+      number.addEventListener('change', function(event) {
+        if (event.target.value === '14') { // Millard
+          muscle.querySelectorAll('input')[0].checked = true;
+          muscle.querySelectorAll('input')[1].checked = false;
+          muscle.querySelectorAll('input')[1].disabled = true;
+          controller.querySelector('option[value="Geyer2010"]').disabled = false;
+          controller.querySelector('option[value="Ong2019"]').disabled = true;
+          if (controller.value === 'Ong2019')
+            controller.value = 'Geyer2010';
+        } else { // '18'
+          muscle.querySelectorAll('input')[1].disabled = false; // Thelen
+          controller.querySelector('option[value="Geyer2010"]').disabled = true;
+          controller.querySelector('option[value="Ong2019"]').disabled = false;
+          if (controller.value === 'Geyer2010')
+            controller.value = 'Ong2019';
+        }
+      });
+
+      function fillCustomWindow() {
+        button.classList.toggle('is-loading');
+        button.disabled = false;
+        new Promise((resolve, reject) => {
+          let xmlhttp = new XMLHttpRequest();
+          xmlhttp.open('GET', 'storage/gait/angles.json', true);
+          xmlhttp.overrideMimeType('application/json');
+          xmlhttp.onload = () => {
+            if (xmlhttp.status === 200 || xmlhttp.status === 0)
+              resolve(JSON.parse(xmlhttp.responseText));
+            else
+              reject(xmlhttp.statusText);
+          };
+          xmlhttp.send();
+        }).then(json => {
+          basicTimeStep = json.basicTimeStep;
+          createGraphs(json);
+          view.setAnimationStepCallback((time) => {
+            if (time % 2 === 0)
+              updateCharts(time / basicTimeStep);
           });
-        };
+        });
 
         function updateCharts(newTime) {
           for (let i = 0; i < 4; i++) {
@@ -316,29 +346,7 @@ export default class Animation extends Project {
           };
           return new Chart(document.getElementById('chart' + index), config);
         }
-
-        view.loadAnimation('storage/gait/model.x3d', 'storage/gait/animation.json', true, false, 'storage/gait/gait.jpg');
-        button.classList.toggle('is-loading');
-        button.disabled = true;
-      });
-      number.addEventListener('change', function(event) {
-        if (event.target.value === '14') { // Millard
-          muscle.querySelectorAll('input')[0].checked = true;
-          muscle.querySelectorAll('input')[1].checked = false;
-          muscle.querySelectorAll('input')[1].disabled = true;
-          controller.querySelector('option[value="Geyer2010"]').disabled = false;
-          controller.querySelector('option[value="Ong2019"]').disabled = true;
-          if (controller.value === 'Ong2019')
-            controller.value = 'Geyer2010';
-        } else { // '18'
-          muscle.querySelectorAll('input')[1].disabled = false; // Thelen
-          controller.querySelector('option[value="Geyer2010"]').disabled = true;
-          controller.querySelector('option[value="Ong2019"]').disabled = false;
-          if (controller.value === 'Geyer2010')
-            controller.value = 'Ong2019';
-        }
-      });
-
+      }
       let container = document.querySelector('.webots-view-container');
       document.querySelector('.section').appendChild(container);
       container.style.removeProperty('display');
