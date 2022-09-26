@@ -1,5 +1,5 @@
 import Project from './project.js';
-// import WebotsView from 'https://cyberbotics.com/wwi/R2023a/WebotsView.js';
+import WebotsView from 'https://cyberbotics.com/wwi/R2023a/WebotsView.js';
 
 export default class Animation extends Project {
   static run(title, footer, routes) {
@@ -116,7 +116,7 @@ export default class Animation extends Project {
       that.setup('animation', [], template.content);
 
       // create the animation (hidden)
-
+      console.log("setup")
       const view = new WebotsView();
       document.getElementsByClassName('webots-view-container')[0].appendChild(view);
       view.showCustomWindow = true;
