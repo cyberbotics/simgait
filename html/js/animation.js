@@ -1,5 +1,5 @@
 import Project from './project.js';
-import WebotsView from 'https://cyberbotics.com/wwi/R2023a/WebotsView.js';
+// import WebotsView from 'https://cyberbotics.com/wwi/R2023a/WebotsView.js';
 
 export default class Animation extends Project {
   static run(title, footer, routes) {
