@@ -139,13 +139,12 @@ export default class Animation extends Project {
           button.disabled = false;
           new Promise((resolve, reject) => {
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('GET', 'angles.json', true);
+            xmlhttp.open('GET', 'storage/gait/angles.json', true);
             xmlhttp.overrideMimeType('application/json');
             xmlhttp.onload = () => {
-              if (xmlhttp.status === 200 || xmlhttp.status === 0){
-                console.log(xmlhttp.responseText)
+              if (xmlhttp.status === 200 || xmlhttp.status === 0)
                 resolve(JSON.parse(xmlhttp.responseText));
-              }else
+              else
                 reject(xmlhttp.statusText);
             };
             xmlhttp.send();
