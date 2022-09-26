@@ -321,11 +321,10 @@ export default class Animation extends Project {
                        document.querySelector('#cost').value;
         console.log('Folder: ' + folder);
         view.onready = () => {
-          if (typeof view.onready === 'function')
-            view.onready();
+          fillCustomWindow();
           button.classList.toggle('is-loading');
           button.disabled = false;
-          console.log("recursion warning")
+          console.log('recursion warning')
         };
 
         view.loadAnimation('storage/gait/model.x3d', 'storage/gait/animation.json', true, false, 'storage/gait/gait.jpg');
