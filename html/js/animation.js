@@ -142,9 +142,10 @@ export default class Animation extends Project {
             xmlhttp.open('GET', 'angles.json', true);
             xmlhttp.overrideMimeType('application/json');
             xmlhttp.onload = () => {
-              if (xmlhttp.status === 200 || xmlhttp.status === 0)
+              if (xmlhttp.status === 200 || xmlhttp.status === 0){
+                console.log(xmlhttp.responseText)
                 resolve(JSON.parse(xmlhttp.responseText));
-              else
+              }else
                 reject(xmlhttp.statusText);
             };
             xmlhttp.send();
