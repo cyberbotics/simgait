@@ -127,11 +127,11 @@ export default class Animation extends Project {
 
         let select = document.getElementById('select0');
         select.value = 0;
-        select = document.getElementById('select0');
+        select = document.getElementById('select1');
         select.value = 1;
-        select = document.getElementById('select0');
+        select = document.getElementById('select2');
         select.value = 3;
-        select = document.getElementById('select0');
+        select = document.getElementById('select3');
         select.value = 5;
 
         const frames = json.frames;
