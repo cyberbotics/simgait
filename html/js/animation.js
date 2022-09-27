@@ -157,7 +157,7 @@ export default class Animation extends Project {
     }
 
     function radiansToDegrees(radians) {
-      return radians * (180 / Math.PI);
+      return -radians * (180 / Math.PI);
     }
 
     function createGraph(index) {
