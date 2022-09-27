@@ -150,10 +150,16 @@ export default class Animation extends Project {
     }
 
     function createGraph(index) {
+      let dataPointsIndex = index;
+      if (index === 2)
+        dataPointsIndex = 3;
+      else if (index === 3)
+        dataPointsIndex = 4;
+
       const data = {
         labels: labels,
         datasets: [{
-          data: dataPoints[index]
+          data: dataPoints[dataPointsIndex]
         }]
       };
 
