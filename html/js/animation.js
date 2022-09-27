@@ -122,12 +122,17 @@ export default class Animation extends Project {
             const option = document.createElement('option');
             option.textContent = names[i];
             option.value = i;
-            const select = document.getElementById('select' + j);
-            select.appendChild(option);
-            if (((i === 0 || i === 1) && i === j) || (i === 2 && j === 3) || (i === 3 && j === 4))
-              select.value = j;
           }
         }
+
+        let select = document.getElementById('select0');
+        select.value = 0;
+        select = document.getElementById('select0');
+        select.value = 1;
+        select = document.getElementById('select0');
+        select.value = 3;
+        select = document.getElementById('select0');
+        select.value = 5;
 
         const frames = json.frames;
         for (let i = 0; i < frames.length; i++) {
