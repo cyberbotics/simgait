@@ -122,6 +122,8 @@ export default class Animation extends Project {
             const option = document.createElement('option');
             option.textContent = names[i];
             option.value = i;
+            const select = document.getElementById('select' + j);
+            select.appendChild(option);
           }
         }
 
