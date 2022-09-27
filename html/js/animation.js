@@ -162,7 +162,7 @@ export default class Animation extends Project {
         dataPointsIndex = 3;
       else if (index === 3)
         dataPointsIndex = 5
-
+      console.log(dataPointsIndex)
       const data = {
         labels: labels,
         datasets: [{
