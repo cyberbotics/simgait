@@ -124,7 +124,7 @@ export default class Animation extends Project {
             option.value = i;
             const select = document.getElementById('select' + j);
             select.appendChild(option);
-            if (i === j)
+            if (((i === 0 || i === 1) && i === j) || (i === 2 && j === 3) || (i === 3 && j === 4))
               select.value = j;
           }
         }
