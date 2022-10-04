@@ -139,11 +139,11 @@ export default class Animation extends Project {
         const frames = json.frames;
         for (let i = 0; i < frames.length; i++) {
           labels.push(frames[i].time);
-          dataPoints[0].push(radiansToDegrees(frames[i].angles[0]));
+          dataPoints[0].push(-radiansToDegrees(frames[i].angles[0]));
           dataPoints[1].push(radiansToDegrees(frames[i].angles[1]));
           dataPoints[2].push(radiansToDegrees(frames[i].angles[2]));
-          dataPoints[3].push(radiansToDegrees(frames[i].angles[3]));
-          dataPoints[4].push(radiansToDegrees(frames[i].angles[4]));
+          dataPoints[3].push(-radiansToDegrees(frames[i].angles[3]));
+          dataPoints[4].push(-radiansToDegrees(frames[i].angles[4]));
           dataPoints[5].push(radiansToDegrees(frames[i].angles[5]));
           dataPoints[6].push(radiansToDegrees(frames[i].angles[6]));
         }
@@ -157,7 +157,7 @@ export default class Animation extends Project {
     }
 
     function radiansToDegrees(radians) {
-      return -radians * (180 / Math.PI);
+      return radians * (180 / Math.PI);
     }
 
     function createGraph(index) {
