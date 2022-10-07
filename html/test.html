@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="SimGait: Simulation of human locomotion &ndash; a neuromechanical and machine learning approach">
+    <title id="title">SimGait</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-1/css/all.css">
+    <link rel="stylesheet" href="css/simgait.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <div class="webots-view-container">
+    </div>
+  </body>
+  <script type=module>
+  import WebotsView from 'https://cyberbotics.com/wwi/R2023a/WebotsView.js';
+
+  const view = new WebotsView();
+  document.getElementsByClassName('webots-view-container')[0].appendChild(view);
+  view.showCustomWindow = true;
+  let basicTimeStep;
+  let myCharts;
+  let labels;
+  let flyoutMenus;
+  const anglesMaps = new Map();
+
+  view.onready = () => fillCustomWindow();
+  view.loadAnimation('storage/gait/model.x3d', 'storage/gait/animation.json', false, undefined, 'storage/gait/gait.jpg');
+
+  function fillCustomWindow() {
+    myCharts = [];
+    labels = [];
+    new Promise((resolve, reject) => {
+      let xmlhttp = new XMLHttpRequest();
+      xmlhttp.open('GET', 'storage/gait/angles.json', true);
+      xmlhttp.overrideMimeType('application/json');
+      xmlhttp.onload = () => {
+        if (xmlhttp.status === 200 || xmlhttp.status === 0)
+          resolve(JSON.parse(xmlhttp.responseText));
+        else
+          reject(xmlhttp.statusText);
+      };
+      xmlhttp.send();
+    }).then(json => {
+      basicTimeStep = json.basicTimeStep;
+      createGraphs(json);
+      view.setAnimationStepCallback((time) => {
+        if (time % 2 === 0)
+          updateCharts(time / basicTimeStep);
+      });
+    });
+  }
+
+  function updateCharts(newTime) {
+    for (let i = 0; i < 4; i++) {
+      myCharts[i].setActiveElements([{datasetIndex: 0, index: newTime}]);
+      myCharts[i].update();
+    }
+  }
+
+
+  function createGraphs(json) {
+    if (typeof view.toolbar !== 'undefined') {
+      view.setCustomWindowTitle('Interactive Charts');
+      view.setCustomWindowTooltip('Interactive Charts');
+      view.setCustomWindowContent(`
+      <div class=chart-container style='left:4px; top:47px'>
+        <div class=menu-div number=0>
+        </div>
+        <div style='width:100%;height:calc(100% - 20px);'>
+          <canvas id='chart0'></canvas>
+        </div>
+      </div>
+      <div class=chart-container style='left: 4px;top:calc(50% + 23px);'>
+        <div class=menu-div number=1>
+        </div>
+        <div style='width:100%;height:calc(100% - 20px);'>
+          <canvas id='chart1'>
+        </div>
+      </div>
+      <div class=chart-container style='left:50%;top:47px;'>
+        <div class=menu-div number=2>
+        </div>
+        <div style='width:100%;height:calc(100% - 20px);'>
+          <canvas id='chart2'>
+        </div>
+      </div>
+      <div class=chart-container style='top:calc(50% + 23px);left:50%;'>
+        <div class=menu-div number=3>
+        </div>
+        <div style='width:100%;height:calc(100% - 20px);'>
+          <canvas id='chart3'>
+        </div>
+      </div>
+      `);
+
+      flyoutMenus = document.getElementsByClassName('menu-div');
+      for (let i = 0; i < flyoutMenus.length; i++) {
+        flyoutMenus[i].innerHTML = flyoutMenuHTML;
+
+      }
+
+      const anglesNames = document.getElementsByClassName('angles-name')
+      for (let i = 0; i < anglesNames.length; i++) {
+        anglesNames[i].onclick = () => {
+          let name = anglesNames[i].innerText;
+          anglesNames[i].parentNode.parentNode.parentNode.parentNode.parentNode.childNodes[0].innerText = name;
+          const number = anglesNames[i].parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('number')
+          myCharts[number].config.data.datasets[0].data = anglesMaps.get(name);
+          myCharts[number].update();
+        };
+      }
+
+      let customWindow = document.getElementById('custom-window');
+      if (customWindow)
+        customWindow.style.minWidth = '310px';
+
+      const names = json.names;
+      names.forEach(name => {
+        anglesMaps.set(name, []);
+      });
+
+      const frames = json.frames;
+      for (let i = 0; i < frames.length; i++) {
+        labels.push(frames[i].time);
+        for (key in frames[i].angles) {
+          const value = anglesMaps.get(key);
+          value.push(radiansToDegrees(frames[i].angles[key]));
+          anglesMaps.set(key, value);
+        }
+      }
+
+      myCharts.push(createGraph('pelvis_tilt'));
+      myCharts[0].options.animation = false;
+      flyoutMenus[0].childNodes[1].childNodes[0].innerText = 'pelvis_tilt';
+      myCharts.push(createGraph('hip_flexion_l'));
+      myCharts[1].options.animation = false;
+      flyoutMenus[1].childNodes[1].childNodes[0].innerText = 'hip_flexion_l';
+      myCharts.push(createGraph('knee_angle_l'));
+      myCharts[2].options.animation = false;
+      flyoutMenus[2].childNodes[1].childNodes[0].innerText = 'knee_angle_l';
+      myCharts.push(createGraph('ankle_angle_l'));
+      myCharts[3].options.animation = false;
+      flyoutMenus[3].childNodes[1].childNodes[0].innerText = 'ankle_angle_l';
+
+    } else
+      setTimeout(() => createGraphs(json), 500);
+  }
+
+  function radiansToDegrees(radians) {
+    return radians * (180 / Math.PI);
+  }
+
+  let index = -1;
+  function createGraph(name) {
+    const data = {
+      labels: labels,
+      datasets: [{
+        data: anglesMaps.get(name)
+      }]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        aspectRatio: 1,
+        maintainAspectRatio: false,
+        elements: {
+          point: {
+            radius: 0,
+            hoverRadius: 2,
+            backgroundColor: 'rgb(255, 180, 0)',
+            borderColor: 'rgb(255, 180, 0)'
+
+          },
+          line: {
+            borderWidth: 1,
+            backgroundColor: 'rgb(0, 122, 204)',
+            borderColor: 'rgb(0, 122, 204)'
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          x: {
+            ticks: {
+              color: 'rgb(220, 220, 220)'
+            },
+            grid: {
+              color: 'rgb(80, 80, 80)'
+            }
+          },
+          y: {
+            ticks: {
+              color: 'rgb(220, 220, 220)'
+            },
+            grid: {
+              color: 'rgb(80, 80, 80)'
+            }
+          }
+        }
+      }
+    };
+    index++;
+    return new Chart(document.getElementById('chart' + index), config);
+  }
+
+  const flyoutMenuHTML = `
+  <div class="menu"><a href="#">Pelvis</a><span class="arrow-down">&#8964;</span>
+      <ul>
+          <li><a href="#">Ankle</a><span class="right-arrow" style="top:-10px;">&#8250</span>
+            <ul>
+              <li><a class="angles-name" href="#">ankle_angle_r</a></li>
+              <li><a class="angles-name" href="#">ankle_angle_l</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Gastrocnemius</a><span class="right-arrow" style="top:8px;">&#8250</span>
+            <ul style="top:18px;">
+              <li><a class="angles-name" href="#">gastroc_r.mtu_length</a></li>
+              <li><a class="angles-name" href="#">gastroc_l.mtu_length</a></li>
+              <li><a class="angles-name" href="#">gastroc_r.activation</a></li>
+              <li><a class="angles-name" href="#">gastroc_l.activation</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Gluteal</a><span class="right-arrow" style="top:26px;">&#8250</span>
+            <ul style="top:36px;">
+              <li><a class="angles-name" href="#">glut_max_r.mtu_length</a></li>
+              <li><a class="angles-name" href="#">glut_max_l.mtu_length</a></li>
+              <li><a class="angles-name" href="#">glut_max_r.activation</a></li>
+              <li><a class="angles-name" href="#">glut_max_l.activation</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Hamstrings</a><span class="right-arrow" style="top:44px;">&#8250</span>
+            <ul style="top:54px;">
+              <li><a class="angles-name" href="#">hamstrings_r.mtu_length</a></li>
+              <li><a class="angles-name" href="#">hamstrings_l.mtu_length</a></li>
+              <li><a class="angles-name" href="#">hamstrings_r.activation</a></li>
+              <li><a class="angles-name" href="#">hamstrings_l.activation</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Hip</a><span class="right-arrow" style="top:62px;">&#8250</span>
+          <ul style="top:72px;">
+              <li><a class="angles-name" href="#">hip_flexion_r</a></li>
+              <li><a class="angles-name" href="#">hip_flexion_l</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Iliopsoas</a><span class="right-arrow" style="top:80px;">&#8250</span>
+          <ul style="top:90px;">
+              <li><a class="angles-name" href="#">iliopsoas_r.mtu_length</a></li>
+              <li><a class="angles-name" href="#">iliopsoas_l.mtu_length</a></li>
+              <li><a class="angles-name" href="#">iliopsoas_r.activation</a></li>
+              <li><a class="angles-name" href="#">iliopsoas_l.activation</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Knee</a><span class="right-arrow" style="top:98px;">&#8250</span>
+          <ul style="top:108px;">
+              <li><a class="angles-name" href="#">knee_angle_r</a></li>
+              <li><a class="angles-name" href="#">knee_angle_l</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Leg</a><span class="right-arrow" style="top:116px;">&#8250</span>
+          <ul style="top:126px;">
+              <li><a class="angles-name" href="#">leg0_l.grf_x</a></li>
+              <li><a class="angles-name" href="#">leg1_r.grf_x</a></li>
+              <li><a class="angles-name" href="#">leg0_l.grf_y</a></li>
+              <li><a class="angles-name" href="#">leg1_r.grf_y</a></li>
+              <li><a class="angles-name" href="#">leg0_l.grf_z</a></li>
+              <li><a class="angles-name" href="#">leg1_r.grf_z</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Pelvis</a><span class="right-arrow" style="top:134px;">&#8250</span>
+          <ul style="top:144px;">
+              <li><a class="angles-name" href="#">pelvis_tilt</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Soleus</a><span class="right-arrow" style="top:152px;">&#8250</span>
+          <ul style="top:162px;">
+              <li><a class="angles-name" href="#">soleus_r.mtu_length</a></li>
+              <li><a class="angles-name" href="#">soleus_l.mtu_length</a></li>
+              <li><a class="angles-name" href="#">soleus_r.activation</a></li>
+              <li><a class="angles-name" href="#">soleus_l.activation</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Tibialis anterior</a><span class="right-arrow" style="top:170px;">&#8250</span>
+          <ul style="top:180px;">
+              <li><a class="angles-name" href="#">tib_ant_r.mtu_length</a></li>
+              <li><a class="angles-name" href="#">tib_ant_l.mtu_length</a></li>
+              <li><a class="angles-name" href="#">tib_ant_r.activation</a></li>
+              <li><a class="angles-name" href="#">tib_ant_l.activation</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Vasti</a><span class="right-arrow" style="top:188px;">&#8250</span>
+          <ul style="top:198px;">
+                <li><a class="angles-name" href="#">vasti_r.mtu_length</a></li>
+                <li><a class="angles-name" href="#">vasti_l.mtu_length</a></li>
+                <li><a class="angles-name" href="#">vasti_r.activation</a></li>
+                <li><a class="angles-name" href="#">vasti_l.activation</a></li>
+            </ul>
+          </li>
+      </ul>
+  </div>
+  `
+
+  </script>
+
+</html>

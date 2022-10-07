@@ -86,7 +86,7 @@ webots-view {
 
 .menu {
     margin:0; padding:0;
-    width: 150px;
+    width: 160px;
     height: 20px;
     position: absolute;
     top:0;
@@ -108,7 +108,7 @@ webots-view {
 }
 
 .menu ul {
-    width: 150px;
+    width: 160px;
     position: absolute;
     visibility: hidden;
     -webkit-transition: all .2s ease-in-out;
@@ -160,12 +160,12 @@ webots-view {
   color: black;
   font-size: 24px;
   top: -12px;
-  left: 130px;
+  left: 140px;
 }
 
 .menu .right-arrow {
   position: absolute;
   color: black;
   font-size: 24px;
-  left: 140px;
+  left: 150px;
 }
