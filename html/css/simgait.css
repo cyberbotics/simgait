@@ -73,6 +73,99 @@ webots-view {
 .menu-div {
   height: 20px;
   width: 100%;
-  text-align: right;
+  text-align: left;
   color: white;
+}
+
+.menu a {
+  text-decoration: none;
+  color: black;
+  font-size: 12px;
+  background-color: white;
+}
+
+.menu {
+    margin:0; padding:0;
+    width: 150px;
+    height: 20px;
+    position: absolute;
+    top:0;
+    left: 30px;
+    background-color: white;
+}
+
+.menu li {
+    float:none;
+}
+
+.menu a {
+   padding: 0 5px;
+   vertical-align: text-bottom;
+}
+
+.menu ul a:hover {
+   background: #bbb
+}
+
+.menu ul {
+    width: 150px;
+    position: absolute;
+    visibility: hidden;
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    opacity: 0;
+    z-index: 10;
+}
+
+.menu:hover ul {
+    margin:0;
+    opacity: 1;
+    visibility: visible;
+}
+
+.menu ul li {
+    clear:both
+}
+
+.menu ul li a {
+    width: auto;
+    display:block;
+}
+
+.menu ul li ul {
+    position: absolute;
+    top: 0; left: 100%;
+    margin: 0 0 0 20px;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    width: auto;
+}
+
+.menu ul li ul li {
+    position: relative;
+    display:none;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.menu ul li:hover ul li {
+    visibility: visible;
+    opacity: 1;
+    display:block;
+}
+
+.menu .arrow-down {
+  position: absolute;
+  color: black;
+  font-size: 24px;
+  top: -12px;
+  left: 130px;
+}
+
+.menu .right-arrow {
+  position: absolute;
+  color: black;
+  font-size: 24px;
+  left: 140px;
 }

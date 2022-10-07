@@ -17,14 +17,15 @@ export default class Animation extends Project {
     let basicTimeStep;
     let myCharts;
     let labels;
-    let dataPoints;
+    let flyoutMenus;
+    const anglesMaps = new Map();
+
     view.onready = () => fillCustomWindow();
     view.loadAnimation('storage/gait/model.x3d', 'storage/gait/animation.json', false, undefined, 'storage/gait/gait.jpg');
 
     function fillCustomWindow() {
       myCharts = [];
       labels = [];
-      dataPoints = [[], [], [], [], [], [], []];
       new Promise((resolve, reject) => {
         let xmlhttp = new XMLHttpRequest();
         xmlhttp.open('GET', 'storage/gait/angles.json', true);
@@ -59,32 +60,28 @@ export default class Animation extends Project {
         view.setCustomWindowTooltip('Interactive Charts');
         view.setCustomWindowContent(`
         <div class=chart-container style='left:4px; top:47px'>
-          <div class=menu-div>
-            <select id=select0 style=width:150px;"></select>
+          <div class=menu-div number=0>
           </div>
           <div style='width:100%;height:calc(100% - 20px);'>
             <canvas id='chart0'></canvas>
           </div>
         </div>
         <div class=chart-container style='left: 4px;top:calc(50% + 23px);'>
-          <div class=menu-div>
-            <select id=select1 style=width:150px;"></select>
+          <div class=menu-div number=1>
           </div>
           <div style='width:100%;height:calc(100% - 20px);'>
             <canvas id='chart1'>
           </div>
         </div>
         <div class=chart-container style='left:50%;top:47px;'>
-          <div class=menu-div>
-            <select id=select2 style=width:150px;"></select>
+          <div class=menu-div number=2>
           </div>
           <div style='width:100%;height:calc(100% - 20px);'>
             <canvas id='chart2'>
           </div>
         </div>
         <div class=chart-container style='top:calc(50% + 23px);left:50%;'>
-          <div class=menu-div>
-            <select id=select3 style=width:150px;"></select>
+          <div class=menu-div number=3>
           </div>
           <div style='width:100%;height:calc(100% - 20px);'>
             <canvas id='chart3'>
@@ -92,66 +89,52 @@ export default class Animation extends Project {
         </div>
         `);
 
-        document.getElementById('select0').onchange = (event) => {
-          myCharts[0].config.data.datasets[0].data = dataPoints[event.srcElement.value];
-          myCharts[0].update();
-        };
+        flyoutMenus = document.getElementsByClassName('menu-div');
+        for (let i = 0; i < flyoutMenus.length; i++)
+          flyoutMenus[i].innerHTML = flyoutMenuHTML;
 
-        document.getElementById('select1').onchange = (event) => {
-          myCharts[1].config.data.datasets[0].data = dataPoints[event.srcElement.value];
-          myCharts[1].update();
-        };
-
-        document.getElementById('select2').onchange = (event) => {
-          myCharts[2].config.data.datasets[0].data = dataPoints[event.srcElement.value];
-          myCharts[2].update();
-        };
-
-        document.getElementById('select3').onchange = (event) => {
-          myCharts[3].config.data.datasets[0].data = dataPoints[event.srcElement.value];
-          myCharts[3].update();
-        };
+        const anglesNames = document.getElementsByClassName('angles-name');
+        for (let i = 0; i < anglesNames.length; i++) {
+          anglesNames[i].onclick = () => {
+            let name = anglesNames[i].innerText;
+            anglesNames[i].parentNode.parentNode.parentNode.parentNode.parentNode.childNodes[0].innerText = name;
+            const number = anglesNames[i].parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute('number');
+            myCharts[number].config.data.datasets[0].data = anglesMaps.get(name);
+            myCharts[number].update();
+          };
+        }
 
         let customWindow = document.getElementById('custom-window');
         if (customWindow)
           customWindow.style.minWidth = '310px';
 
         const names = json.names;
-        for (let i = 0; i < names.length; i++) {
-          for (let j = 0; j < 4; j++) {
-            const option = document.createElement('option');
-            option.textContent = names[i];
-            option.value = i;
-            const select = document.getElementById('select' + j);
-            select.appendChild(option);
-          }
-        }
-
-        let select = document.getElementById('select0');
-        select.value = 0;
-        select = document.getElementById('select1');
-        select.value = 1;
-        select = document.getElementById('select2');
-        select.value = 3;
-        select = document.getElementById('select3');
-        select.value = 5;
+        names.forEach(name => {
+          anglesMaps.set(name, []);
+        });
 
         const frames = json.frames;
         for (let i = 0; i < frames.length; i++) {
           labels.push(frames[i].time);
-          dataPoints[0].push(-radiansToDegrees(frames[i].angles[0]));
-          dataPoints[1].push(radiansToDegrees(frames[i].angles[1]));
-          dataPoints[2].push(radiansToDegrees(frames[i].angles[2]));
-          dataPoints[3].push(-radiansToDegrees(frames[i].angles[3]));
-          dataPoints[4].push(-radiansToDegrees(frames[i].angles[4]));
-          dataPoints[5].push(radiansToDegrees(frames[i].angles[5]));
-          dataPoints[6].push(radiansToDegrees(frames[i].angles[6]));
+          for (let key in frames[i].angles) {
+            const value = anglesMaps.get(key);
+            value.push(radiansToDegrees(frames[i].angles[key]));
+            anglesMaps.set(key, value);
+          }
         }
 
-        for (let i = 0; i < 4; i++) {
-          myCharts.push(createGraph(i));
-          myCharts[i].options.animation = false;
-        }
+        myCharts.push(createGraph('pelvis_tilt'));
+        myCharts[0].options.animation = false;
+        flyoutMenus[0].childNodes[1].childNodes[0].innerText = 'pelvis_tilt';
+        myCharts.push(createGraph('hip_flexion_l'));
+        myCharts[1].options.animation = false;
+        flyoutMenus[1].childNodes[1].childNodes[0].innerText = 'hip_flexion_l';
+        myCharts.push(createGraph('knee_angle_l'));
+        myCharts[2].options.animation = false;
+        flyoutMenus[2].childNodes[1].childNodes[0].innerText = 'knee_angle_l';
+        myCharts.push(createGraph('ankle_angle_l'));
+        myCharts[3].options.animation = false;
+        flyoutMenus[3].childNodes[1].childNodes[0].innerText = 'ankle_angle_l';
       } else
         setTimeout(() => createGraphs(json), 500);
     }
@@ -160,17 +143,12 @@ export default class Animation extends Project {
       return radians * (180 / Math.PI);
     }
 
-    function createGraph(index) {
-      let dataPointsIndex = index;
-      if (index === 2)
-        dataPointsIndex = 3;
-      else if (index === 3)
-        dataPointsIndex = 5;
-
+    let index = -1;
+    function createGraph(name) {
       const data = {
         labels: labels,
         datasets: [{
-          data: dataPoints[dataPointsIndex]
+          data: anglesMaps.get(name)
         }]
       };
 
@@ -219,8 +197,105 @@ export default class Animation extends Project {
           }
         }
       };
+      index++;
       return new Chart(document.getElementById('chart' + index), config);
     }
+
+    const flyoutMenuHTML = `
+    <div class="menu"><a href="#">Pelvis</a><span class="arrow-down">&#8964;</span>
+        <ul>
+            <li><a href="#">Ankle</a><span class="right-arrow" style="top:-10px;">&#8250</span>
+              <ul>
+                <li><a class="angles-name" href="#">ankle_angle_r</a></li>
+                <li><a class="angles-name" href="#">ankle_angle_l</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Gastrocnemius</a><span class="right-arrow" style="top:8px;">&#8250</span>
+              <ul style="top:18px;">
+                <li><a class="angles-name" href="#">gastroc_r.mtu_length</a></li>
+                <li><a class="angles-name" href="#">gastroc_l.mtu_length</a></li>
+                <li><a class="angles-name" href="#">gastroc_r.activation</a></li>
+                <li><a class="angles-name" href="#">gastroc_l.activation</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Gluteal</a><span class="right-arrow" style="top:26px;">&#8250</span>
+              <ul style="top:36px;">
+                <li><a class="angles-name" href="#">glut_max_r.mtu_length</a></li>
+                <li><a class="angles-name" href="#">glut_max_l.mtu_length</a></li>
+                <li><a class="angles-name" href="#">glut_max_r.activation</a></li>
+                <li><a class="angles-name" href="#">glut_max_l.activation</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Hamstrings</a><span class="right-arrow" style="top:44px;">&#8250</span>
+              <ul style="top:54px;">
+                <li><a class="angles-name" href="#">hamstrings_r.mtu_length</a></li>
+                <li><a class="angles-name" href="#">hamstrings_l.mtu_length</a></li>
+                <li><a class="angles-name" href="#">hamstrings_r.activation</a></li>
+                <li><a class="angles-name" href="#">hamstrings_l.activation</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Hip</a><span class="right-arrow" style="top:62px;">&#8250</span>
+            <ul style="top:72px;">
+                <li><a class="angles-name" href="#">hip_flexion_r</a></li>
+                <li><a class="angles-name" href="#">hip_flexion_l</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Iliopsoas</a><span class="right-arrow" style="top:80px;">&#8250</span>
+            <ul style="top:90px;">
+                <li><a class="angles-name" href="#">iliopsoas_r.mtu_length</a></li>
+                <li><a class="angles-name" href="#">iliopsoas_l.mtu_length</a></li>
+                <li><a class="angles-name" href="#">iliopsoas_r.activation</a></li>
+                <li><a class="angles-name" href="#">iliopsoas_l.activation</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Knee</a><span class="right-arrow" style="top:98px;">&#8250</span>
+            <ul style="top:108px;">
+                <li><a class="angles-name" href="#">knee_angle_r</a></li>
+                <li><a class="angles-name" href="#">knee_angle_l</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Leg</a><span class="right-arrow" style="top:116px;">&#8250</span>
+            <ul style="top:126px;">
+                <li><a class="angles-name" href="#">leg0_l.grf_x</a></li>
+                <li><a class="angles-name" href="#">leg1_r.grf_x</a></li>
+                <li><a class="angles-name" href="#">leg0_l.grf_y</a></li>
+                <li><a class="angles-name" href="#">leg1_r.grf_y</a></li>
+                <li><a class="angles-name" href="#">leg0_l.grf_z</a></li>
+                <li><a class="angles-name" href="#">leg1_r.grf_z</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Pelvis</a><span class="right-arrow" style="top:134px;">&#8250</span>
+            <ul style="top:144px;">
+                <li><a class="angles-name" href="#">pelvis_tilt</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Soleus</a><span class="right-arrow" style="top:152px;">&#8250</span>
+            <ul style="top:162px;">
+                <li><a class="angles-name" href="#">soleus_r.mtu_length</a></li>
+                <li><a class="angles-name" href="#">soleus_l.mtu_length</a></li>
+                <li><a class="angles-name" href="#">soleus_r.activation</a></li>
+                <li><a class="angles-name" href="#">soleus_l.activation</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Tibialis anterior</a><span class="right-arrow" style="top:170px;">&#8250</span>
+            <ul style="top:180px;">
+                <li><a class="angles-name" href="#">tib_ant_r.mtu_length</a></li>
+                <li><a class="angles-name" href="#">tib_ant_l.mtu_length</a></li>
+                <li><a class="angles-name" href="#">tib_ant_r.activation</a></li>
+                <li><a class="angles-name" href="#">tib_ant_l.activation</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Vasti</a><span class="right-arrow" style="top:188px;">&#8250</span>
+            <ul style="top:198px;">
+                  <li><a class="angles-name" href="#">vasti_r.mtu_length</a></li>
+                  <li><a class="angles-name" href="#">vasti_l.mtu_length</a></li>
+                  <li><a class="angles-name" href="#">vasti_r.activation</a></li>
+                  <li><a class="angles-name" href="#">vasti_l.activation</a></li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+    `;
 
     function setup() {
       const template = document.createElement('template');
