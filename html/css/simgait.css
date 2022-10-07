@@ -173,3 +173,7 @@ webots-view {
   font-size: 24px;
   left: 150px;
 }
+
+.menu .right-arrow:hover {
+  background-color: transparent;
+}
