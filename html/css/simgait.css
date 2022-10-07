@@ -173,6 +173,7 @@ webots-view {
   color: black;
   font-size: 24px;
   left: 150px;
+  pointer-events: none;
 }
 
 .menu .right-arrow:hover {
