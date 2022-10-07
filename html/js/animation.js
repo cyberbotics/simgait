@@ -202,95 +202,95 @@ export default class Animation extends Project {
     }
 
     const flyoutMenuHTML = `
-    <div class="menu"><a href="#">Pelvis</a><span class="arrow-down">&#8964;</span>
+    <div class="menu"><span>Pelvis</span><span class="arrow-down">&#8964;</span>
         <ul>
-            <li><a href="#">Ankle</a><span class="right-arrow" style="top:-10px;">&#8250</span>
+            <li><span>Ankle</span><span class="right-arrow" style="top:-10px;">&#8250</span>
               <ul>
-                <li><a class="angles-name" href="#">ankle_angle_r</a></li>
-                <li><a class="angles-name" href="#">ankle_angle_l</a></li>
+                <li><span class="angles-name">ankle_angle_r</span></li>
+                <li><span class="angles-name">ankle_angle_l</span></li>
               </ul>
             </li>
-            <li><a href="#">Gastrocnemius</a><span class="right-arrow" style="top:8px;">&#8250</span>
+            <li><span>Gastrocnemius</span><span class="right-arrow" style="top:8px;">&#8250</span>
               <ul style="top:18px;">
-                <li><a class="angles-name" href="#">gastroc_r.mtu_length</a></li>
-                <li><a class="angles-name" href="#">gastroc_l.mtu_length</a></li>
-                <li><a class="angles-name" href="#">gastroc_r.activation</a></li>
-                <li><a class="angles-name" href="#">gastroc_l.activation</a></li>
+                <li><span class="angles-name">gastroc_r.mtu_length</span></li>
+                <li><span class="angles-name">gastroc_l.mtu_length</span></li>
+                <li><span class="angles-name">gastroc_r.activation</span></li>
+                <li><span class="angles-name">gastroc_l.activation</span></li>
               </ul>
             </li>
-            <li><a href="#">Gluteal</a><span class="right-arrow" style="top:26px;">&#8250</span>
+            <li><span>Gluteal</span><span class="right-arrow" style="top:26px;">&#8250</span>
               <ul style="top:36px;">
-                <li><a class="angles-name" href="#">glut_max_r.mtu_length</a></li>
-                <li><a class="angles-name" href="#">glut_max_l.mtu_length</a></li>
-                <li><a class="angles-name" href="#">glut_max_r.activation</a></li>
-                <li><a class="angles-name" href="#">glut_max_l.activation</a></li>
+                <li><span class="angles-name">glut_max_r.mtu_length</span></li>
+                <li><span class="angles-name">glut_max_l.mtu_length</span></li>
+                <li><span class="angles-name">glut_max_r.activation</span></li>
+                <li><span class="angles-name">glut_max_l.activation</span></li>
               </ul>
             </li>
-            <li><a href="#">Hamstrings</a><span class="right-arrow" style="top:44px;">&#8250</span>
+            <li><span>Hamstrings</span><span class="right-arrow" style="top:44px;">&#8250</span>
               <ul style="top:54px;">
-                <li><a class="angles-name" href="#">hamstrings_r.mtu_length</a></li>
-                <li><a class="angles-name" href="#">hamstrings_l.mtu_length</a></li>
-                <li><a class="angles-name" href="#">hamstrings_r.activation</a></li>
-                <li><a class="angles-name" href="#">hamstrings_l.activation</a></li>
+                <li><span class="angles-name">hamstrings_r.mtu_length</span></li>
+                <li><span class="angles-name">hamstrings_l.mtu_length</span></li>
+                <li><span class="angles-name">hamstrings_r.activation</span></li>
+                <li><span class="angles-name">hamstrings_l.activation</span></li>
               </ul>
             </li>
-            <li><a href="#">Hip</a><span class="right-arrow" style="top:62px;">&#8250</span>
+            <li><span>Hip</span><span class="right-arrow" style="top:62px;">&#8250</span>
             <ul style="top:72px;">
-                <li><a class="angles-name" href="#">hip_flexion_r</a></li>
-                <li><a class="angles-name" href="#">hip_flexion_l</a></li>
+                <li><span class="angles-name">hip_flexion_r</span></li>
+                <li><span class="angles-name">hip_flexion_l</span></li>
               </ul>
             </li>
-            <li><a href="#">Iliopsoas</a><span class="right-arrow" style="top:80px;">&#8250</span>
+            <li><span>Iliopsoas</span><span class="right-arrow" style="top:80px;">&#8250</span>
             <ul style="top:90px;">
-                <li><a class="angles-name" href="#">iliopsoas_r.mtu_length</a></li>
-                <li><a class="angles-name" href="#">iliopsoas_l.mtu_length</a></li>
-                <li><a class="angles-name" href="#">iliopsoas_r.activation</a></li>
-                <li><a class="angles-name" href="#">iliopsoas_l.activation</a></li>
+                <li><span class="angles-name">iliopsoas_r.mtu_length</span></li>
+                <li><span class="angles-name">iliopsoas_l.mtu_length</span></li>
+                <li><span class="angles-name">iliopsoas_r.activation</span></li>
+                <li><span class="angles-name">iliopsoas_l.activation</span></li>
               </ul>
             </li>
-            <li><a href="#">Knee</a><span class="right-arrow" style="top:98px;">&#8250</span>
+            <li><span>Knee</span><span class="right-arrow" style="top:98px;">&#8250</span>
             <ul style="top:108px;">
-                <li><a class="angles-name" href="#">knee_angle_r</a></li>
-                <li><a class="angles-name" href="#">knee_angle_l</a></li>
+                <li><span class="angles-name">knee_angle_r</span></li>
+                <li><span class="angles-name">knee_angle_l</span></li>
               </ul>
             </li>
-            <li><a href="#">Leg</a><span class="right-arrow" style="top:116px;">&#8250</span>
+            <li><span>Leg</span><span class="right-arrow" style="top:116px;">&#8250</span>
             <ul style="top:126px;">
-                <li><a class="angles-name" href="#">leg0_l.grf_x</a></li>
-                <li><a class="angles-name" href="#">leg1_r.grf_x</a></li>
-                <li><a class="angles-name" href="#">leg0_l.grf_y</a></li>
-                <li><a class="angles-name" href="#">leg1_r.grf_y</a></li>
-                <li><a class="angles-name" href="#">leg0_l.grf_z</a></li>
-                <li><a class="angles-name" href="#">leg1_r.grf_z</a></li>
+                <li><span class="angles-name">leg0_l.grf_x</span></li>
+                <li><span class="angles-name">leg1_r.grf_x</span></li>
+                <li><span class="angles-name">leg0_l.grf_y</span></li>
+                <li><span class="angles-name">leg1_r.grf_y</span></li>
+                <li><span class="angles-name">leg0_l.grf_z</span></li>
+                <li><span class="angles-name">leg1_r.grf_z</span></li>
               </ul>
             </li>
-            <li><a href="#">Pelvis</a><span class="right-arrow" style="top:134px;">&#8250</span>
+            <li><span>Pelvis</span><span class="right-arrow" style="top:134px;">&#8250</span>
             <ul style="top:144px;">
-                <li><a class="angles-name" href="#">pelvis_tilt</a></li>
+                <li><span class="angles-name">pelvis_tilt</span></li>
               </ul>
             </li>
-            <li><a href="#">Soleus</a><span class="right-arrow" style="top:152px;">&#8250</span>
+            <li><span>Soleus</span><span class="right-arrow" style="top:152px;">&#8250</span>
             <ul style="top:162px;">
-                <li><a class="angles-name" href="#">soleus_r.mtu_length</a></li>
-                <li><a class="angles-name" href="#">soleus_l.mtu_length</a></li>
-                <li><a class="angles-name" href="#">soleus_r.activation</a></li>
-                <li><a class="angles-name" href="#">soleus_l.activation</a></li>
+                <li><span class="angles-name">soleus_r.mtu_length</span></li>
+                <li><span class="angles-name">soleus_l.mtu_length</span></li>
+                <li><span class="angles-name">soleus_r.activation</span></li>
+                <li><span class="angles-name">soleus_l.activation</span></li>
               </ul>
             </li>
-            <li><a href="#">Tibialis anterior</a><span class="right-arrow" style="top:170px;">&#8250</span>
+            <li><span>Tibialis anterior</span><span class="right-arrow" style="top:170px;">&#8250</span>
             <ul style="top:180px;">
-                <li><a class="angles-name" href="#">tib_ant_r.mtu_length</a></li>
-                <li><a class="angles-name" href="#">tib_ant_l.mtu_length</a></li>
-                <li><a class="angles-name" href="#">tib_ant_r.activation</a></li>
-                <li><a class="angles-name" href="#">tib_ant_l.activation</a></li>
+                <li><span class="angles-name">tib_ant_r.mtu_length</span></li>
+                <li><span class="angles-name">tib_ant_l.mtu_length</span></li>
+                <li><span class="angles-name">tib_ant_r.activation</span></li>
+                <li><span class="angles-name">tib_ant_l.activation</span></li>
               </ul>
             </li>
-            <li><a href="#">Vasti</a><span class="right-arrow" style="top:188px;">&#8250</span>
+            <li><span>Vasti</span><span class="right-arrow" style="top:188px;">&#8250</span>
             <ul style="top:198px;">
-                  <li><a class="angles-name" href="#">vasti_r.mtu_length</a></li>
-                  <li><a class="angles-name" href="#">vasti_l.mtu_length</a></li>
-                  <li><a class="angles-name" href="#">vasti_r.activation</a></li>
-                  <li><a class="angles-name" href="#">vasti_l.activation</a></li>
+                  <li><span class="angles-name">vasti_r.mtu_length</span></li>
+                  <li><span class="angles-name">vasti_l.mtu_length</span></li>
+                  <li><span class="angles-name">vasti_r.activation</span></li>
+                  <li><span class="angles-name">vasti_l.activation</span></li>
               </ul>
             </li>
         </ul>

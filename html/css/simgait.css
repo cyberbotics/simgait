@@ -77,7 +77,7 @@ webots-view {
   color: white;
 }
 
-.menu a {
+.menu span {
   text-decoration: none;
   color: black;
   font-size: 12px;
@@ -98,12 +98,12 @@ webots-view {
     float:none;
 }
 
-.menu a {
+.menu span {
    padding: 0 5px;
    vertical-align: text-bottom;
 }
 
-.menu ul a:hover {
+.menu ul span:hover {
    background: #bbb
 }
 
@@ -127,7 +127,7 @@ webots-view {
     clear:both
 }
 
-.menu ul li a {
+.menu ul li span {
     width: auto;
     display:block;
 }
@@ -156,6 +156,8 @@ webots-view {
 }
 
 .menu .arrow-down {
+  padding: 0;
+  background-color: transparent;
   position: absolute;
   color: black;
   font-size: 24px;
@@ -165,6 +167,8 @@ webots-view {
 
 .menu .right-arrow {
   position: absolute;
+  padding: 0;
+  background-color: transparent;
   color: black;
   font-size: 24px;
   left: 150px;
