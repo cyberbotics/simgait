@@ -182,8 +182,15 @@ webots-view {
 
 .menu .flyout-separator {
   pointer-events: none;
-  width: 160px;
+  width: 100px;
   background-color: white;
-  border-bottom: solid 1px black;
-  height: 5px;
+  border-bottom: solid 1px #d3d1d1;
+}
+
+.menu .flyout-spacing {
+  pointer-events: none;
+  width: 155px;
+  background-color: white;
+  border-bottom: solid 1px #d3d1d1;
+  height: 2px;
 }

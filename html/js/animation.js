@@ -239,7 +239,9 @@ export default class Animation extends Project {
                 <li><span class="angles-name">pelvis_tilt</span></li>
               </ul>
             </li>
+            <li class="flyout-spacing"></li>
             <li class="flyout-separator"></li>
+            <li class="flyout-spacing"></li>
             <li><span>GRF</span><span class="right-arrow" style="top:116px;">&#8250</span>
             <ul style="top:126px;">
                 <li><span class="angles-name">leg0_l.grf_x</span></li>
@@ -250,7 +252,9 @@ export default class Animation extends Project {
                 <li><span class="angles-name">leg1_r.grf_z</span></li>
               </ul>
             </li>
+            <li class="flyout-spacing"></li>
             <li class="flyout-separator"></li>
+            <li class="flyout-spacing"></li>
             <li><span>Soleus</span><span class="right-arrow" style="top:152px;">&#8250</span>
             <ul style="top:162px;">
                 <li><span class="angles-name">soleus_r.mtu_length</span></li>
