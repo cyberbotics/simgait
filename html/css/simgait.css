@@ -180,9 +180,10 @@ webots-view {
   background-color: transparent;
 }
 
-.menu flyout-separator {
+.menu .flyout-separator {
   pointer-events: none;
   width: 160px;
   background-color: white;
   border-bottom: solid 1px black;
+  height: 5px;
 }
