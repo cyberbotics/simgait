@@ -179,3 +179,10 @@ webots-view {
 .menu .right-arrow:hover {
   background-color: transparent;
 }
+
+.menu flyout-separator {
+  pointer-events: none;
+  width: 160px;
+  background-color: white;
+  border-bottom: solid 1px black;
+}
