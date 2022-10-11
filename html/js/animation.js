@@ -179,6 +179,12 @@ export default class Animation extends Project {
           },
           scales: {
             x: {
+              title: {
+                display: true,
+                text: 'Time [s]',
+                padding: 0,
+                color: 'rgb(220, 220, 220)'
+              },
               ticks: {
                 color: 'rgb(220, 220, 220)'
               },
@@ -187,6 +193,12 @@ export default class Animation extends Project {
               }
             },
             y: {
+              title: {
+                display: true,
+                text: 'Angle [degree]',
+                padding: 0,
+                color: 'rgb(220, 220, 220)'
+              },
               ticks: {
                 color: 'rgb(220, 220, 220)'
               },
@@ -210,28 +222,10 @@ export default class Animation extends Project {
                 <li><span class="angles-name">ankle_angle_l</span></li>
               </ul>
             </li>
-            <li><span>Gastrocnemius</span><span class="right-arrow" style="top:8px;">&#8250</span>
-              <ul style="top:18px;">
-                <li><span class="angles-name">gastroc_r.mtu_length</span></li>
-                <li><span class="angles-name">gastroc_l.mtu_length</span></li>
-                <li><span class="angles-name">gastroc_r.activation</span></li>
-                <li><span class="angles-name">gastroc_l.activation</span></li>
-              </ul>
-            </li>
-            <li><span>Gluteal</span><span class="right-arrow" style="top:26px;">&#8250</span>
-              <ul style="top:36px;">
-                <li><span class="angles-name">glut_max_r.mtu_length</span></li>
-                <li><span class="angles-name">glut_max_l.mtu_length</span></li>
-                <li><span class="angles-name">glut_max_r.activation</span></li>
-                <li><span class="angles-name">glut_max_l.activation</span></li>
-              </ul>
-            </li>
-            <li><span>Hamstrings</span><span class="right-arrow" style="top:44px;">&#8250</span>
-              <ul style="top:54px;">
-                <li><span class="angles-name">hamstrings_r.mtu_length</span></li>
-                <li><span class="angles-name">hamstrings_l.mtu_length</span></li>
-                <li><span class="angles-name">hamstrings_r.activation</span></li>
-                <li><span class="angles-name">hamstrings_l.activation</span></li>
+            <li><span>Knee</span><span class="right-arrow" style="top:98px;">&#8250</span>
+            <ul style="top:108px;">
+                <li><span class="angles-name">knee_angle_r</span></li>
+                <li><span class="angles-name">knee_angle_l</span></li>
               </ul>
             </li>
             <li><span>Hip</span><span class="right-arrow" style="top:62px;">&#8250</span>
@@ -240,21 +234,13 @@ export default class Animation extends Project {
                 <li><span class="angles-name">hip_flexion_l</span></li>
               </ul>
             </li>
-            <li><span>Iliopsoas</span><span class="right-arrow" style="top:80px;">&#8250</span>
-            <ul style="top:90px;">
-                <li><span class="angles-name">iliopsoas_r.mtu_length</span></li>
-                <li><span class="angles-name">iliopsoas_l.mtu_length</span></li>
-                <li><span class="angles-name">iliopsoas_r.activation</span></li>
-                <li><span class="angles-name">iliopsoas_l.activation</span></li>
+            <li><span>Pelvis</span><span class="right-arrow" style="top:134px;">&#8250</span>
+            <ul style="top:144px;">
+                <li><span class="angles-name">pelvis_tilt</span></li>
               </ul>
             </li>
-            <li><span>Knee</span><span class="right-arrow" style="top:98px;">&#8250</span>
-            <ul style="top:108px;">
-                <li><span class="angles-name">knee_angle_r</span></li>
-                <li><span class="angles-name">knee_angle_l</span></li>
-              </ul>
-            </li>
-            <li><span>Leg</span><span class="right-arrow" style="top:116px;">&#8250</span>
+            <li>-----------</li>
+            <li><span>GRF</span><span class="right-arrow" style="top:116px;">&#8250</span>
             <ul style="top:126px;">
                 <li><span class="angles-name">leg0_l.grf_x</span></li>
                 <li><span class="angles-name">leg1_r.grf_x</span></li>
@@ -264,17 +250,21 @@ export default class Animation extends Project {
                 <li><span class="angles-name">leg1_r.grf_z</span></li>
               </ul>
             </li>
-            <li><span>Pelvis</span><span class="right-arrow" style="top:134px;">&#8250</span>
-            <ul style="top:144px;">
-                <li><span class="angles-name">pelvis_tilt</span></li>
-              </ul>
-            </li>
+            <li>-----------</li>
             <li><span>Soleus</span><span class="right-arrow" style="top:152px;">&#8250</span>
             <ul style="top:162px;">
                 <li><span class="angles-name">soleus_r.mtu_length</span></li>
                 <li><span class="angles-name">soleus_l.mtu_length</span></li>
                 <li><span class="angles-name">soleus_r.activation</span></li>
                 <li><span class="angles-name">soleus_l.activation</span></li>
+              </ul>
+            </li>
+            <li><span>Gastrocnemius</span><span class="right-arrow" style="top:8px;">&#8250</span>
+              <ul style="top:18px;">
+                <li><span class="angles-name">gastroc_r.mtu_length</span></li>
+                <li><span class="angles-name">gastroc_l.mtu_length</span></li>
+                <li><span class="angles-name">gastroc_r.activation</span></li>
+                <li><span class="angles-name">gastroc_l.activation</span></li>
               </ul>
             </li>
             <li><span>Tibialis anterior</span><span class="right-arrow" style="top:170px;">&#8250</span>
@@ -285,12 +275,36 @@ export default class Animation extends Project {
                 <li><span class="angles-name">tib_ant_l.activation</span></li>
               </ul>
             </li>
+            <li><span>Hamstrings</span><span class="right-arrow" style="top:44px;">&#8250</span>
+              <ul style="top:54px;">
+                <li><span class="angles-name">hamstrings_r.mtu_length</span></li>
+                <li><span class="angles-name">hamstrings_l.mtu_length</span></li>
+                <li><span class="angles-name">hamstrings_r.activation</span></li>
+                <li><span class="angles-name">hamstrings_l.activation</span></li>
+              </ul>
+            </li>
             <li><span>Vasti</span><span class="right-arrow" style="top:188px;">&#8250</span>
             <ul style="top:198px;">
                   <li><span class="angles-name">vasti_r.mtu_length</span></li>
                   <li><span class="angles-name">vasti_l.mtu_length</span></li>
                   <li><span class="angles-name">vasti_r.activation</span></li>
                   <li><span class="angles-name">vasti_l.activation</span></li>
+              </ul>
+            </li>
+            <li><span>Gluteal</span><span class="right-arrow" style="top:26px;">&#8250</span>
+              <ul style="top:36px;">
+                <li><span class="angles-name">glut_max_r.mtu_length</span></li>
+                <li><span class="angles-name">glut_max_l.mtu_length</span></li>
+                <li><span class="angles-name">glut_max_r.activation</span></li>
+                <li><span class="angles-name">glut_max_l.activation</span></li>
+              </ul>
+            </li>
+            <li><span>Iliopsoas</span><span class="right-arrow" style="top:80px;">&#8250</span>
+            <ul style="top:90px;">
+                <li><span class="angles-name">iliopsoas_r.mtu_length</span></li>
+                <li><span class="angles-name">iliopsoas_l.mtu_length</span></li>
+                <li><span class="angles-name">iliopsoas_r.activation</span></li>
+                <li><span class="angles-name">iliopsoas_l.activation</span></li>
               </ul>
             </li>
         </ul>
