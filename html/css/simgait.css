@@ -67,8 +67,14 @@ webots-view {
 
 .chart-container {
   position: absolute;
-  height: calc(50% - 26px);
-  width: calc(50% - 4px);;
+  width: 50%;
+}
+
+.graph-container {
+  position: absolute;
+  left: 8px;
+  width: calc(100% - 16px);
+  height: calc(100% - 47px);
 }
 
 .menu-div {

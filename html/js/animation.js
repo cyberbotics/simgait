@@ -48,7 +48,7 @@ export default class Animation extends Project {
     }
 
     function updateCharts(newTime) {
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 8; i++) {
         myCharts[i].setActiveElements([{datasetIndex: 0, index: newTime}]);
         myCharts[i].update();
       }
@@ -59,32 +59,62 @@ export default class Animation extends Project {
         view.setCustomWindowTitle('Interactive Charts');
         view.setCustomWindowTooltip('Interactive Charts');
         view.setCustomWindowContent(`
-        <div class=chart-container style='left:4px; top:47px'>
-          <div class=menu-div number=0>
+        <div class=graph-container>
+          <div id=chartContainer0 class=chart-container>
+            <div class=menu-div number=0>
+            </div>
+            <div style='width:100%;height:calc(100% - 20px);'>
+              <canvas id='chart0'></canvas>
+            </div>
           </div>
-          <div style='width:100%;height:calc(100% - 20px);'>
-            <canvas id='chart0'></canvas>
+          <div id=chartContainer1 class=chart-container>
+            <div class=menu-div number=1>
+            </div>
+            <div style='width:100%;height:calc(100% - 20px);'>
+              <canvas id='chart1'>
+            </div>
           </div>
-        </div>
-        <div class=chart-container style='left: 4px;top:calc(50% + 23px);'>
-          <div class=menu-div number=1>
+          <div id=chartContainer2 class=chart-container>
+            <div class=menu-div number=2>
+            </div>
+            <div style='width:100%;height:calc(100% - 20px);'>
+              <canvas id='chart2'>
+            </div>
           </div>
-          <div style='width:100%;height:calc(100% - 20px);'>
-            <canvas id='chart1'>
+          <div id=chartContainer3 class=chart-container>
+            <div class=menu-div number=3>
+            </div>
+            <div style='width:100%;height:calc(100% - 20px);'>
+              <canvas id='chart3'>
+            </div>
           </div>
-        </div>
-        <div class=chart-container style='left:50%;top:47px;'>
-          <div class=menu-div number=2>
+          <div id=chartContainer4 class=chart-container>
+            <div class=menu-div number=4>
+            </div>
+            <div style='width:100%;height:calc(100% - 20px);'>
+              <canvas id='chart4'></canvas>
+            </div>
           </div>
-          <div style='width:100%;height:calc(100% - 20px);'>
-            <canvas id='chart2'>
+          <div id=chartContainer5 class=chart-container>
+            <div class=menu-div number=5>
+            </div>
+            <div style='width:100%;height:calc(100% - 20px);'>
+              <canvas id='chart5'>
+            </div>
           </div>
-        </div>
-        <div class=chart-container style='top:calc(50% + 23px);left:50%;'>
-          <div class=menu-div number=3>
+          <div id=chartContainer6 class=chart-container>
+            <div class=menu-div number=6>
+            </div>
+            <div style='width:100%;height:calc(100% - 20px);'>
+              <canvas id='chart6'>
+            </div>
           </div>
-          <div style='width:100%;height:calc(100% - 20px);'>
-            <canvas id='chart3'>
+          <div id=chartContainer7 class=chart-container>
+            <div class=menu-div number=7>
+            </div>
+            <div style='width:100%;height:calc(100% - 20px);'>
+              <canvas id='chart7'>
+            </div>
           </div>
         </div>
         `);
@@ -106,7 +136,7 @@ export default class Animation extends Project {
 
         let customWindow = document.getElementById('custom-window');
         if (customWindow)
-          customWindow.style.minWidth = '310px';
+          customWindow.style.minWidth = '420px';
 
         const names = json.names;
         names.forEach(name => {
@@ -135,12 +165,110 @@ export default class Animation extends Project {
         myCharts.push(createGraph('ankle_angle_l'));
         myCharts[3].options.animation = false;
         flyoutMenus[3].childNodes[1].childNodes[0].innerText = 'ankle_angle_l';
+        myCharts.push(createGraph('soleus_l.mtu_length'));
+        myCharts[4].options.animation = false;
+        flyoutMenus[4].childNodes[1].childNodes[0].innerText = 'soleus_l.mtu_length';
+        myCharts.push(createGraph('vasti_l.mtu_length'));
+        myCharts[5].options.animation = false;
+        flyoutMenus[5].childNodes[1].childNodes[0].innerText = 'vasti_l.mtu_length';
+        myCharts.push(createGraph('glut_max_l.mtu_length'));
+        myCharts[6].options.animation = false;
+        flyoutMenus[6].childNodes[1].childNodes[0].innerText = 'glut_max_l.mtu_length';
+        myCharts.push(createGraph('hamstrings_l.mtu_length'));
+        myCharts[7].options.animation = false;
+        flyoutMenus[7].childNodes[1].childNodes[0].innerText = 'hamstrings_l.mtu_length';
+
+        fourGraph();
+
+        const container = document.getElementsByClassName('graph-container')[0];
+
+        onresize(container, function() {
+          if (container.offsetHeight > 700)
+            eightGraph();
+          else
+            fourGraph();
+        });
       } else
         setTimeout(() => createGraphs(json), 500);
     }
 
+    function onresize(domElem, callback) {
+      const resizeObserver = new ResizeObserver(() => callback());
+      resizeObserver.observe(domElem);
+    };
+
     function radiansToDegrees(radians) {
       return radians * (180 / Math.PI);
+    }
+
+    function fourGraph() {
+      const div0 = document.getElementById('chartContainer0');
+      div0.style.top = '0px';
+      div0.style.height = '50%';
+      const div1 = document.getElementById('chartContainer1');
+      div1.style.top = '50%';
+      div1.style.height = '50%';
+      const div2 = document.getElementById('chartContainer2');
+      div2.style.left = '50%';
+      div2.style.top = '0px';
+      div2.style.height = '50%';
+      const div3 = document.getElementById('chartContainer3');
+      div3.style.left = '50%';
+      div3.style.top = '50%';
+      div3.style.height = '50%';
+
+      const div4 = document.getElementById('chartContainer4');
+      div4.style.display = 'none';
+      const div5 = document.getElementById('chartContainer5');
+      div5.style.display = 'none';
+      const div6 = document.getElementById('chartContainer6');
+      div6.style.display = 'none';
+      const div7 = document.getElementById('chartContainer7');
+      div7.style.display = 'none';
+    }
+
+    function eightGraph() {
+      const div0 = document.getElementById('chartContainer0');
+      div0.style.top = '0px';
+      div0.style.height = '25%';
+
+      const div1 = document.getElementById('chartContainer1');
+      div1.style.top = '25%';
+      div1.style.height = '25%';
+
+      const div2 = document.getElementById('chartContainer2');
+      div2.style.top = '50%';
+      div2.style.left = '0px';
+      div2.style.height = '25%';
+
+      const div3 = document.getElementById('chartContainer3');
+      div3.style.top = '75%';
+      div3.style.left = '0px';
+      div3.style.height = '25%';
+
+      const div4 = document.getElementById('chartContainer4');
+      div4.style.display = 'block';
+      div4.style.top = '0px';
+      div4.style.left = '50%';
+      div4.style.height = '25%';
+
+      const div5 = document.getElementById('chartContainer5');
+      div5.style.display = 'block';
+      div5.style.top = '25%';
+      div5.style.left = '50%';
+      div5.style.height = '25%';
+
+      const div6 = document.getElementById('chartContainer6');
+      div6.style.display = 'block';
+      div6.style.top = '50%';
+      div6.style.left = '50%';
+      div6.style.height = '25%';
+
+      const div7 = document.getElementById('chartContainer7');
+      div7.style.display = 'block';
+      div7.style.top = '75%';
+      div7.style.left = '50%';
+      div7.style.height = '25%';
     }
 
     let index = -1;
