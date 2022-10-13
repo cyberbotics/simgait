@@ -42,7 +42,7 @@ export default class Animation extends Project {
         basicTimeStep = json.basicTimeStep;
         createGraphs(json);
         view.setAnimationStepCallback((time) => {
-          if (time % 20 === 0)
+          if (time % 30 === 0)
             updateCharts(time / basicTimeStep);
         });
       });
