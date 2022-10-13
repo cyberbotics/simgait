@@ -18,6 +18,7 @@ export default class Animation extends Project {
     let myCharts;
     let labels;
     let flyoutMenus;
+    let numberOfDisplayedGraph = 4
     const anglesMaps = new Map();
 
     view.onready = () => fillCustomWindow();
@@ -48,7 +49,7 @@ export default class Animation extends Project {
     }
 
     function updateCharts(newTime) {
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < numberOfDisplayedGraph; i++) {
         myCharts[i].setActiveElements([{datasetIndex: 0, index: newTime}]);
         myCharts[i].update();
       }
@@ -225,6 +226,8 @@ export default class Animation extends Project {
       div6.style.display = 'none';
       const div7 = document.getElementById('chartContainer7');
       div7.style.display = 'none';
+
+      numberOfDisplayedGraph = 4;
     }
 
     function eightGraph() {
@@ -269,6 +272,8 @@ export default class Animation extends Project {
       div7.style.top = '75%';
       div7.style.left = '50%';
       div7.style.height = '25%';
+
+      numberOfDisplayedGraph = 8;
     }
 
     let index = -1;
