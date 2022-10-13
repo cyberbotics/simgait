@@ -49,9 +49,11 @@ export default class Animation extends Project {
     }
 
     function updateCharts(newTime) {
-      for (let i = 0; i < numberOfDisplayedGraph; i++) {
-        myCharts[i].setActiveElements([{datasetIndex: 0, index: newTime}]);
-        myCharts[i].update();
+      if (document.getElementById('custom-window').style.visibility === 'visible') {
+        for (let i = 0; i < numberOfDisplayedGraph; i++) {
+          myCharts[i].setActiveElements([{datasetIndex: 0, index: newTime}]);
+          myCharts[i].update();
+        }
       }
     }
 
