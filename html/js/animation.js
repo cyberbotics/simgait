@@ -21,18 +21,17 @@ export default class Animation extends Project {
     let numberOfDisplayedGraph = 4;
     const anglesMaps = new Map();
 
-    view.onready = () => fillCustomWindow();
+    view.onready = () => fillCustomWindow('storage/14_Millard_Geyer2010');
     view.loadAnimation('storage/14_Millard_Geyer2010/model.x3d', 'storage/14_Millard_Geyer2010/animation.json', false, undefined, 'storage/14_Millard_Geyer2010/gait.jpg');
 
-    function fillCustomWindow() {
+    function fillCustomWindow(prefix) {
       myCharts = [];
       labels = [];
       new Promise((resolve, reject) => {
         let xmlhttp = new XMLHttpRequest();
-        xmlhttp.open('GET', 'storage/gait/angles.json', true);
+        xmlhttp.open('GET', prefix + '/angles.json', true);
         xmlhttp.overrideMimeType('application/json');
         xmlhttp.onload = () => {
-          console.log(xmlhttp.responseText)
           if (xmlhttp.status === 200 || xmlhttp.status === 0)
             resolve(JSON.parse(xmlhttp.responseText));
           else
@@ -541,7 +540,7 @@ export default class Animation extends Project {
                        controller.value;
         console.log('Folder: ' + folder);
         view.onready = () => {
-          fillCustomWindow();
+          fillCustomWindow(folder);
           button.classList.toggle('is-loading');
           button.disabled = false;
         };
