@@ -535,9 +535,9 @@ export default class Animation extends Project {
       let controller = document.querySelector('#controller');
 
       button.addEventListener('click', function(event) {
-        const folder = number.querySelector('input[name="number"]:checked').value + '_' +
+        const folder = 'storage' + number.querySelector('input[name="number"]:checked').value + '_' +
                        muscle.querySelector('input[name="muscle"]:checked').value + '_' +
-                       controller.value
+                       controller.value;
         console.log('Folder: ' + folder);
         view.onready = () => {
           fillCustomWindow();
@@ -545,7 +545,7 @@ export default class Animation extends Project {
           button.disabled = false;
         };
 
-        view.loadAnimation('storage/gait/model.x3d', 'storage/gait/animation.json', true, false, 'storage/gait/gait.jpg');
+        view.loadAnimation(folder + '/model.x3d', folder + '/animation.json', true, false, folder + '/gait.jpg');
         button.classList.toggle('is-loading');
         button.disabled = true;
       });
