@@ -10,6 +10,7 @@ export default class Animation extends Project {
     super(title, footer, routes);
     routes.push({url: '/animation', setup: setup, cleanup: cleanup});
     let that = this;
+    let index = -1;
 
     const view = new WebotsView();
     document.getElementsByClassName('webots-view-container')[0].appendChild(view);
@@ -278,7 +279,6 @@ export default class Animation extends Project {
       numberOfDisplayedGraph = 8;
     }
 
-    let index = -1;
     function createGraph(name) {
       const data = {
         labels: labels,
@@ -345,7 +345,6 @@ export default class Animation extends Project {
         }
       };
       index++;
-      console.log(index)
       return new Chart(document.getElementById('chart' + index), config);
     }
 
@@ -540,6 +539,7 @@ export default class Animation extends Project {
                        muscle.querySelector('input[name="muscle"]:checked').value + '_' +
                        controller.value;
         console.log('Folder: ' + folder);
+        index = -1;
         view.onready = () => {
           fillCustomWindow(folder);
           button.classList.toggle('is-loading');
