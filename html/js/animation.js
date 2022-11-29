@@ -32,6 +32,7 @@ export default class Animation extends Project {
         xmlhttp.open('GET', 'storage/gait/angles.json', true);
         xmlhttp.overrideMimeType('application/json');
         xmlhttp.onload = () => {
+          console.log(xmlhttp.responseText)
           if (xmlhttp.status === 200 || xmlhttp.status === 0)
             resolve(JSON.parse(xmlhttp.responseText));
           else
