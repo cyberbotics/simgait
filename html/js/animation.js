@@ -18,11 +18,11 @@ export default class Animation extends Project {
     let myCharts;
     let labels;
     let flyoutMenus;
-    let numberOfDisplayedGraph = 4
+    let numberOfDisplayedGraph = 4;
     const anglesMaps = new Map();
 
     view.onready = () => fillCustomWindow();
-    view.loadAnimation('storage/gait/model.x3d', 'storage/gait/animation.json', false, undefined, 'storage/gait/gait.jpg');
+    view.loadAnimation('storage/14_Millard_Geyer2010/model.x3d', 'storage/14_Millard_Geyer2010/animation.json', false, undefined, 'storage/14_Millard_Geyer2010/gait.jpg');
 
     function fillCustomWindow() {
       myCharts = [];
