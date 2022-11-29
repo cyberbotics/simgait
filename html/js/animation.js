@@ -535,7 +535,7 @@ export default class Animation extends Project {
       let controller = document.querySelector('#controller');
 
       button.addEventListener('click', function(event) {
-        const folder = 'storage' + number.querySelector('input[name="number"]:checked').value + '_' +
+        const folder = 'storage/' + number.querySelector('input[name="number"]:checked').value + '_' +
                        muscle.querySelector('input[name="muscle"]:checked').value + '_' +
                        controller.value;
         console.log('Folder: ' + folder);
