@@ -207,74 +207,102 @@ export default class Animation extends Project {
 
     function fourGraph() {
       const div0 = document.getElementById('chartContainer0');
-      div0.style.top = '0px';
-      div0.style.height = '50%';
+      if (div0) {
+        div0.style.top = '0px';
+        div0.style.height = '50%';
+      }
       const div1 = document.getElementById('chartContainer1');
-      div1.style.top = '50%';
-      div1.style.height = '50%';
+      if (div1) {
+        div1.style.top = '50%';
+        div1.style.height = '50%';
+      }
       const div2 = document.getElementById('chartContainer2');
-      div2.style.left = '50%';
-      div2.style.top = '0px';
-      div2.style.height = '50%';
+      if (div2) {
+        div2.style.left = '50%';
+        div2.style.top = '0px';
+        div2.style.height = '50%';
+      }
       const div3 = document.getElementById('chartContainer3');
-      div3.style.left = '50%';
-      div3.style.top = '50%';
-      div3.style.height = '50%';
+      if (div3) {
+        div3.style.left = '50%';
+        div3.style.top = '50%';
+        div3.style.height = '50%';
+      }
 
       const div4 = document.getElementById('chartContainer4');
-      div4.style.display = 'none';
+      if (div4)
+        div4.style.display = 'none';
       const div5 = document.getElementById('chartContainer5');
-      div5.style.display = 'none';
+      if (div5)
+        div5.style.display = 'none';
       const div6 = document.getElementById('chartContainer6');
-      div6.style.display = 'none';
+      if (div6)
+        div6.style.display = 'none';
       const div7 = document.getElementById('chartContainer7');
-      div7.style.display = 'none';
+      if (div7)
+        div7.style.display = 'none';
 
       numberOfDisplayedGraph = 4;
     }
 
     function eightGraph() {
       const div0 = document.getElementById('chartContainer0');
-      div0.style.top = '0px';
-      div0.style.height = '25%';
+      if (div0) {
+        div0.style.top = '0px';
+        div0.style.height = '25%';
+      }
 
       const div1 = document.getElementById('chartContainer1');
-      div1.style.top = '25%';
-      div1.style.height = '25%';
+      if (div1) {
+        div1.style.top = '25%';
+        div1.style.height = '25%';
+      }
 
       const div2 = document.getElementById('chartContainer2');
-      div2.style.top = '50%';
-      div2.style.left = '0px';
-      div2.style.height = '25%';
+      if (div2) {
+        div2.style.top = '50%';
+        div2.style.left = '0px';
+        div2.style.height = '25%';
+      }
 
       const div3 = document.getElementById('chartContainer3');
-      div3.style.top = '75%';
-      div3.style.left = '0px';
-      div3.style.height = '25%';
+      if (div3) {
+        div3.style.top = '75%';
+        div3.style.left = '0px';
+        div3.style.height = '25%';
+      }
 
       const div4 = document.getElementById('chartContainer4');
-      div4.style.display = 'block';
-      div4.style.top = '0px';
-      div4.style.left = '50%';
-      div4.style.height = '25%';
+      if (div4) {
+        div4.style.display = 'block';
+        div4.style.top = '0px';
+        div4.style.left = '50%';
+        div4.style.height = '25%';
+      }
 
       const div5 = document.getElementById('chartContainer5');
-      div5.style.display = 'block';
-      div5.style.top = '25%';
-      div5.style.left = '50%';
-      div5.style.height = '25%';
+      if (div5) {
+        div5.style.display = 'block';
+        div5.style.top = '25%';
+        div5.style.left = '50%';
+        div5.style.height = '25%';
+      }
 
       const div6 = document.getElementById('chartContainer6');
-      div6.style.display = 'block';
-      div6.style.top = '50%';
-      div6.style.left = '50%';
-      div6.style.height = '25%';
+      if (div6) {
+        div6.style.display = 'block';
+        div6.style.top = '50%';
+        div6.style.left = '50%';
+        div6.style.height = '25%';
+      }
 
       const div7 = document.getElementById('chartContainer7');
-      div7.style.display = 'block';
-      div7.style.top = '75%';
-      div7.style.left = '50%';
-      div7.style.height = '25%';
+      if (div7) {
+        div7.style.display = 'block';
+        div7.style.top = '75%';
+        div7.style.left = '50%';
+        div7.style.height = '25%';
+      }
 
       numberOfDisplayedGraph = 8;
     }
