@@ -462,9 +462,7 @@ export default class Animation extends Project {
             <div class="field is-horizontal">
               <div class="control">
                 <div class="select">
-                  <select id="gait">
-                    <option>Healthy</option>
-                  </select>
+                    <div>Healthy</div>
                 </div>
               </div>
             </div>
@@ -520,27 +518,6 @@ export default class Animation extends Project {
 
         <div class="field is-horizontal">
           <div class="field-label">
-            <label class="label">Cost function measure:</label>
-          </div>
-          <div class="field-body">
-            <div class="field is-horizontal">
-              <div class="control">
-                <div class="select">
-                  <select id="cost">
-                    <option>0</option>
-                    <option>5</option>
-                    <option>8</option>
-                    <option>11</option>
-                    <option>15</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="field is-horizontal">
-          <div class="field-label">
           </div>
           <div class="field-body">
             <div class="field">
@@ -562,11 +539,9 @@ export default class Animation extends Project {
       let controller = document.querySelector('#controller');
 
       button.addEventListener('click', function(event) {
-        const folder = document.querySelector('#gait').value + '_' +
-                       number.querySelector('input[name="number"]:checked').value + '_' +
+        const folder = number.querySelector('input[name="number"]:checked').value + '_' +
                        muscle.querySelector('input[name="muscle"]:checked').value + '_' +
-                       controller.value + '_' +
-                       document.querySelector('#cost').value;
+                       controller.value
         console.log('Folder: ' + folder);
         view.onready = () => {
           fillCustomWindow();
