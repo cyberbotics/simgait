@@ -345,6 +345,7 @@ export default class Animation extends Project {
         }
       };
       index++;
+      console.log(index)
       return new Chart(document.getElementById('chart' + index), config);
     }
 
