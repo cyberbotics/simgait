@@ -460,11 +460,7 @@ export default class Animation extends Project {
           </div>
           <div class="field-body">
             <div class="field is-horizontal">
-              <div class="control">
-                <div class="select">
-                    <div>Healthy</div>
-                </div>
-              </div>
+              <div>Healthy</div>
             </div>
           </div>
         </div>
