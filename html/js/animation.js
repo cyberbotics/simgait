@@ -15,6 +15,9 @@ export default class Animation extends Project {
     const view = new WebotsView();
     const container = document.getElementsByClassName('webots-view-container')[0];
     container.appendChild(view);
+    line = document.createElement('div');
+    line.innerHTML = `<a href="https://github.com/cyberbotics/simgait/wiki" target="_blank">How do I create a movie from this animation?</a>`;
+    container.appendChild(line);
     view.showCustomWindow = true;
     let basicTimeStep;
     let myCharts;
