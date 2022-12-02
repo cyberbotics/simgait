@@ -13,14 +13,7 @@ export default class Animation extends Project {
     let index = -1;
 
     const view = new WebotsView();
-    const container = document.getElementsByClassName('webots-view-container')[0];
-    container.appendChild(view);
-    const line = document.createElement('div');
-    line.classList.add('section');
-    line.innerHTML = `<a href="https://github.com/cyberbotics/simgait/wiki" target="_blank">How do I create a movie from this animation?</a>`;
-    // container.insertAdjacentElement("afterend", line);
-    // container.parentNode.insertBefore(line, container.nextSibling);
-    console.log(container);
+    document.getElementsByClassName('webots-view-container')[0].appendChild(view);
     view.showCustomWindow = true;
     let basicTimeStep;
     let myCharts;
@@ -607,6 +600,14 @@ export default class Animation extends Project {
       document.querySelector('.section').appendChild(container);
       container.style.removeProperty('display');
       document.querySelector('webots-view').resize();
+
+      const line = document.createElement('div');
+      line.classList.add('section');
+      line.innerHTML = `<a href="https://github.com/cyberbotics/simgait/wiki" target="_blank">How do I create a movie from this animation?</a>`;
+      // container.insertAdjacentElement("afterend", line);
+      // container.parentNode.insertBefore(line, container.nextSibling);
+      container.parentNode.append(line);
+      console.log(container);
     }
     function cleanup() {
       let container = document.querySelector('.webots-view-container');
