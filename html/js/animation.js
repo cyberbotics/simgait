@@ -603,9 +603,8 @@ export default class Animation extends Project {
 
       const line = document.createElement('div');
       line.classList.add('section');
+      line.style = "style="padding:0;font-size:small";
       line.innerHTML = `<a href="https://github.com/cyberbotics/simgait/wiki" target="_blank">How do I create a movie from this animation?</a>`;
-      // container.insertAdjacentElement("afterend", line);
-      // container.parentNode.insertBefore(line, container.nextSibling);
       container.parentNode.append(line);
       console.log(container);
     }
