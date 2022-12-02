@@ -18,7 +18,7 @@ export default class Animation extends Project {
     const line = document.createElement('div');
     line.classList.add('section');
     line.innerHTML = `<a href="https://github.com/cyberbotics/simgait/wiki" target="_blank">How do I create a movie from this animation?</a>`;
-    container.parentElement.appendChild(line);
+    container.insertAdjacentElement("afterend", line);
     view.showCustomWindow = true;
     let basicTimeStep;
     let myCharts;
