@@ -20,7 +20,7 @@ export default class Animation extends Project {
     line.innerHTML = `<a href="https://github.com/cyberbotics/simgait/wiki" target="_blank">How do I create a movie from this animation?</a>`;
     // container.insertAdjacentElement("afterend", line);
     // container.parentNode.insertBefore(line, container.nextSibling);
-    console.log(container.parentNode);
+    console.log(container);
     view.showCustomWindow = true;
     let basicTimeStep;
     let myCharts;
