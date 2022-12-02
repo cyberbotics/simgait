@@ -606,7 +606,7 @@ export default class Animation extends Project {
       line.style.padding = 0;
       line.style.paddingTop = '8px';
       line.style.fontSize = "small";
-      line.innerHTML = `<a href="https://github.com/cyberbotics/simgait/wiki" target="_blank">How do I create a movie from this animation?</a>`;
+      line.innerHTML = `<a href="https://github.com/cyberbotics/simgait/wiki" target="_blank">How to create a movie from this animation?</a>`;
       container.parentNode.append(line);
     }
     function cleanup() {
