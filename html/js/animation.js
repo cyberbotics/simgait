@@ -13,7 +13,8 @@ export default class Animation extends Project {
     let index = -1;
 
     const view = new WebotsView();
-    document.getElementsByClassName('webots-view-container')[0].appendChild(view);
+    const container = document.getElementsByClassName('webots-view-container')[0];
+    container.appendChild(view);
     view.showCustomWindow = true;
     let basicTimeStep;
     let myCharts;
