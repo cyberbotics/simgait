@@ -604,10 +604,10 @@ export default class Animation extends Project {
       const line = document.createElement('div');
       line.classList.add('section');
       line.style.padding = 0;
+      line.style.paddingTop = '8px';
       line.style.fontSize = "small";
       line.innerHTML = `<a href="https://github.com/cyberbotics/simgait/wiki" target="_blank">How do I create a movie from this animation?</a>`;
       container.parentNode.append(line);
-      console.log(container);
     }
     function cleanup() {
       let container = document.querySelector('.webots-view-container');
