@@ -24,6 +24,21 @@ CREATE TABLE `user` (
   `updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `animation` (
+  `id` int NOT NULL,
+  `uploaded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `title` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `description` varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `version` varchar(16) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `duration` int NOT NULL,
+  `size` int NOT NULL,
+  `viewed` int NOT NULL DEFAULT '0',
+  `user` int NOT NULL,
+  `branch` varchar(256) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT 'main',
+  `uploading` bit(1) DEFAULT b'1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 ALTER TABLE `project`
   ADD PRIMARY KEY (`id`),
@@ -45,4 +60,8 @@ ALTER TABLE `request`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `user`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `animation`
+  ADD PRIMARY KEY (`id`) USING BTREE;
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
