@@ -15,7 +15,7 @@ export default class Animation extends Project {
     this.sort = 'default';
     this.page = 1;
 
-    function setup() {
+    function setup(project) {
       const pageLimit = 10;
       let page = new URL(document.location.href).searchParams.get('p')
         ? parseInt(new URL(document.location.href).searchParams.get('p')) : 1;
@@ -23,9 +23,12 @@ export default class Animation extends Project {
         ? (new URL(document.location.href).searchParams.get('search')).toString() : this.search;
       let sort = new URL(document.location.href).searchParams.get('sort')
         ? (new URL(document.location.href).searchParams.get('sort')).toString() : this.sort;
+
+      console.log(project)
+      mainContainer(project);
     }
 
-    function mainContainer(project, activeTab) {
+    function mainContainer(project) {
       const template = document.createElement('template');
       template.innerHTML =
         `<div id="tab-content">
