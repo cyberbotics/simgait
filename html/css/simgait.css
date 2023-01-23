@@ -199,3 +199,12 @@ webots-view {
   background-color: white;
   height: 4px;
 }
+
+#main-container {
+  min-height: calc(100vh - 100px);
+}
+
+#main-container.webotsView {
+  height: calc(100% - 48px);
+  min-height: 10px;
+}
