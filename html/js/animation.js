@@ -88,8 +88,7 @@ export default class Animation extends Project {
             </div>
           </section>
         </div>`;
-      const title = (document.location.pathname.length > 1) ? document.location.pathname.substring(1) : 'home';
-      project.setup(title, template.content);
+      project.setup('animation', [], template.content);
     }
   }
 }

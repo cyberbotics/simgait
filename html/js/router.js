@@ -92,7 +92,7 @@ export default class Router {
             if (pushHistory)
               window.history.pushState(null, name, url.pathname + url.search + url.hash);
             route.setup(that);
-            that.pathname = url.pathname
+            that.pathname = url.pathname;
             found = true;
             resolve();
             break;
