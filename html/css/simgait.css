@@ -235,3 +235,8 @@ div.table-container {
   padding-left: 6px;
   top: 160px;
 }
+
+.pagination-link.is-current {
+    background-color: #007acc;
+    border: none;
+}
