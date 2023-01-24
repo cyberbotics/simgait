@@ -220,3 +220,17 @@ div.table-container {
 .column-title {
   user-select: none;
 }
+
+.fa-sort-up {
+  color: grey;
+  position: absolute;
+  padding-left: 6px;
+  top: 67px;
+}
+
+.fa-sort-down {
+  color: grey;
+  position: absolute;
+  padding-left: 6px;
+  top: 60px;
+}
