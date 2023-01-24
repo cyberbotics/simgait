@@ -259,7 +259,7 @@ export default class Animation extends Project {
 
   listAnimations(project) {
     const offset = (this.page - 1) * this.pageLimit;
-    fetch('/html/ajax/animation/list.php', {
+    fetch('/ajax/animation/list.php', {
       method: 'post',
       body: JSON.stringify({ offset: offset, limit: this.pageLimit, sortBy: this.sort, search: this.search })
     })
