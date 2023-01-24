@@ -201,6 +201,7 @@ export default class Animation extends Project {
           </div>
         </section>
       </div>`;
+    console.log(project)
     project.setup('animation', [], template.content);
   }
 
