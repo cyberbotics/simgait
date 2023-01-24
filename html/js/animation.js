@@ -9,8 +9,7 @@ export default class Animation extends Project {
 
   constructor(title, footer, routes) {
     super(title, footer, routes);
-    const cleanup = '';
-    routes.push({url: '/animation', setup: project => this.setupAnimation(project), cleanup: cleanup});
+    routes.push({url: '/animation', setup: project => this.setupAnimation(project)});
 
     this.search = '';
     this.searchDelay = false;
