@@ -437,8 +437,8 @@ export default class Animation extends Project {
     return row;
   }
 
-  initSearch(project, searchString) {
-    document.getElementById('animation-search-input').value = searchString;
+  initSearch(project) {
+    document.getElementById('animation-search-input').value = this.search;
     document.getElementById('animation-search-input').addEventListener('keyup', () => {
       if (!this.searchDelay) {
         this.searchDelay = true;
