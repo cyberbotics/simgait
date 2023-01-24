@@ -6,7 +6,7 @@ elseif (in_array($uri, array('/settings', '/animation', '/simulation')))
   $found = true;
 else
   $found = false;
-$found = true;
+
 http_response_code($found ? 200 : 404);
 
 header("X-Content-Type-Options: nosniff");

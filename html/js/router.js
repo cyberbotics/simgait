@@ -68,6 +68,7 @@ export default class Router {
     }
   }
   load(page = null, pushHistory = true) {
+    console.log(page)
     let that = this;
     let promise = new Promise((resolve, reject) => {
       for (let i = 0; i < that.routes.length; i++) {
