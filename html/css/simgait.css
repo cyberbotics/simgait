@@ -237,6 +237,10 @@ div.table-container {
   top: 60px;
 }
 
+.fa-sort-down::before {
+    content: "\f0dd";
+}
+
 .fa-sort-up {
   color: grey;
   position: absolute;
