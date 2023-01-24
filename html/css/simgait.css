@@ -308,3 +308,9 @@ div.table-container {
 .thumbnail-button-container button:hover {
   background-color: black;
 }
+
+.table-title:hover~.thumbnail {
+    opacity: 1;
+    transition: all 0.2s ease-in-out;
+    transition-delay: 0.5s;
+}
