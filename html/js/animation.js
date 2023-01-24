@@ -202,7 +202,7 @@ export default class Animation extends Project {
         </section>
       </div>`;
     console.log(project)
-    project.setup('animation', [], template.content);
+    super.setup('animation', [], template.content);
   }
 
   initSort(project) {
