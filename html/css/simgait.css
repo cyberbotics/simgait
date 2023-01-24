@@ -260,3 +260,51 @@ div.table-container {
   display: flex;
   overflow: hidden;
 }
+
+.thumbnail-image {
+  height: 180px;
+  object-fit: cover;
+  box-shadow: 0 0 10px black;
+  z-index: 2;
+}
+
+.thumbnail-description {
+  position: relative;
+  height: 100%;
+  color: white;
+  padding: 10px;
+  font-size: small;
+  overflow: hidden;
+  margin: auto;
+}
+
+.thumbnail-description-fade {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(rgba(38, 38, 38, 0) 80%, rgba(38, 38, 38, 1) 95%);
+  z-index: 1;
+}
+
+.thumbnail-button-container {
+  position: relative;
+}
+
+.thumbnail-button-container button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #555;
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.thumbnail-button-container button:hover {
+  background-color: black;
+}
