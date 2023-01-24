@@ -147,7 +147,8 @@
 
   // save files in new folder
   require '../../../php/mysql_id_string.php';
-  $uri = '/A'. mysql_id_to_string($mysqli->insert_id);
+  $type = $animation ? 'A' : 'S';
+  $uri = '/' . $type . mysql_id_to_string($mysqli->insert_id);
   $folder = "../../storage$uri";
   mkdir($folder);
   if ($animation && !move_uploaded_file($_FILES['animation-file']['tmp_name'], "$folder/animation.json"))
@@ -161,7 +162,11 @@
   if ($total_meshes > 0)
     move_assets($total_meshes, "meshes", $folder);
 
-  $condition = "branch=\"$branch\";
+  $condition = "branch=\"$branch\" AND ";
+  if ($type === 'S') // scene
+    $condition .= 'duration=0';
+  else // animation
+    $condition .= 'duration>0';
   $result = $mysqli->query("SELECT COUNT(*) AS total FROM animation WHERE $condition") or error($mysqli->error);
   $count = $result->fetch_array(MYSQLI_ASSOC);
   $total = intval($count['total']);
