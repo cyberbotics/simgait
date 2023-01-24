@@ -96,10 +96,8 @@ export default class Animation extends Project {
       body.append('user', project.id);
       body.append('password', project.password);
       fetch('/ajax/animation/create.php', { method: 'post', body: body })
-        .then(function(response) {
-          return response.json();
-        })
-        .then(function(data) {
+        .then(response => response.json())
+        .then(data => {
           if (data.error)
             modal.error(data.error);
           else if (!cancelled) {
