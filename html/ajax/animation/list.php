@@ -1,4 +1,4 @@
-<?php # This script list available animations
+<?php # This script list available animations (or scenes)
   function error($message) {
     die("{\"error\":\"$message\"}");
   }
@@ -12,9 +12,14 @@
   $mysqli->set_charset('utf8');
   $offset = isset($data->offset) ? intval($data->offset) : 0;
   $limit = isset($data->limit) ? intval($data->limit) : 10;
+  $type = isset($data->type) ? strtoupper($data->type[0]) : 'A';
   require '../../../php/mysql_id_string.php';
   $branch = basename(dirname(__FILE__, 4));
-  $condition = "branch=\"$branch\" ";
+  $condition = "branch=\"$branch\" AND ";
+  if ($type == 'S') // scene
+    $condition .= "duration = 0";
+  else // animation
+    $condition .= "duration > 0";
   if (isset($data->url)) { // view request
     $url = $mysqli->escape_string($data->url);
     $uri = substr($url, strrpos($url, '/'));
@@ -33,7 +38,7 @@
     while($row = $result->fetch_array(MYSQLI_ASSOC)) {
       $id = intval($row['id']);
       $mysqli->query("DELETE FROM animation WHERE id=$id");
-      delete_animation($id);
+      delete_animation($type, $id);
     }
     $sortBy = isset($data->sortBy) && $data->sortBy != "default" && $data->sortBy != "undefined" ?
       $mysqli->escape_string($data->sortBy) : "viewed-desc";
@@ -62,7 +67,7 @@
     $row['title'] = htmlentities($row['title']);
     $row['description'] = htmlentities($row['description']);
     $row['version'] = htmlentities($row['version']);
-    $uri = '/A' . mysql_id_to_string($row['id']);
+    $uri = '/' . $type . mysql_id_to_string($row['id']);
     $row['url'] = 'https://' . $_SERVER['SERVER_NAME'] . $uri;
     array_push($animations, $row);
   }

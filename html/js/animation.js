@@ -264,7 +264,6 @@ export default class Animation extends Project {
       body: JSON.stringify({ offset: offset, limit: this.pageLimit, sortBy: this.sort, search: this.search })
     })
       .then(function(response) {
-        console.log(response.text())
         return response.json();
       })
       .then(function(data) {
