@@ -38,7 +38,7 @@ export default class Animation extends Project {
 
     if (project.email && project.email.endsWith('@cyberbotics.com'))
       project.content.querySelector('section[data-content="proto"] > div > table > thead > tr')
-        .appendChild(document.createElement('th'));
+        ?.appendChild(document.createElement('th'));
   }
 
   addAnimation(project) {
