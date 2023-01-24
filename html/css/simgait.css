@@ -240,3 +240,23 @@ div.table-container {
     background-color: rgba(50,115,220,1);
     border: none;
 }
+
+.thumbnail {
+    opacity: 0;
+    position: relative;
+    pointer-events: none;
+    transform: scale(1);
+}
+
+.thumbnail-container {
+  position: absolute;
+  top: 5px;
+  left: 120px;
+  height: 180px;
+  width: 640px;
+  background: rgba(38, 38, 38, 1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px black;
+  display: flex;
+  overflow: hidden;
+}
