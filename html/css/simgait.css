@@ -208,3 +208,17 @@ webots-view {
   height: calc(100% - 48px);
   min-height: 10px;
 }
+
+.fa-sort-down {
+  color: grey;
+  position: absolute;
+  padding-left: 6px;
+  top: 60px;
+}
+
+.fa-sort-up {
+  color: grey;
+  position: absolute;
+  padding-left: 6px;
+  top: 67px;
+}
