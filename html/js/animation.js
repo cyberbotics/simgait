@@ -16,7 +16,7 @@ export default class Animation extends Project {
     this.searchDelay = false;
     this.sort = 'default';
     this.page = 1;
-    this.pageLimit = 10;
+    this.pageLimit = 8;
   }
 
   setupAnimation(project) {
