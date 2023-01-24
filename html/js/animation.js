@@ -399,8 +399,7 @@ export default class Animation extends Project {
     }
     const admin = project.email ? project.email.endsWith('@cyberbotics.com') : false;
     const url = data.url.startsWith('https://webots.cloud') ? document.location.origin + data.url.substring(20) : data.url;
-    const thumbnailUrl = url.slice(0, url.lastIndexOf('/')) + '/storage' + url.slice(url.lastIndexOf('/')) + '/thumbnail.jpg';
-    const defaultThumbnailUrl = document.location.origin + '/images/thumbnail_not_available.jpg';
+    const defaultThumbnailUrl = document.location.origin + '/images/thumbnail.jpg';
     const versionUrl = `https://github.com/cyberbotics/webots/releases/tag/${data.version}`;
     const style = (data.user === 0) ? ' style="color:grey"' : (parseInt(project.id) === data.user
       ? ' style="color:#007acc"' : (admin ? ' style="color:red"' : ''));
@@ -416,7 +415,7 @@ export default class Animation extends Project {
   <a class="table-title has-text-dark" href="${url}">${title}</a>
   <div class="thumbnail">
     <div class="thumbnail-container">
-      <img class="thumbnail-image" src="${thumbnailUrl}" onerror="this.src='${defaultThumbnailUrl}';"/>
+      <img class="thumbnail-image" src="${defaultThumbnailUrl}" onerror="this.src='';"/>
       <p class="thumbnail-description">${data.description}<div class="thumbnail-description-fade"/></p>
     </div>
   </div>
