@@ -139,7 +139,7 @@ export default class Animation extends Project {
   mainContainer(project) {
     const template = document.createElement('template');
     template.innerHTML =
-      `<div id="tab-content">
+      `<div id="main-container">
         <section class="section is-active" data-content="animation">
           <div class="table-container">
             <div class="search-bar" style="max-width: 280px; padding-bottom: 20px;">
