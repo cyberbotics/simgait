@@ -86,6 +86,7 @@ export default class Router {
         that.notFound();
         resolve();
       } else {
+        console.log("first step")
         let found = false;
         for (let i = 0; i < that.routes.length; i++) {
           const route = that.routes[i];
