@@ -6,6 +6,7 @@ html { /* hides the vertical scroll bar if it is not needed */
 
 .navbar {
   min-height:56px; /* needed to avoid heigth change when Log In and Sign Up buttons are hidden */
+  background-color: #007acc
 }
 
 body footer .has-text-centered {
