@@ -209,6 +209,18 @@ webots-view {
   min-height: 10px;
 }
 
+div.table-container {
+  display: grid;
+}
+
+.table-container tr {
+  height: 50px;
+}
+
+.column-title {
+  user-select: none;
+}
+
 .fa-sort-down {
   color: grey;
   position: absolute;
