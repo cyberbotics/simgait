@@ -94,7 +94,7 @@ export default class Animation extends Project {
     const input = modal.querySelector(`#animation-file`);
     input.focus();
     modal.querySelector('button.cancel').addEventListener('click', function() { cancelled = true; });
-    modal.querySelector('form').addEventListener('submit', function(event) {
+    modal.querySelector('form').addEventListener('submit', event => {
       event.preventDefault();
       modal.querySelector('button[type="submit"]').classList.add('is-loading');
       const body = new FormData(modal.querySelector('form'));
@@ -214,7 +214,7 @@ export default class Animation extends Project {
       }
     }
     document.querySelectorAll('.column-title').forEach((title) => {
-      title.addEventListener('click', function(e) {
+      title.addEventListener('click', () => {
         const sortIcon = title.querySelector('.sort-icon');
         const type = title.id.split('-')[0];
         const previousSort = this.sort.split('-')[0];
@@ -289,7 +289,7 @@ export default class Animation extends Project {
               let p = (data.animations.length === 1) ? this.page - 1 : this.page;
               if (p === 0)
                 p = 1;
-              node.addEventListener('click', function(event) { this.deleteAnimation(event, project, p); });
+              node.addEventListener('click', event => this.deleteAnimation(event, project, p));
             }
           }
           const total = (data.total === 0) ? 1 : Math.ceil(data.total / this.pageLimit);
@@ -439,7 +439,7 @@ export default class Animation extends Project {
 
   initSearch(project, searchString) {
     document.getElementById('animation-search-input').value = searchString;
-    document.getElementById('animation-search-input').addEventListener('keyup', function(event) {
+    document.getElementById('animation-search-input').addEventListener('keyup', () => {
       if (!this.searchDelay) {
         this.searchDelay = true;
         setTimeout(() => {
@@ -451,7 +451,7 @@ export default class Animation extends Project {
         }, '300');
       }
     });
-    document.getElementById('animation-search-click').addEventListener('click', function(event) {
+    document.getElementById('animation-search-click').addEventListener('click', () => {
       if (document.getElementById('animation-search-icon').classList.contains('fa-xmark')) {
         document.getElementById('animation-search-input').value = '';
         this.search = document.getElementById('animation-search-input').value;
