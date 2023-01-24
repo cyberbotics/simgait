@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
   </div>
 </section>`;
-    project.setup('home', ['Overview', 'Simulations', 'Partners'], template.content);
+    project.super.setup('home', ['Overview', 'Simulations', 'Partners'], template.content);
   }
 
   function simulationPage(project) {
