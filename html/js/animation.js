@@ -259,10 +259,8 @@ export default class Animation extends Project {
       method: 'post',
       body: JSON.stringify({ offset: offset, limit: this.pageLimit, sortBy: this.sort, search: this.search })
     })
-      .then(function(response) {
-        return response.json();
-      })
-      .then(function(data) {
+      .then(response => response.json())
+      .then(data => {
         if (data.error)
           ModalDialog.run(`Animation listing error`, data.error);
         else {
