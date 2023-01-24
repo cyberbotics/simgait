@@ -234,3 +234,8 @@ div.table-container {
   padding-left: 6px;
   top: 67px;
 }
+
+.fas, .fa-solid {
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
