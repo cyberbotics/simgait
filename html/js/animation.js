@@ -10,7 +10,7 @@ export default class Animation extends Project {
   constructor(title, footer, routes) {
     super(title, footer, routes);
     const cleanup = '';
-    // routes.push({url: '/animation', setup: this.setup, cleanup: cleanup});
+    routes.push({url: '/animation', setup: project => this.setupAnimation(project), cleanup: cleanup});
 
     this.search = '';
     this.searchDelay = false;
@@ -19,8 +19,7 @@ export default class Animation extends Project {
     this.pageLimit = 10;
   }
 
-  setup(project) {
-    console.error("SETUP")
+  setupAnimation(project) {
     this.page = new URL(document.location.href).searchParams.get('p')
       ? parseInt(new URL(document.location.href).searchParams.get('p')) : 1;
     this.search = new URL(document.location.href).searchParams.get('search')
