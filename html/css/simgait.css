@@ -221,6 +221,15 @@ div.table-container {
   user-select: none;
 }
 
+.fas, .fa-solid {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-style: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-rendering: auto;
+}
+
 .fa-sort-down {
   color: grey;
   position: absolute;
@@ -233,9 +242,4 @@ div.table-container {
   position: absolute;
   padding-left: 6px;
   top: 67px;
-}
-
-.fas, .fa-solid {
-    font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
 }
