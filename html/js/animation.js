@@ -32,8 +32,7 @@ export default class Animation extends Project {
     this.initSearch(project);
     this.updateSearchIcon();
 
-    project.content.querySelector('#add-a-new-animation').addEventListener('click',
-      function(event) { this.addAnimation(project); });
+    project.content.querySelector('#add-a-new-animation').addEventListener('click', () => this.addAnimation(project));
 
     this.listAnimations(project);
 
@@ -201,7 +200,6 @@ export default class Animation extends Project {
           </div>
         </section>
       </div>`;
-    console.log(project)
     super.setup('animation', [], template.content);
   }
 
