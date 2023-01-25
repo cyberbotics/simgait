@@ -195,7 +195,7 @@ export default class User extends Router {
         return false;
       const template = document.createElement('template');
       template.innerHTML =
-`<section class="section">
+`<div id="main-container"><section class="section">
   <div class="container">
     <h1 class="title"><i class="fas fa-cog"></i> Settings</h1>
     <h2 class="subtitle">Manage your account</h2>
@@ -220,7 +220,7 @@ export default class User extends Router {
       <button class="button is-danger" id="delete-account">Delete my account</button>
     </div>
   </div>
-</section>`;
+</section></div>`;
       that.setup('settings', [], template.content);
       document.querySelectorAll('input[name="category"]').forEach(function(radio) {
         radio.addEventListener('click', function(event) {
