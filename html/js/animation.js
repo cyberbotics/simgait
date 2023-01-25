@@ -104,10 +104,8 @@ export default class Animation extends Project {
             const id = data.id;
             const total = data.total;
             fetch('/ajax/animation/create.php', { method: 'post', body: JSON.stringify({ uploading: 0, uploadId: id }) })
-              .then(function(response) {
-                return response.json();
-              })
-              .then(function(data) {
+              .then(response => response.json())
+              .then(data => {
                 if (data.status !== 'uploaded')
                   modal.error(data.error);
                 else
@@ -400,7 +398,7 @@ export default class Animation extends Project {
       ? `Delete your animation` : (admin ? `Delete this animation as administrator` : ''));
     const deleteIcon = (data.user === 0 || parseInt(project.id) === data.user || admin)
       ? `<i${style} class="is-clickable far fa-trash-alt" id="animation-${data.id}" title="${tooltip}"></i>` : '';
-    const uploaded = data.uploaded.replace(' ', `<br>${deleteIcon} `);
+    const uploaded = data.uploaded.replace(' ', `<br>${deleteIcon} `);function
     const title = data.title === '' ? '<i>anonymous</i>' : data.title;
     let row = `
 <td class="has-text-centered">${data.viewed}</td>
