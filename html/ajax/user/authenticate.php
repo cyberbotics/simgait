@@ -24,5 +24,5 @@
     error("This e-mail address is not registered.");
   if ($user['password'] != $password)
     error("The password you entered is wrong.");
-  die("{\"username\": \"$user[username]\", \"category\": \"$user[category]\", \"enabled\": \"$user[enabled]\"}");
+  die("{\"username\": \"$user[username]\", \"category\": \"$user[category]\", \"enabled\": \"$user[enabled]\", \"id\": \"$user[id]\"}");
  ?>
