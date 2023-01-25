@@ -150,7 +150,7 @@ export default class Project extends User {
       template.innerHTML += `<div><h1 class="subtitle" style="margin:10px 0">${data.title}</h1>${description}</div>`;
     }
     template.innerHTML += '</section>';
-    this.setup(page, template.content);
+    this.setup(page, [], template.content);
     if (!Project.webotsView)
       Project.webotsView = document.querySelector('webots-view');
     else
