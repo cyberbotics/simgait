@@ -194,26 +194,6 @@ export default class User extends Router {
       if (!that.password || !that.email)
         return false;
       const template = document.createElement('template');
-      let developer = '';
-      let clinician = '';
-      let educator = '';
-      if (that.category === 'developer')
-        developer = 'checked';
-      else if (that.category === 'clinician')
-        clinician = 'checked';
-      else if (that.category === 'educator')
-        educator = 'checked';
-      const originalCategory = window.localStorage.getItem('originalCategory');
-      if (originalCategory !== 'developer') {
-        if (developer !== '')
-          developer += ' ';
-        developer += 'disabled';
-      }
-      if (originalCategory === 'educator') {
-        if (clinician !== '')
-          clinician += ' ';
-        clinician += 'disabled';
-      }
       template.innerHTML =
 `<section class="section">
   <div class="container">
@@ -222,23 +202,6 @@ export default class User extends Router {
   </div>
 </section>
 <section class="section">
-  <div class="container panel">
-    <p class="panel-heading">Category</p>
-    <div class="panel-block">
-      <div class="control">
-        <label class="radio">
-          <input type="radio" id="developer" name="category" ${developer}> <i class="${that.categoryIcon('developer')}"></i> developer
-        </label>
-        <label class="radio">
-          <input type="radio" id="clinician" name="category" ${clinician}> <i class="${that.categoryIcon('clinician')}"></i> clinician
-        </label>
-        <label class="radio">
-          <input type="radio" id="educator" name="category" ${educator}> <i class="${that.categoryIcon('educator')}"></i> educator
-        </label>
-        <p id="sign-up-category-help" class="help"></p>
-      </div>
-    </div>
-  </div>
   <div class="container panel">
     <p class="panel-heading">Change password</p>
     <div class="panel-block">
