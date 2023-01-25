@@ -335,7 +335,6 @@ export default class User extends Router {
     navbarEnd.parentNode.replaceChild(this.menu(), navbarEnd);
   }
   menu() {
-    console.error(this.username)
     let div = document.createElement('div');
     div.setAttribute('class', 'navbar-end');
     div.innerHTML =
@@ -650,7 +649,6 @@ export default class User extends Router {
             that.username = '!';
             that.load('/');
           } else {
-            console.log(data.username)
             document.querySelector('#user-menu').style.display = 'flex';
             document.querySelector('#log-in').style.display = 'none';
             document.querySelector('#sign-up').style.display = 'none';
