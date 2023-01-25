@@ -139,7 +139,7 @@
     if ($password['password'] !== $_POST['password'])
       error("Wrong password for user $user.");
   } else {
-    error("No user");
+    error("You must be logged to upload an animation");
   }
   $branch = basename(dirname(__FILE__, 4));
   $query = "INSERT INTO animation(title, description, version, duration, size, user, branch) ".
