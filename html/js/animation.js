@@ -53,16 +53,6 @@ export default class Animation extends Project {
       <div class="help">Upload the Webots animation file: <em>animation.json</em></div>
     </div>
     <div class="field">
-      <label class="label">Angles file</label>
-      <div class="control has-icons-left">
-        <input id="angle-file" name="angle-file" class="input" type="file" required accept=".json">
-        <span class="icon is-small is-left">
-          <i class="fas fa-upload"></i>
-        </span>
-      </div>
-      <div class="help">Upload the angle file: <em>angles.json</em></div>
-    </div>
-    <div class="field">
         <label class="label">Webots scene</label>
         <div class="control has-icons-left">
           <input id="scene-file" name="scene-file" class="input" type="file" required accept=".x3d">
