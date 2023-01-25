@@ -335,6 +335,7 @@ export default class User extends Router {
     navbarEnd.parentNode.replaceChild(this.menu(), navbarEnd);
   }
   menu() {
+    console.log(this.username)
     let div = document.createElement('div');
     div.setAttribute('class', 'navbar-end');
     div.innerHTML =
