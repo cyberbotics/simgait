@@ -31,9 +31,7 @@ export default class Animation extends Project {
     this.initSearch(project);
     this.updateSearchIcon();
 
-    const addAnimation = project.content.querySelector('#add-a-new-animation');
-    if (addAnimation)
-      addAnimation.addEventListener('click', () => this.addAnimation(project));
+    project.content.querySelector('#add-a-new-animation').addEventListener('click', () => this.addAnimation(project));
 
     this.listAnimations(project);
 
@@ -137,15 +135,6 @@ export default class Animation extends Project {
 
   mainContainer(project) {
     const template = document.createElement('template');
-    let addButton = '';
-    console.log(project)
-    if (project.id) {
-      addButton = `
-      <div class="buttons">
-        <button class="button" id="add-a-new-animation">Add a new animation</button>
-      </div>`;
-    }
-
     template.innerHTML =
       `<div id="tab-content">
         <section class="section is-active" data-content="animation">
@@ -199,7 +188,9 @@ export default class Animation extends Project {
           </div>
           <nav class="pagination is-small is-rounded" role="navigation" aria-label="pagination">
           </nav>
-          ${addButton}
+          <div class="buttons">
+            <button class="button" id="add-a-new-animation">Add a new animation</button>
+          </div>
         </section>
       </div>`;
     super.setup('animation', [], template.content);
