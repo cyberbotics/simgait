@@ -217,7 +217,7 @@ webots-view {
 }
 
 #main-container.webotsView {
-  height: calc(100% - 260px);
+  height: calc(100% - 208px);
   min-height: 10px;
 }
 
