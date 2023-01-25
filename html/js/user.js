@@ -655,6 +655,7 @@ export default class User extends Router {
             document.querySelector('#projects').href = '/' + data.username;
             document.querySelector('#username').innerHTML = data.username;
             that.username = data.username;
+            that.id = data.id;
             window.localStorage.setItem('originalCategory', data.category);
             that.category = data.category;
             if (reload) // the page content may need to be updated after loging in.
