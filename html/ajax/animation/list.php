@@ -24,13 +24,8 @@
     $url = $mysqli->escape_string($data->url);
     $uri = substr($url, strrpos($url, '/'));
     $uploadMessage = "?upload=webots";
-    try {
-      if (endsWith($uri, $uploadMessage))
-        $uri = substr($uri, 0, strrpos($uri, '?'));
-    } catch (\Throwable $e) {
-        die("Caught exception: " . $e->getMessage());
-    }
-    die("skip catch");
+    if (endsWith($uri, $uploadMessage))
+      $uri = substr($uri, 0, strrpos($uri, '?'));    
     $id = string_to_mysql_id(substr($uri, 2)); // skipping '/A'
     $query = "UPDATE animation SET viewed = viewed + 1 WHERE id=$id";
     $mysqli->query($query) or error($mysqli->error);
