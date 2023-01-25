@@ -136,7 +136,7 @@ export default class Animation extends Project {
   mainContainer(project) {
     const template = document.createElement('template');
     template.innerHTML =
-      `<div id="tab-content">
+      `<div id="main-container"><div id="tab-content">
         <section class="section is-active" data-content="animation">
           <div class="table-container">
             <div class="search-bar" style="max-width: 280px; padding-bottom: 20px;">
@@ -192,7 +192,7 @@ export default class Animation extends Project {
             <button class="button" id="add-a-new-animation">Add a new animation</button>
           </div>
         </section>
-      </div>`;
+      </div></div>`;
     super.setup('animation', [], template.content);
   }
 
