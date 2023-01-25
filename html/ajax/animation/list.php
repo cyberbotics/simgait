@@ -28,7 +28,7 @@
       if (str_ends_with($uri, $uploadMessage))
         $uri = substr($uri, 0, strrpos($uri, '?'));
     } catch (\Throwable $e) {
-        die("Caught exception:");
+        die("Caught exception: $e");
     }
     die("skip catch");
     $id = string_to_mysql_id(substr($uri, 2)); // skipping '/A'
