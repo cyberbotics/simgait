@@ -77,6 +77,55 @@ export default class Project extends User {
     });
     return promise;
   }
+  runWebotsView(data, version) {
+    if (!version || version === undefined)
+      version = data && data.version ? data.version : this.findGetParameter('version');
+
+    const src = 'https://cyberbotics.com/wwi/' + version + '/WebotsView.js';
+
+    let promise = new Promise((resolve, reject) => {
+      let script = document.getElementById('webots-view-version');
+
+      if (!script || (script && script.src !== src)) {
+        if (script && script.src !== src) {
+          script.remove();
+          window.location.reload();
+        }
+        script = document.createElement('script');
+        script.type = 'module';
+        script.id = 'webots-view-version';
+        script.src = src;
+        script.onload = () => {
+          this._loadContent(data, resolve);
+        };
+        script.onerror = () => {
+          console.warn(
+            'Could not find Webots version, reloading with R2022b instead. This could cause some unwanted behaviour.');
+          script.remove();
+          this.runWebotsView(data, 'R2022b'); // if release not found, default to R2022b
+        };
+        document.body.appendChild(script);
+      } else
+        this._loadContent(data, resolve);
+    });
+
+    promise.then(() => {
+      if (document.querySelector('#user-menu')) {
+        if (this.email && this.password) {
+          document.querySelector('#user-menu').style.display = 'auto';
+          document.querySelector('#log-in').style.display = 'none';
+          document.querySelector('#sign-up').style.display = 'none';
+          this.updateDisplayName();
+        } else {
+          document.querySelector('#user-menu').style.display = 'none';
+          document.querySelector('#log-in').style.display = 'flex';
+          document.querySelector('#sign-up').style.display = 'flex';
+        }
+        if (this.email === '!')
+          this.login();
+      }
+    });
+  }
   userPage(data) {
     let that = this;
 
