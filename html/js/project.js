@@ -1,5 +1,6 @@
 import ModalDialog from './modal_dialog.js';
 import User from './user.js';
+import GraphWindow from './GraphWindow.js';
 
 export default class Project extends User {
   dynamicPage(url, pushHistory) {
@@ -129,6 +130,7 @@ export default class Project extends User {
     if (data) {
       const reference = 'storage' + data.url.substring(data.url.lastIndexOf('/'));
       this.setupWebotsView(data.duration > 0 ? 'animation' : 'scene', data);
+      Project.webotsView.onready = () => new GraphWindow();
       Project.webotsView.loadAnimation(`${reference}/scene.x3d`, `${reference}/animation.json`, false,
         undefined, `${reference}/thumbnail.jpg`);
       resolve();

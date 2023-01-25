@@ -1,6 +1,5 @@
 import Project from './project.js';
 import ModalDialog from './modal_dialog.js';
-import GraphWindow from './GraphWindow.js';
 
 export default class Animation extends Project {
   static run(title, footer, routes) {
