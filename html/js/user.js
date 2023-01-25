@@ -362,6 +362,8 @@ export default class User extends Router {
 
     div.querySelector('a#log-out').addEventListener('click', function(event) {
       that.password = null;
+      that.email = null;
+      that.id = null;
       if (window.location.pathname === '/settings')
         that.load('/');
       else
