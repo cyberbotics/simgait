@@ -207,7 +207,6 @@ webots-view {
 
 #main-container.webotsView {
   height: calc(100% - 48px);
-  min-height: 10px;
 }
 
 div.table-container {
