@@ -31,7 +31,9 @@ export default class Animation extends Project {
     this.initSearch(project);
     this.updateSearchIcon();
 
-    project.content.querySelector('#add-a-new-animation').addEventListener('click', () => this.addAnimation(project));
+    const addAnimation = project.content.querySelector('#add-a-new-animation');
+    if (addAnimation)
+      addAnimation.addEventListener('click', () => this.addAnimation(project));
 
     this.listAnimations(project);
 
