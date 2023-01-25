@@ -25,7 +25,7 @@
     $uri = substr($url, strrpos($url, '/'));
     $uploadMessage = "?upload=webots";
     try {
-      if (str_ends_with($uri, $uploadMessage))
+      if (endsWith($uri, $uploadMessage))
         $uri = substr($uri, 0, strrpos($uri, '?'));
     } catch (\Throwable $e) {
         die("Caught exception: " . $e->getMessage());
@@ -90,4 +90,12 @@
   $answer->animations = $animations;
   $answer->total = intval($count['count']);
   die(json_encode($answer));
+
+  function endsWith($string, $end) {
+    $length = strlen($end);
+    if(!$length) {
+      return true;
+    }
+    return substr($string, -$length ) === $end;
+  }
  ?>
