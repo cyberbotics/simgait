@@ -19,6 +19,7 @@ export default class Animation extends Project {
   }
 
   setupAnimation(project) {
+    console.log(project)
     this.page = new URL(document.location.href).searchParams.get('p')
       ? parseInt(new URL(document.location.href).searchParams.get('p')) : 1;
     this.search = new URL(document.location.href).searchParams.get('search')
