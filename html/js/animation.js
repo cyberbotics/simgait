@@ -134,7 +134,6 @@ export default class Animation extends Project {
   }
 
   mainContainer(project) {
-    console.log(project)
     const template = document.createElement('template');
     template.innerHTML =
       `<div id="main-container"><div id="tab-content">
@@ -189,7 +188,7 @@ export default class Animation extends Project {
           </div>
           <nav class="pagination is-small is-rounded" role="navigation" aria-label="pagination">
           </nav>
-          <div class="buttons">
+          <div class="buttons" style="display:none">
             <button class="button" id="add-a-new-animation">Add a new animation</button>
           </div>
         </section>
