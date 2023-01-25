@@ -134,6 +134,7 @@ export default class Animation extends Project {
   }
 
   mainContainer(project) {
+    console.log(project)
     const template = document.createElement('template');
     template.innerHTML =
       `<div id="main-container"><div id="tab-content">
