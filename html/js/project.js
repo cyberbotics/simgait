@@ -5,6 +5,54 @@ export default class Project extends User {
   dynamicPage(url, pushHistory) {
     let that = this;
     let promise = new Promise((resolve, reject) => {
+      if (url.pathname.startsWith('/A')) {
+        fetch('/ajax/animation/list.php', { method: 'post', body: JSON.stringify({ url: url, type: url.pathname[1] }) })
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(data) {
+            let pushUrl;
+            if (url.search !== data.uploadMessage)
+              pushUrl = url.pathname + url.search + url.hash;
+            else {
+              if (!that.id) {
+                let uploads = JSON.parse(window.localStorage.getItem('uploads'));
+                if (uploads === null)
+                  uploads = [];
+                if (!uploads.includes(data.animation.id))
+                  uploads.push(data.animation.id);
+                window.localStorage.setItem('uploads', JSON.stringify(uploads));
+              } else {
+                fetch('/ajax/user/authenticate.php', {
+                  method: 'post',
+                  body: JSON.stringify({ email: that.email, password: that.password, uploads: [data.animation.id] })
+                }).then(response => response.json())
+                  .then(data => {
+                    if (data.error) {
+                      that.password = null;
+                      that.email = '!';
+                      that.load('/');
+                      ModalDialog.run('Error', data.error);
+                    } else
+                      ModalDialog.run(`Upload associated`,
+                        `Your upload has successfully been associated with your webots.cloud account`);
+                  });
+              }
+              pushUrl = url.pathname + url.hash;
+            }
+            if (pushHistory)
+              window.history.pushState(null, '', pushUrl);
+            if (data.error) { // no such animation
+              that.notFound();
+              resolve();
+            } else {
+              that.runWebotsView(data.animation);
+              resolve();
+            }
+          });
+      } else {
+
+      }
       const username = url.pathname.substring(1);
       const content = {
         method: 'post',
