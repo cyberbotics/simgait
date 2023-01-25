@@ -109,7 +109,8 @@ export default class Animation extends Project {
       let body = new FormData(modal.querySelector('form'));
       body.append('user', project.id);
       body.append('password', project.password);
-      console.log(body.values())
+      for (const value of body.values())
+        console.log(value)
       fetch('/ajax/animation/create.php', { method: 'post', body: body })
         .then(function(response) {
           console.log(response.text())
