@@ -115,7 +115,6 @@ export default class Project extends User {
           document.querySelector('#user-menu').style.display = 'auto';
           document.querySelector('#log-in').style.display = 'none';
           document.querySelector('#sign-up').style.display = 'none';
-          this.updateDisplayName();
         } else {
           document.querySelector('#user-menu').style.display = 'none';
           document.querySelector('#log-in').style.display = 'flex';
@@ -128,14 +127,10 @@ export default class Project extends User {
   }
   _loadContent(data, resolve) {
     if (data) {
-      // scene or animation
       const reference = 'storage' + data.url.substring(data.url.lastIndexOf('/'));
       this.setupWebotsView(data.duration > 0 ? 'animation' : 'scene', data);
-      if (data.duration > 0) {
-        Project.webotsView.loadAnimation(`${reference}/scene.x3d`, `${reference}/animation.json`, false,
-          undefined, `${reference}/thumbnail.jpg`);
-      } else
-        Project.webotsView.loadScene(`${reference}/scene.x3d`, this._isMobileDevice(), `${reference}/thumbnail.jpg`);
+      Project.webotsView.loadAnimation(`${reference}/scene.x3d`, `${reference}/animation.json`, false,
+        undefined, `${reference}/thumbnail.jpg`);
       resolve();
     }
   }
