@@ -90,6 +90,6 @@
   die(json_encode($answer));
 
   function myErrorHandler($errno, $errstr, $errfile, $errline) {
-    die($errstr);
+    die("bonjour");
   }
  ?>
