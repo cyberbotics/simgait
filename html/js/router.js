@@ -8,7 +8,7 @@ export default class Router {
     body.classList.add('has-navbar-fixed-top');
     this.resetNavbar();
     body.append(this.content);
-    this.content.append(footer);
+    this.content.appendChild(footer);
     let that = this;
     // Catch clicks on the root-level element.
     body.addEventListener('click', function(event) {
