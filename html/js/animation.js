@@ -110,24 +110,12 @@ export default class Animation extends Project {
               .then(function(data) {
                 if (data.status !== 'uploaded')
                   modal.error(data.error);
-                else {
+                else
                   modal.close();
-                  if (!project.id) {
-                    ModalDialog.run(`Anonymous animation uploaded`,
-                      `The animation you just uploaded may be deleted anytime by anyone.<br>` +
-                      `To prevent this, you should associate it with your webots.cloud account: ` +
-                      `log in or sign up for a new account now from this browser.`);
-                    let uploads = JSON.parse(window.localStorage.getItem('uploads'));
-                    if (uploads === null)
-                      uploads = [];
-                    uploads.push(id);
-                    window.localStorage.setItem('uploads', JSON.stringify(uploads));
-                  }
-                }
-              });
 
-            const p = (total === 0) ? 1 : Math.ceil(total / this.pageLimit);
-            project.load(`/animation${(p > 1) ? ('?p=' + p) : ''}`);
+                const p = (total === 0) ? 1 : Math.ceil(total / this.pageLimit);
+                project.load(`/animation${(p > 1) ? ('?p=' + p) : ''}`);
+              });
           }
         });
     });
