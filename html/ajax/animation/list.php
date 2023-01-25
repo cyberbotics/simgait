@@ -24,10 +24,11 @@
     $url = $mysqli->escape_string($data->url);
     $uri = substr($url, strrpos($url, '/'));
     $uploadMessage = "?upload=webots";
+    die("Line 27");
+
     if (str_ends_with($uri, $uploadMessage))
       $uri = substr($uri, 0, strrpos($uri, '?'));
     $id = string_to_mysql_id(substr($uri, 2)); // skipping '/A'
-    die("Before query");
     $query = "UPDATE animation SET viewed = viewed + 1 WHERE id=$id";
     $mysqli->query($query) or error($mysqli->error);
     $query = "SELECT * FROM animation WHERE id=$id AND $condition";
