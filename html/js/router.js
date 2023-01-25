@@ -4,6 +4,7 @@ export default class Router {
     this.content = document.createElement('div');
     this.content.id = 'scrollable-body';
     this.routes = routes;
+    this.footer = footer;
     const body = document.querySelector('body');
     body.classList.add('has-navbar-fixed-top');
     this.resetNavbar();
@@ -17,7 +18,8 @@ export default class Router {
         element = element.parentElement;
       if (element.tagName === 'A' && element.href && event.button === 0) { // left click on an <a href=...>
         if (element.origin === document.location.origin &&
-            (element.pathname !== document.location.pathname || document.location.hash === element.hash || element.hash === '')) {
+            (element.pathname !== document.location.pathname || document.location.hash === element.hash ||
+              element.hash === '')) {
           // same-origin navigation: a link within the site (we are skipping linking to the same page with possibly hashtags)
           event.preventDefault(); // prevent the browser from doing the navigation
           that.load(element.pathname + element.hash);
@@ -154,6 +156,7 @@ export default class Router {
         that.content.appendChild(item);
       });
     }
+    this.content.appendChild(this.footer);
     if (fullpage) {
       document.querySelector('body footer').style.display = 'none';
       document.querySelector('body nav').style.display = 'none';
