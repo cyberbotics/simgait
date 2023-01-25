@@ -6,7 +6,7 @@ export default class Project extends User {
     let that = this;
     let promise = new Promise((resolve, reject) => {
       if (url.pathname.startsWith('/A')) {
-        fetch('/ajax/animation/list.php', { method: 'post', body: JSON.stringify({ url: url, type: url.pathname[1] }) })
+        fetch('/ajax/animation/list.php', { method: 'post', body: JSON.stringify({ url: url }) })
           .then(function(response) {
             return response.json();
           })
