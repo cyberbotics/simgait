@@ -314,3 +314,8 @@ div.table-container {
     transition: all 0.2s ease-in-out;
     transition-delay: 0.5s;
 }
+
+#webots-view-container {
+    height: 100%;
+    max-width: none;
+}
