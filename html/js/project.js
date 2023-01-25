@@ -133,7 +133,7 @@ export default class Project extends User {
       this.setupWebotsView(data.duration > 0 ? 'animation' : 'scene', data);
       if (data.duration > 0) {
         Project.webotsView.loadAnimation(`${reference}/scene.x3d`, `${reference}/animation.json`, false,
-          this._isMobileDevice(), `${reference}/thumbnail.jpg`);
+          undefined, `${reference}/thumbnail.jpg`);
       } else
         Project.webotsView.loadScene(`${reference}/scene.x3d`, this._isMobileDevice(), `${reference}/thumbnail.jpg`);
       resolve();
