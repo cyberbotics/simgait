@@ -39,20 +39,23 @@ export default class Animation extends Project {
       project.content.querySelector('section[data-content="proto"] > div > table > thead > tr')
         ?.appendChild(document.createElement('th'));
   }
-
   addAnimation(project) {
-    const content = {};
-    content.innerHTML = `<div class="field">
-      <label class="label">Webots animation</label>
-      <div class="control has-icons-left">
-        <input id="animation-file" name="animation-file" class="input" type="file" required accept=".json">
-        <span class="icon is-small is-left">
-          <i class="fas fa-upload"></i>
-        </span>
-      </div>
-      <div class="help">Upload the Webots animation file: <em>animation.json</em></div>
-    </div>
-    <div class="field">
+    const type = 'A';
+    let content = {};
+    if (type === 'A')
+      content.innerHTML = `<div class="field">
+        <label class="label">Webots animation</label>
+        <div class="control has-icons-left">
+          <input id="animation-file" name="animation-file" class="input" type="file" required accept=".json">
+          <span class="icon is-small is-left">
+            <i class="fas fa-upload"></i>
+          </span>
+        </div>
+        <div class="help">Upload the Webots animation file: <em>animation.json</em></div>
+      </div>`;
+    else
+      content.innerHTML = '';
+    content.innerHTML += `<div class="field">
         <label class="label">Webots scene</label>
         <div class="control has-icons-left">
           <input id="scene-file" name="scene-file" class="input" type="file" required accept=".x3d">
@@ -61,6 +64,16 @@ export default class Animation extends Project {
           </span>
         </div>
         <div class="help">Upload the Webots X3D scene file: <em>scene.x3d</em></div>
+      </div>
+      <div class="field">
+        <label class="label">Webots thumbnail</label>
+        <div class="control has-icons-left">
+          <input id="thumbnail-file" name="thumbnail-file" class="input" type="file" accept=".jpg">
+          <span class="icon is-small is-left">
+            <i class="fas fa-upload"></i>
+          </span>
+        </div>
+        <div class="help">Upload the thumbnail file: <em>thumbnail.jpg</em></div>
       </div>
       <div class="field">
         <label class="label">Texture files</label>
@@ -84,40 +97,136 @@ export default class Animation extends Project {
           <em>*.dae</em> and/or <em>*.stl</em></div>
       </div>`;
     let cancelled = false;
-    const title = 'Add an animation';
-    const modal = ModalDialog.run(title, content.innerHTML, 'Cancel', 'Add');
-    const input = modal.querySelector(`#animation-file`);
+    const title = (type === 'A') ? 'Add an animation' : 'Add a scene';
+    let modal = ModalDialog.run(title, content.innerHTML, 'Cancel', 'Add');
+    const typeName = (type === 'A') ? 'animation' : 'scene';
+    let input = modal.querySelector(`#${typeName}-file`);
     input.focus();
     modal.querySelector('button.cancel').addEventListener('click', function() { cancelled = true; });
-    modal.querySelector('form').addEventListener('submit', event => {
+    modal.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
       modal.querySelector('button[type="submit"]').classList.add('is-loading');
-      const body = new FormData(modal.querySelector('form'));
+      let body = new FormData(modal.querySelector('form'));
       body.append('user', project.id);
       body.append('password', project.password);
       fetch('/ajax/animation/create.php', { method: 'post', body: body })
-        .then(response => response.json())
-        .then(data => {
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
           if (data.error)
             modal.error(data.error);
           else if (!cancelled) {
             const id = data.id;
             const total = data.total;
             fetch('/ajax/animation/create.php', { method: 'post', body: JSON.stringify({ uploading: 0, uploadId: id }) })
-              .then(response => response.json())
-              .then(data => {
+              .then(function(response) {
+                return response.json();
+              })
+              .then(function(data) {
                 if (data.status !== 'uploaded')
                   modal.error(data.error);
-                else
+                else {
                   modal.close();
-
-                const p = (total === 0) ? 1 : Math.ceil(total / this.pageLimit);
-                project.load(`/animation${(p > 1) ? ('?p=' + p) : ''}`);
+                  if (!project.id) {
+                    ModalDialog.run(`Anonymous ${typeName} uploaded`,
+                      `The ${typeName} you just uploaded may be deleted anytime by anyone.<br>` +
+                      `To prevent this, you should associate it with your webots.cloud account: ` +
+                      `log in or sign up for a new account now from this browser.`);
+                    let uploads = JSON.parse(window.localStorage.getItem('uploads'));
+                    if (uploads === null)
+                      uploads = [];
+                    uploads.push(id);
+                    window.localStorage.setItem('uploads', JSON.stringify(uploads));
+                  }
+                }
               });
+
+            const p = (total === 0) ? 1 : Math.ceil(total / 8);
+            project.load(`/${typeName}${(p > 1) ? ('?p=' + p) : ''}`);
           }
         });
     });
   }
+
+  // addAnimation(project) {
+  //   const content = {};
+  //   content.innerHTML = `<div class="field">
+  //     <label class="label">Webots animation</label>
+  //     <div class="control has-icons-left">
+  //       <input id="animation-file" name="animation-file" class="input" type="file" required accept=".json">
+  //       <span class="icon is-small is-left">
+  //         <i class="fas fa-upload"></i>
+  //       </span>
+  //     </div>
+  //     <div class="help">Upload the Webots animation file: <em>animation.json</em></div>
+  //   </div>
+  //   <div class="field">
+  //       <label class="label">Webots scene</label>
+  //       <div class="control has-icons-left">
+  //         <input id="scene-file" name="scene-file" class="input" type="file" required accept=".x3d">
+  //         <span class="icon is-small is-left">
+  //           <i class="fas fa-upload"></i>
+  //         </span>
+  //       </div>
+  //       <div class="help">Upload the Webots X3D scene file: <em>scene.x3d</em></div>
+  //     </div>
+  //     <div class="field">
+  //       <label class="label">Texture files</label>
+  //       <div class="control has-icons-left">
+  //         <input id="texture-files" name="textures[]" class="input" type="file" multiple accept=".jpg, .jpeg, .png, .hrd">
+  //         <span class="icon is-small is-left">
+  //           <i class="fas fa-upload"></i>
+  //         </span>
+  //       </div>
+  //       <div class="help">Upload all the texture files: <em>*.png</em>, <em>*.jpg</em> and/or <em>*.hdr</em></div>
+  //     </div>
+  //     <div class="field">
+  //       <label class="label">Mesh files</label>
+  //       <div class="control has-icons-left">
+  //         <input id="texture-files" name="meshes[]" class="input" type="file" multiple accept=".stl, .obj, .mtl, .dae">
+  //         <span class="icon is-small is-left">
+  //           <i class="fas fa-upload"></i>
+  //         </span>
+  //       </div>
+  //       <div class="help">Upload all the meshes files: <em>*.obj</em>, <em>*.mtl</em>,
+  //         <em>*.dae</em> and/or <em>*.stl</em></div>
+  //     </div>`;
+  //   let cancelled = false;
+  //   const title = 'Add an animation';
+  //   const modal = ModalDialog.run(title, content.innerHTML, 'Cancel', 'Add');
+  //   const input = modal.querySelector(`#animation-file`);
+  //   input.focus();
+  //   modal.querySelector('button.cancel').addEventListener('click', function() { cancelled = true; });
+  //   modal.querySelector('form').addEventListener('submit', event => {
+  //     event.preventDefault();
+  //     modal.querySelector('button[type="submit"]').classList.add('is-loading');
+  //     const body = new FormData(modal.querySelector('form'));
+  //     body.append('user', project.id);
+  //     body.append('password', project.password);
+  //     fetch('/ajax/animation/create.php', { method: 'post', body: body })
+  //       .then(response => response.json())
+  //       .then(data => {
+  //         if (data.error)
+  //           modal.error(data.error);
+  //         else if (!cancelled) {
+  //           const id = data.id;
+  //           const total = data.total;
+  //           fetch('/ajax/animation/create.php', { method: 'post', body: JSON.stringify({ uploading: 0, uploadId: id }) })
+  //             .then(response => response.json())
+  //             .then(data => {
+  //               if (data.status !== 'uploaded')
+  //                 modal.error(data.error);
+  //               else
+  //                 modal.close();
+  //
+  //               const p = (total === 0) ? 1 : Math.ceil(total / this.pageLimit);
+  //               project.load(`/animation${(p > 1) ? ('?p=' + p) : ''}`);
+  //             });
+  //         }
+  //       });
+  //   });
+  // }
 
   mainContainer(project) {
     let display;
