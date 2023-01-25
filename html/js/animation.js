@@ -134,7 +134,11 @@ export default class Animation extends Project {
   }
 
   mainContainer(project) {
-    const display = 'none';
+    let display;
+    if (typeof project.id === 'undefined')
+      display = 'none';
+    else
+      display = 'block';
     const template = document.createElement('template');
     template.innerHTML =
       `<div id="main-container"><div id="tab-content">
