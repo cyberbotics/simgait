@@ -51,32 +51,31 @@ export default class Project extends User {
             }
           });
       } else {
-
+        const username = url.pathname.substring(1);
+        const content = {
+          method: 'post',
+          body: JSON.stringify({
+            email: that.email,
+            password: that.password,
+            username: username
+          })
+        };
+        fetch('/ajax/project/user.php', content)
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(data) {
+            if (pushHistory)
+              window.history.pushState(null, name, url.pathname + url.search + url.hash);
+            if (data.error) { // no such user
+              that.notFound();
+              resolve();
+            } else {
+              that.userPage(data);
+              resolve();
+            }
+          });
       }
-      const username = url.pathname.substring(1);
-      const content = {
-        method: 'post',
-        body: JSON.stringify({
-          email: that.email,
-          password: that.password,
-          username: username
-        })
-      };
-      fetch('/ajax/project/user.php', content)
-        .then(function(response) {
-          return response.json();
-        })
-        .then(function(data) {
-          if (pushHistory)
-            window.history.pushState(null, name, url.pathname + url.search + url.hash);
-          if (data.error) { // no such user
-            that.notFound();
-            resolve();
-          } else {
-            that.userPage(data);
-            resolve();
-          }
-        });
     });
     return promise;
   }
