@@ -201,7 +201,7 @@ webots-view {
   height: 4px;
 }
 
-#main-container {
+#scrollable-body {
   height: calc(100% - 3.25rem);
   width: 100vw;
   min-width: 325px;
@@ -212,8 +212,13 @@ webots-view {
   left: 0;
 }
 
+#main-container {
+  min-height: calc(100vh - 260px);
+}
+
 #main-container.webotsView {
   height: calc(100% - 48px);
+  min-height: 10px;
 }
 
 div.table-container {
