@@ -135,7 +135,8 @@ export default class Animation extends Project {
 
   mainContainer(project) {
     let display;
-    if (typeof project.id === 'undefined')
+    console.log(project)
+    if (!project.id)
       display = 'none';
     else
       display = 'block';
