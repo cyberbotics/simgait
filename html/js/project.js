@@ -120,7 +120,7 @@ export default class Project extends User {
           document.querySelector('#log-in').style.display = 'flex';
           document.querySelector('#sign-up').style.display = 'flex';
         }
-        if (this.email === '!')
+        if (this.username === '!')
           this.login();
       }
     });
