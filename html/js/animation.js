@@ -43,7 +43,7 @@ export default class Animation extends Project {
   addAnimation(project) {
     if (typeof project.id === 'undefined')
       return;
-
+    console.log(project.id)
     const content = {};
     content.innerHTML = `<div class="field">
       <label class="label">Webots animation</label>
