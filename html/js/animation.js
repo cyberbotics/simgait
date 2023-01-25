@@ -135,10 +135,15 @@ export default class Animation extends Project {
 
   mainContainer(project) {
     const template = document.createElement('template');
-    let addButton = `
-    <div class="buttons">
-      <button class="button" id="add-a-new-animation">Add a new animation</button>
-    </div>`;
+    let addButton;
+    console.log(project)
+    if (project.id) {
+      addButton = `
+      <div class="buttons">
+        <button class="button" id="add-a-new-animation">Add a new animation</button>
+      </div>`;
+    }
+
     template.innerHTML =
       `<div id="tab-content">
         <section class="section is-active" data-content="animation">
