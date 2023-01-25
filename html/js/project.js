@@ -8,6 +8,7 @@ export default class Project extends User {
       if (url.pathname.startsWith('/A')) {
         fetch('/ajax/animation/list.php', { method: 'post', body: JSON.stringify({ url: url }) })
           .then(function(response) {
+            console.log(response.text())
             return response.json();
           })
           .then(function(data) {
