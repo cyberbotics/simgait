@@ -68,7 +68,6 @@ export default class Router {
     }
   }
   load(page = null, pushHistory = true) {
-    console.error(page)
     let that = this;
     let promise = new Promise((resolve, reject) => {
       for (let i = 0; i < that.routes.length; i++) {
@@ -86,7 +85,6 @@ export default class Router {
         that.notFound();
         resolve();
       } else {
-        console.log("first step")
         let found = false;
         for (let i = 0; i < that.routes.length; i++) {
           const route = that.routes[i];
@@ -101,7 +99,6 @@ export default class Router {
           }
         }
         if (!found) {
-          console.log("not found in route")
           that.dynamicPage(url, pushHistory).then(() => {
             resolve();
           });

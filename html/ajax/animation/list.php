@@ -21,6 +21,7 @@
   else // animation
     $condition .= "duration > 0";
   if (isset($data->url)) { // view request
+    die("Animation url found");
     $url = $mysqli->escape_string($data->url);
     $uri = substr($url, strrpos($url, '/'));
     $uploadMessage = "?upload=webots";
