@@ -138,6 +138,8 @@
       error("Unknown user: $user.");
     if ($password['password'] !== $_POST['password'])
       error("Wrong password for user $user.");
+  } else {
+    error("No user");
   }
   $branch = basename(dirname(__FILE__, 4));
   $query = "INSERT INTO animation(title, description, version, duration, size, user, branch) ".

@@ -135,7 +135,6 @@ export default class Animation extends Project {
 
   mainContainer(project) {
     let display;
-    console.log(project)
     if (!project.id)
       display = 'none';
     else
