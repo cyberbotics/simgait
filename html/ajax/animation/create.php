@@ -91,7 +91,7 @@
   $user = (isset($_POST['user'])) ? intval($_POST['user']) : 0;
 
   // determine title, info and version
-  $file = fopen($_FILES['scene-file']['tmp_name'], 'r') or error('Unable to open scene file');
+  $file = fopen($_FILES['scene-file']['tmp_name'], 'r') or error('Unable to open scene file' . $_FILES['scene-file']['tmp_name']);
   $count = 0;
   $world_info = false;
   while (!feof($file)) {
