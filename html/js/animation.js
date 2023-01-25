@@ -398,7 +398,7 @@ export default class Animation extends Project {
       ? `Delete your animation` : (admin ? `Delete this animation as administrator` : ''));
     const deleteIcon = (data.user === 0 || parseInt(project.id) === data.user || admin)
       ? `<i${style} class="is-clickable far fa-trash-alt" id="animation-${data.id}" title="${tooltip}"></i>` : '';
-    const uploaded = data.uploaded.replace(' ', `<br>${deleteIcon} `);function
+    const uploaded = data.uploaded.replace(' ', `<br>${deleteIcon} `);
     const title = data.title === '' ? '<i>anonymous</i>' : data.title;
     let row = `
 <td class="has-text-centered">${data.viewed}</td>
