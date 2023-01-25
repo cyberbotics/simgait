@@ -41,9 +41,6 @@ export default class Animation extends Project {
   }
 
   addAnimation(project) {
-    if (typeof project.id === 'undefined')
-      return;
-    console.log(project.id)
     const content = {};
     content.innerHTML = `<div class="field">
       <label class="label">Webots animation</label>
@@ -138,6 +135,10 @@ export default class Animation extends Project {
 
   mainContainer(project) {
     const template = document.createElement('template');
+    let addButton = `
+    <div class="buttons">
+      <button class="button" id="add-a-new-animation">Add a new animation</button>
+    </div>`;
     template.innerHTML =
       `<div id="tab-content">
         <section class="section is-active" data-content="animation">
@@ -191,9 +192,7 @@ export default class Animation extends Project {
           </div>
           <nav class="pagination is-small is-rounded" role="navigation" aria-label="pagination">
           </nav>
-          <div class="buttons">
-            <button class="button" id="add-a-new-animation">Add a new animation</button>
-          </div>
+          ${addButton}
         </section>
       </div>`;
     super.setup('animation', [], template.content);
