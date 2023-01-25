@@ -101,6 +101,7 @@ export default class Router {
           }
         }
         if (!found) {
+          console.log("not found in route")
           that.dynamicPage(url, pushHistory).then(() => {
             resolve();
           });
