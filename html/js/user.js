@@ -364,6 +364,7 @@ export default class User extends Router {
       that.password = null;
       that.email = null;
       that.id = null;
+      that.category = null;
       if (window.location.pathname === '/settings')
         that.load('/');
       else
