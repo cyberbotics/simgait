@@ -137,7 +137,7 @@ export default class Animation extends Project {
 
   mainContainer(project) {
     const template = document.createElement('template');
-    let addButton;
+    let addButton = '';
     console.log(project)
     if (project.id) {
       addButton = `
