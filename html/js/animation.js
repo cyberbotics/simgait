@@ -134,9 +134,8 @@ export default class Animation extends Project {
   }
 
   mainContainer(project) {
-    console.log(project.email)
     let display;
-    if (!project.id)
+    if (!project.email)
       display = 'none';
     else
       display = 'block';
