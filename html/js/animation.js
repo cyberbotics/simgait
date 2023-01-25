@@ -51,8 +51,8 @@ export default class Animation extends Project {
         </span>
       </div>
       <div class="help">Upload the Webots animation file: <em>animation.json</em></div>
-    </div>`;
-    content.innerHTML += `<div class="field">
+    </div>
+    <div class="field">
         <label class="label">Webots scene</label>
         <div class="control has-icons-left">
           <input id="scene-file" name="scene-file" class="input" type="file" required accept=".x3d">
