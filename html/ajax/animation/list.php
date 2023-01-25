@@ -25,10 +25,9 @@
     $uri = substr($url, strrpos($url, '/'));
     $uploadMessage = "?upload=webots";
     try {
-      if (str_ends_with($uri, $uploadMessage))
-        $uri = substr($uri, 0, strrpos($uri, '?'));
+      
     } catch (Exception $e) {
-        die('Caught exception: \n');
+        die("Caught exception:");
     }
     die("skip catch");
     $id = string_to_mysql_id(substr($uri, 2)); // skipping '/A'
