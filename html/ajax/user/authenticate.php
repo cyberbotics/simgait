@@ -16,7 +16,7 @@
   $mysqli->set_charset('utf8');
   $email = $mysqli->escape_string($data->{'email'});
   $password = $mysqli->escape_string($data->{'password'});
-  $result = $mysqli->query("SELECT username, category, enabled, password FROM user WHERE email=\"$email\"")
+  $result = $mysqli->query("SELECT username, category, enabled, password, id FROM user WHERE email=\"$email\"")
     or error($mysqli->error);
   $user = $result->fetch_assoc();
   $result->free();
