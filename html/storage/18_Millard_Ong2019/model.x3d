@@ -33,7 +33,7 @@
 <TextureCoordinate point='16.0000 0.0000, 0.0000 16.0000, 0.0000 0.0000, 16.0000 16.0000'></TextureCoordinate>
 </IndexedFaceSet>
 </Shape></Transform>
-<Transform id='n13' type='solid' rotation='1 0 0 1.5708'>
+<Transform id='n13' type='solid' name='skeleton' rotation='1 0 0 1.5708'>
 <Transform id='n14' name='pelvis'><Shape id='n15' castShadows='true'><PBRAppearance id='n16' roughness='1' metalness='0' normalMapFactor='0.2'>
 <ImageTexture id='n17'
  url='https://raw.githubusercontent.com/cyberbotics/webots/R2022a/projects/appearances/protos/textures/marble/marble_base_color.jpg'

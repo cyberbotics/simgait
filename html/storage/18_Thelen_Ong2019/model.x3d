@@ -33,29 +33,29 @@
 <TextureCoordinate point='16.0000 0.0000, 0.0000 16.0000, 0.0000 0.0000, 16.0000 16.0000'></TextureCoordinate>
 </IndexedFaceSet>
 </Shape></Transform>
-<Transform id='n13' type='solid' rotation='1 0 0 1.5708'>
+<Transform id='n13' type='solid' name='skeleton' rotation='1 0 0 1.5708'>
 <Transform id='n14' name='pelvis'><Shape id='n15' castShadows='true'><PBRAppearance id='n16' roughness='1' metalness='0' normalMapFactor='0.2'>
 <ImageTexture id='n17'
  url='https://raw.githubusercontent.com/cyberbotics/webots/R2022a/projects/appearances/protos/textures/marble/marble_base_color.jpg'
- containerField='' origChannelCount='3' isTransparent='false' role='baseColor'>
+ containerField='' origChannelCount='3' isTransparent='false' role='baseColorMap'>
 <TextureProperties id='n18' anisotropicDegree='8' generateMipMaps='true' minificationFilter='AVG_PIXEL'
  magnificationFilter='AVG_PIXEL'/>
 </ImageTexture>
 <ImageTexture id='n19'
  url='https://raw.githubusercontent.com/cyberbotics/webots/R2022a/projects/appearances/protos/textures/marble/marble_roughness.jpg'
- containerField='' origChannelCount='3' isTransparent='false' role='roughness'>
+ containerField='' origChannelCount='3' isTransparent='false' role='roughnessMap'>
 <TextureProperties id='n20' anisotropicDegree='8' generateMipMaps='true' minificationFilter='AVG_PIXEL'
  magnificationFilter='AVG_PIXEL'/>
 </ImageTexture>
 <ImageTexture id='n21'
  url='https://raw.githubusercontent.com/cyberbotics/webots/R2022a/projects/appearances/protos/textures/marble/marble_normal.jpg'
- containerField='' origChannelCount='3' isTransparent='false' role='normal'>
+ containerField='' origChannelCount='3' isTransparent='false' role='normalMap'>
 <TextureProperties id='n22' anisotropicDegree='8' generateMipMaps='true' minificationFilter='AVG_PIXEL'
  magnificationFilter='AVG_PIXEL'/>
 </ImageTexture>
 <ImageTexture id='n23'
  url='https://raw.githubusercontent.com/cyberbotics/webots/R2022a/projects/appearances/protos/textures/marble/marble_occlusion.jpg'
- containerField='' origChannelCount='3' isTransparent='false' role='occlusion'>
+ containerField='' origChannelCount='3' isTransparent='false' role='occlusionMap'>
 <TextureProperties id='n24' anisotropicDegree='8' generateMipMaps='true' minificationFilter='AVG_PIXEL'
  magnificationFilter="AVG_PIXEL"/>
 </ImageTexture>
