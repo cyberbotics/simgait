@@ -269,7 +269,7 @@ export default class GraphWindow {
       this.fourGraph();
 
       const container = document.getElementsByClassName('graph-container')[0];
-
+      console.log(container)
       onresize(container, function() {
         console.log(container.offsetHeight)
         if (container.offsetHeight > 700)
