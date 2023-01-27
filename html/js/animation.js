@@ -40,67 +40,42 @@ export default class Animation extends Project {
         ?.appendChild(document.createElement('th'));
   }
   addAnimation(project) {
-    const type = 'A';
     let content = {};
-    if (type === 'A')
-      content.innerHTML = `<div class="field">
-        <label class="label">Webots animation</label>
-        <div class="control has-icons-left">
-          <input id="animation-file" name="animation-file" class="input" type="file" required accept=".json">
-          <span class="icon is-small is-left">
-            <i class="fas fa-upload"></i>
-          </span>
-        </div>
-        <div class="help">Upload the Webots animation file: <em>animation.json</em></div>
-      </div>`;
-    else
-      content.innerHTML = '';
-    content.innerHTML += `<div class="field">
-        <label class="label">Webots scene</label>
-        <div class="control has-icons-left">
-          <input id="scene-file" name="scene-file" class="input" type="file" required accept=".x3d">
-          <span class="icon is-small is-left">
-            <i class="fas fa-upload"></i>
-          </span>
-        </div>
-        <div class="help">Upload the Webots X3D scene file: <em>scene.x3d</em></div>
+    content.innerHTML = `<div class="field">
+      <label class="label">Webots animation</label>
+      <div class="control has-icons-left">
+        <input id="animation-file" name="animation-file" class="input" type="file" required accept=".json">
+        <span class="icon is-small is-left">
+          <i class="fas fa-upload"></i>
+        </span>
       </div>
-      <div class="field">
-        <label class="label">Webots thumbnail</label>
-        <div class="control has-icons-left">
-          <input id="thumbnail-file" name="thumbnail-file" class="input" type="file" accept=".jpg">
-          <span class="icon is-small is-left">
-            <i class="fas fa-upload"></i>
-          </span>
-        </div>
-        <div class="help">Upload the thumbnail file: <em>thumbnail.jpg</em></div>
+      <div class="help">Upload the Webots animation file: <em>animation.json</em></div>
+    </div>
+    <div class="field">
+      <label class="label">Angles file</label>
+      <div class="control has-icons-left">
+        <input id="angle-file" name="angle-file" class="input" type="file" required accept=".json">
+        <span class="icon is-small is-left">
+          <i class="fas fa-upload"></i>
+        </span>
       </div>
-      <div class="field">
-        <label class="label">Texture files</label>
-        <div class="control has-icons-left">
-          <input id="texture-files" name="textures[]" class="input" type="file" multiple accept=".jpg, .jpeg, .png, .hrd">
-          <span class="icon is-small is-left">
-            <i class="fas fa-upload"></i>
-          </span>
-        </div>
-        <div class="help">Upload all the texture files: <em>*.png</em>, <em>*.jpg</em> and/or <em>*.hdr</em></div>
+      <div class="help">Upload the Webots animation file: <em>animation.json</em></div>
+    </div>
+    <div class="field">
+      <label class="label">Webots scene</label>
+      <div class="control has-icons-left">
+        <input id="scene-file" name="scene-file" class="input" type="file" required accept=".x3d">
+        <span class="icon is-small is-left">
+          <i class="fas fa-upload"></i>
+        </span>
       </div>
-      <div class="field">
-        <label class="label">Mesh files</label>
-        <div class="control has-icons-left">
-          <input id="texture-files" name="meshes[]" class="input" type="file" multiple accept=".stl, .obj, .mtl, .dae">
-          <span class="icon is-small is-left">
-            <i class="fas fa-upload"></i>
-          </span>
-        </div>
-        <div class="help">Upload all the meshes files: <em>*.obj</em>, <em>*.mtl</em>,
-          <em>*.dae</em> and/or <em>*.stl</em></div>
-      </div>`;
+      <div class="help">Upload the Webots X3D scene file: <em>scene.x3d</em></div>
+    </div>
+    `;
     let cancelled = false;
-    const title = (type === 'A') ? 'Add an animation' : 'Add a scene';
+    const title = 'Add an animation';
     let modal = ModalDialog.run(title, content.innerHTML, 'Cancel', 'Add');
-    const typeName = (type === 'A') ? 'animation' : 'scene';
-    let input = modal.querySelector(`#${typeName}-file`);
+    let input = modal.querySelector(`#animation-file`);
     input.focus();
     modal.querySelector('button.cancel').addEventListener('click', function() { cancelled = true; });
     modal.querySelector('form').addEventListener('submit', function(event) {
@@ -129,8 +104,8 @@ export default class Animation extends Project {
                 else {
                   modal.close();
                   if (!project.id) {
-                    ModalDialog.run(`Anonymous ${typeName} uploaded`,
-                      `The ${typeName} you just uploaded may be deleted anytime by anyone.<br>` +
+                    ModalDialog.run(`Anonymous animation uploaded`,
+                      `The animation you just uploaded may be deleted anytime by anyone.<br>` +
                       `To prevent this, you should associate it with your webots.cloud account: ` +
                       `log in or sign up for a new account now from this browser.`);
                     let uploads = JSON.parse(window.localStorage.getItem('uploads'));
@@ -141,7 +116,7 @@ export default class Animation extends Project {
                   }
                 }
                 const p = (total === 0) ? 1 : Math.ceil(total / 8);
-                project.load(`/${typeName}${(p > 1) ? ('?p=' + p) : ''}`);
+                project.load(`/animation${(p > 1) ? ('?p=' + p) : ''}`);
               });
           }
         });
