@@ -59,7 +59,7 @@ export default class Animation extends Project {
           <i class="fas fa-upload"></i>
         </span>
       </div>
-      <div class="help">Upload the Webots animation file: <em>animation.json</em></div>
+      <div class="help">Upload the Webots angles file: <em>angles.json</em></div>
     </div>
     <div class="field">
       <label class="label">Webots scene</label>
