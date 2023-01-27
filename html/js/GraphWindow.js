@@ -270,7 +270,7 @@ export default class GraphWindow {
 
       const container = document.getElementsByClassName('graph-container')[0];
       console.log(container)
-      onresize(container, function() {
+      this.onresize(container, function() {
         console.log(container.offsetHeight)
         if (container.offsetHeight > 700)
           this.eightGraph();
