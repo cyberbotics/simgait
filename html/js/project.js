@@ -132,6 +132,7 @@ export default class Project extends User {
       this.setupWebotsView(data.duration > 0 ? 'animation' : 'scene', data);
       Project.webotsView.onready = () => {
         const graphWindow = new GraphWindow();
+        graphWindow.fillCustomWindow(reference);
         console.log(data)
       }
       Project.webotsView.loadAnimation(`${reference}/scene.x3d`, `${reference}/animation.json`, false,
