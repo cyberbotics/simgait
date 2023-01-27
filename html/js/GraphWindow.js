@@ -143,6 +143,7 @@ export default class GraphWindow {
 
   createGraphs(json) {
     if (typeof this.view.toolbar !== 'undefined') {
+      console.log("test")
       this.view.setCustomWindowTitle('Interactive Charts');
       this.view.setCustomWindowTooltip('Interactive Charts');
       this.view.setCustomWindowContent(`
