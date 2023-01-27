@@ -130,11 +130,11 @@ export default class Project extends User {
     if (data) {
       const reference = 'storage' + data.url.substring(data.url.lastIndexOf('/'));
       this.setupWebotsView(data.duration > 0 ? 'animation' : 'scene', data);
+      Project.webotsView.showCustomWindow = true;
       Project.webotsView.onready = () => {
         const graphWindow = new GraphWindow(Project.webotsView);
         graphWindow.fillCustomWindow(reference);
-        console.log(data)
-      }
+      };
       Project.webotsView.loadAnimation(`${reference}/scene.x3d`, `${reference}/animation.json`, false,
         undefined, `${reference}/thumbnail.jpg`);
       resolve();

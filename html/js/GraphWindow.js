@@ -143,7 +143,6 @@ export default class GraphWindow {
 
   createGraphs(json) {
     if (typeof this.view.toolbar !== 'undefined') {
-      console.log("test")
       this.view.setCustomWindowTitle('Interactive Charts');
       this.view.setCustomWindowTooltip('Interactive Charts');
       this.view.setCustomWindowContent(`
@@ -272,6 +271,7 @@ export default class GraphWindow {
       const container = document.getElementsByClassName('graph-container')[0];
 
       onresize(container, function() {
+        console.log(container.offsetHeight)
         if (container.offsetHeight > 700)
           this.eightGraph();
         else
