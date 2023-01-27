@@ -131,7 +131,7 @@ export default class Project extends User {
       const reference = 'storage' + data.url.substring(data.url.lastIndexOf('/'));
       this.setupWebotsView(data.duration > 0 ? 'animation' : 'scene', data);
       Project.webotsView.onready = () => {
-        const graphWindow = new GraphWindow();
+        const graphWindow = new GraphWindow(Project.webotsView);
         graphWindow.fillCustomWindow(reference);
         console.log(data)
       }
