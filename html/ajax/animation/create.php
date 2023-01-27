@@ -150,7 +150,7 @@
   if (!move_uploaded_file($_FILES['animation-file']['tmp_name'], "$folder/animation.json"))
     error('Cannot move animation file.');
   if (!move_uploaded_file($_FILES['angles-file']['tmp_name'], "$folder/angles.json"))
-    error('Cannot move animation file.');
+    error('Cannot move angles file.');
   if (!move_uploaded_file($_FILES['scene-file']['tmp_name'], "$folder/scene.x3d"))
     error('Cannot move scene file.');
 

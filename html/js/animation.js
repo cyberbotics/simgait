@@ -54,7 +54,7 @@ export default class Animation extends Project {
     <div class="field">
       <label class="label">Angles file</label>
       <div class="control has-icons-left">
-        <input id="angle-file" name="angle-file" class="input" type="file" required accept=".json">
+        <input id="angles-file" name="angles-file" class="input" type="file" required accept=".json">
         <span class="icon is-small is-left">
           <i class="fas fa-upload"></i>
         </span>
