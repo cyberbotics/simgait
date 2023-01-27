@@ -269,9 +269,7 @@ export default class GraphWindow {
       this.fourGraph();
 
       const container = document.getElementsByClassName('graph-container')[0];
-      console.log(container)
-      this.onresize(container, function() {
-        console.log(container.offsetHeight)
+      this.onresize(container, () => {
         if (container.offsetHeight > 700)
           this.eightGraph();
         else
@@ -282,7 +280,6 @@ export default class GraphWindow {
   }
 
   onresize(domElem, callback) {
-    console.log("resize")
     const resizeObserver = new ResizeObserver(() => callback());
     resizeObserver.observe(domElem);
   };
