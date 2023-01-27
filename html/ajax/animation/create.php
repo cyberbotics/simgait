@@ -77,7 +77,7 @@
   // get files and variables from post
   $animation = array_key_exists('animation-file', $_FILES);
   $size = $animation ? $_FILES['animation-file']['size'] : 0;
-  die("".$_FILES['animation-file']['size']);
+  die("".$size);
   $size += $_FILES['scene-file']['size'];
   $thumbnailAvailable = (array_key_exists('thumbnail-file', $_FILES) && $_FILES['thumbnail-file']['tmp_name'] !== '') ? true : false;
   $size += $thumbnailAvailable ? $_FILES['thumbnail-file']['size'] : 0;
