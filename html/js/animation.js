@@ -140,10 +140,9 @@ export default class Animation extends Project {
                     window.localStorage.setItem('uploads', JSON.stringify(uploads));
                   }
                 }
+                const p = (total === 0) ? 1 : Math.ceil(total / 8);
+                project.load(`/${typeName}${(p > 1) ? ('?p=' + p) : ''}`);
               });
-
-            const p = (total === 0) ? 1 : Math.ceil(total / 8);
-            project.load(`/${typeName}${(p > 1) ? ('?p=' + p) : ''}`);
           }
         });
     });
