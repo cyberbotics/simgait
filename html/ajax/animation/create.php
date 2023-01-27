@@ -76,18 +76,12 @@
 
   // get files and variables from post
   $animation = array_key_exists('animation-file', $_FILES);
-  $size = $animation ? $_FILES['animation-file']['size'] : 0;
+  $size = $_FILES['animation-file']['size'];
+  $angles = array_key_exists('angles-file', $_FILES);
+
   $size += $_FILES['scene-file']['size'];
-  $thumbnailAvailable = (array_key_exists('thumbnail-file', $_FILES) && $_FILES['thumbnail-file']['tmp_name'] !== '') ? true : false;
-  $size += $thumbnailAvailable ? $_FILES['thumbnail-file']['size'] : 0;
+  $size += $_FILES['scene-file']['size'];
 
-  $total_textures = $_FILES['textures']['name'][0] ? count($_FILES['textures']['name']) : 0;
-  for($i = 0; $i < $total_textures; $i++)
-    $size += $_FILES['textures']['size'][$i];
-
-  $total_meshes = $_FILES['meshes']['name'][0] ? count($_FILES['meshes']['name']) : 0;
-  for($i = 0; $i < $total_meshes; $i++)
-    $size += $_FILES['meshes']['size'][$i];
   $user = (isset($_POST['user'])) ? intval($_POST['user']) : 0;
 
   // determine title, info and version
@@ -153,22 +147,14 @@
   $uri = '/' . $type . mysql_id_to_string($mysqli->insert_id);
   $folder = "../../storage$uri";
   mkdir($folder);
-  if ($animation && !move_uploaded_file($_FILES['animation-file']['tmp_name'], "$folder/animation.json"))
+  if (!move_uploaded_file($_FILES['animation-file']['tmp_name'], "$folder/animation.json"))
+    error('Cannot move animation file.');
+  if (!move_uploaded_file($_FILES['angles-file']['tmp_name'], "$folder/angles.json"))
     error('Cannot move animation file.');
   if (!move_uploaded_file($_FILES['scene-file']['tmp_name'], "$folder/scene.x3d"))
     error('Cannot move scene file.');
-  if ($thumbnailAvailable && !move_uploaded_file($_FILES['thumbnail-file']['tmp_name'], "$folder/thumbnail.jpg"))
-    error('Cannot move thumbnail file.');
-  if ($total_textures > 0)
-    move_assets($total_textures, "textures", $folder);
-  if ($total_meshes > 0)
-    move_assets($total_meshes, "meshes", $folder);
 
-  $condition = "branch=\"$branch\" AND ";
-  if ($type === 'S') // scene
-    $condition .= 'duration=0';
-  else // animation
-    $condition .= 'duration>0';
+  $condition = "branch=\"$branch\"";
   $result = $mysqli->query("SELECT COUNT(*) AS total FROM animation WHERE $condition") or error($mysqli->error);
   $count = $result->fetch_array(MYSQLI_ASSOC);
   $total = intval($count['total']);
