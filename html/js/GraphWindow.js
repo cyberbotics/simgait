@@ -282,6 +282,7 @@ export default class GraphWindow {
   }
 
   onresize(domElem, callback) {
+    console.log("resize")
     const resizeObserver = new ResizeObserver(() => callback());
     resizeObserver.observe(domElem);
   };
