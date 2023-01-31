@@ -264,7 +264,7 @@ export default class Animation extends Project {
           tbody.innerHTML = line;
           for (let i = 0; i < data.animations.length; i++) {
             const id = data.animations[i].id;
-            console.log(data.animation)
+            console.log(data.animations[i])
             document.getElementById('checkbox-' + id).onchange = () => this.handleInput(id, data.animations, project);
           }
           for (let i = 0; i < data.animations.length; i++) {
