@@ -134,6 +134,10 @@ export default class Animation extends Project {
             <table class="table is-striped is-hoverable">
               <thead>
                 <tr>
+                  <th class="is-clickable column-title" id="animation-select-viewed" title="Selected"
+                    style="text-align:center; width: 65px;">
+                    <i class="fas fa-chart-column"></i>
+                  </th>
                   <th class="is-clickable column-title" id="animation-sort-viewed" title="Number of views"
                     style="text-align:center; width: 65px;">
                     <i class="fas fa-chart-column"></i>
