@@ -135,7 +135,6 @@ export default class Project extends User {
         const graphWindow = new GraphWindow(Project.webotsView);
         graphWindow.fillCustomWindow(reference);
       };
-      console.log(this.test)
       Project.webotsView.loadAnimation(`${reference}/scene.x3d`, `${reference}/animation.json`, false,
         undefined, `${reference}/thumbnail.jpg`);
       resolve();

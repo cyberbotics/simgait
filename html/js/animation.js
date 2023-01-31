@@ -262,6 +262,8 @@ export default class Animation extends Project {
           table.style.marginBottom = (50 * (this.pageLimit - data.animations.length)) + 'px';
           const tbody = table.querySelector(`tbody`);
           tbody.innerHTML = line;
+          for (let i = 0; i < data.animations.length; i++)
+            console.log(document.getElementById('checkbox-' + data.animations[i].id))
           for (let i = 0; i < data.animations.length; i++) {
             const node = tbody.querySelector(`#animation-${data.animations[i].id}`);
             if (node) {
@@ -385,7 +387,7 @@ export default class Animation extends Project {
         duration = hour + duration;
       }
     }
-    project.test = 'bonjour';
+
     const admin = project.email ? project.email.endsWith('@cyberbotics.com') : false;
     const url = data.url.startsWith('https://webots.cloud') ? document.location.origin + data.url.substring(20) : data.url;
     const defaultThumbnailUrl = document.location.origin + '/images/thumbnail.jpg';
