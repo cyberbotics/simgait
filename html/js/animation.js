@@ -263,8 +263,8 @@ export default class Animation extends Project {
           const tbody = table.querySelector(`tbody`);
           tbody.innerHTML = line;
           for (let i = 0; i < data.animations.length; i++) {
-            const checkbox = document.getElementById('checkbox-' + data.animations[i].id)
-            checkbox.disabled = true
+            const id = data.animations[i].id;
+            document.getElementById('checkbox-' + id).onchange = () => this.handleInput(id, data.animations);
           }
           for (let i = 0; i < data.animations.length; i++) {
             const node = tbody.querySelector(`#animation-${data.animations[i].id}`);
@@ -279,6 +279,10 @@ export default class Animation extends Project {
           this.updatePagination(total);
         }
       });
+  }
+
+  handleInput(id, animations) {
+    console.log(id);
   }
 
   updatePagination(max) {
