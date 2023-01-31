@@ -262,8 +262,10 @@ export default class Animation extends Project {
           table.style.marginBottom = (50 * (this.pageLimit - data.animations.length)) + 'px';
           const tbody = table.querySelector(`tbody`);
           tbody.innerHTML = line;
-          for (let i = 0; i < data.animations.length; i++)
-            console.log(document.getElementById('checkbox-' + data.animations[i].id))
+          for (let i = 0; i < data.animations.length; i++) {
+            const checkbox = document.getElementById('checkbox-' + data.animations[i].id)
+            checkbox.disabled = true
+          }
           for (let i = 0; i < data.animations.length; i++) {
             const node = tbody.querySelector(`#animation-${data.animations[i].id}`);
             if (node) {
