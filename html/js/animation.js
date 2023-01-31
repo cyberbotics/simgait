@@ -398,7 +398,7 @@ export default class Animation extends Project {
     const uploaded = data.uploaded.replace(' ', `<br>${deleteIcon} `);
     const title = data.title === '' ? '<i>anonymous</i>' : data.title;
     let row = `
-<td><input type=checkbox></td>
+<td class="selected"><input type=checkbox></td>
 <td class="has-text-centered">${data.viewed}</td>
 <td>
   <a class="table-title has-text-dark" href="${url}">${title}</a>

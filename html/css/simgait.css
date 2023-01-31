@@ -330,3 +330,7 @@ div.table-container {
     height: 100%;
     max-width: none;
 }
+
+.selected {
+  text-align: center;
+}
