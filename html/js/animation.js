@@ -347,6 +347,7 @@ export default class Animation extends Project {
   }
 
   animationRow(data, project) {
+    console.log(data)
     let size = data.size;
     let unit;
     if (size < 1024)

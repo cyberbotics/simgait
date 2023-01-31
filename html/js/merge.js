@@ -12,61 +12,71 @@ const j1 = fetch('storage/18_Thelen_Ong2019/animation.json')
 const j2 = fetch('storage/18_Millard_Ong2019/animation.json')
   .then(result => result.json());
 
-const p1 = fetch('storage/18_Thelen_Ong2019/model.x3d')
-  .then(result => result.text())
-  .then(text => {
-    const parser = new DOMParser();
-    const xml = parser.parseFromString(text, 'text/xml');
-    const root = xml.getElementsByTagName('Scene')[0];
-    for (const child of root.childNodes) {
-      if (child.tagName === 'Transform' && getNodeAttribute(child, 'name') === 'skeleton') {
-        child.setAttribute('translation', '0 1 0');
-        return child;
-      }
-    }
-  });
-const p2 = fetch('storage/18_Millard_Ong2019/model.x3d')
+const s1 = fetch('storage/18_Thelen_Ong2019/model.x3d')
   .then(result => result.text())
   .then(text => {
     const parser = new DOMParser();
     return parser.parseFromString(text, 'text/xml');
   });
 
-// TODO make possible to merge 2 in 1 if 2 is smaller
-Promise.all([p1, p2, j1, j2]).then(() => {
-  p2.then(p2 => {
-    const root = p2.getElementsByTagName('Scene')[0];
-    const maxId = findMaxId(root, -1);
-    p1.then(skeleton => {
-      // Combine x3d
-      skeleton.id = 'n' + (parseInt(skeleton.id.substr(1)) + maxId);
-      increaseId(skeleton, maxId);
-      root.appendChild(skeleton);
+const s2 = fetch('storage/18_Millard_Ong2019/model.x3d')
+  .then(result => result.text())
+  .then(text => {
+    const parser = new DOMParser();
+    return parser.parseFromString(text, 'text/xml');
+  });
 
-      // Combine json
-      j1.then(json1 => {
-        j2.then(json2 => {
+Promise.all([s1, s2, j1, j2]).then(() => {
+  j1.then(json1 => {
+    j2.then(json2 => {
+      s1.then(scene1 => {
+        s2.then(scene2 => {
           const array1 = json1.frames;
           const array2 = json2.frames;
+          // Check which animation is the longest
+          let length;
+          let receiverScene, sceneToBeMerged;
+          let receiverJson, jsonToBeMerged;
           // We assume that all animation have the same timestep.
-          const length = array1.length > array2.length ? array1.length : array2.length;
+          if (array1.length > array2.length) {
+            length = array2.length;
+            receiverScene = scene1;
+            sceneToBeMerged = scene2;
+            receiverJson = json1;
+            jsonToBeMerged = json2;
+          } else {
+            length = array1.length;
+            receiverScene = scene2;
+            sceneToBeMerged = scene1;
+            receiverJson = json2;
+            jsonToBeMerged = json1;
+          }
 
+          const skeleton = getSkeleton(sceneToBeMerged);
+          const root = receiverScene.getElementsByTagName('Scene')[0];
+          const maxId = findMaxId(root, -1);
+          // Combine x3d
+          skeleton.id = 'n' + (parseInt(skeleton.id.substr(1)) + maxId);
+          increaseId(skeleton, maxId);
+          root.appendChild(skeleton);
+
+          // Combine json
           // Merge ids
-          let ids1 = json1.ids.split(';');
+          let ids1 = jsonToBeMerged.ids.split(';');
           ids1 = ';' + ids1.map(id => parseInt(id) + maxId).join(';');
-          json2.ids += ids1;
+          receiverJson.ids += ids1;
 
           // Merge frames
           for (let i = 0; i < length; i++) {
-            const updates1 = array1[i].updates;
-            const updates2 = array2[i].updates;
+            const updates1 = jsonToBeMerged.frames[i].updates;
+            const updates2 = receiverJson.frames[i].updates;
 
             for (const update of updates1) {
               update.id += maxId;
               updates2.push(update);
             }
           }
-          webotsView.loadAnimation(new XMLSerializer().serializeToString(p2), json2,
+          webotsView.loadAnimation(new XMLSerializer().serializeToString(receiverScene), receiverJson,
             undefined, undefined, undefined, true);
         });
       });
@@ -95,6 +105,16 @@ function increaseId(node, offset) {
         child.id = 'n' + (parseInt(child.id.substr(1)) + offset);
 
       increaseId(child, offset);
+    }
+  }
+}
+
+function getSkeleton(xml) {
+  const root = xml.getElementsByTagName('Scene')[0];
+  for (const child of root.childNodes) {
+    if (child.tagName === 'Transform' && getNodeAttribute(child, 'name') === 'skeleton') {
+      child.setAttribute('translation', '0 1 0');
+      return child;
     }
   }
 }
