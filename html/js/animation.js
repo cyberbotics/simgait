@@ -264,7 +264,7 @@ export default class Animation extends Project {
           tbody.innerHTML = line;
           for (let i = 0; i < data.animations.length; i++) {
             const id = data.animations[i].id;
-            document.getElementById('checkbox-' + id).onchange = () => this.handleInput(id, data.animations);
+            document.getElementById('checkbox-' + id).onchange = () => this.handleInput(id, data.animations, project);
           }
           for (let i = 0; i < data.animations.length; i++) {
             const node = tbody.querySelector(`#animation-${data.animations[i].id}`);
@@ -281,8 +281,34 @@ export default class Animation extends Project {
       });
   }
 
-  handleInput(id, animations) {
-    console.log(id);
+  handleInput(id, animations, project) {
+    if (project.compare1 === id) {
+      project.compare1 = undefined;
+      if (typeof project.compare2 !== 'undefined') {
+        for (let i = 0; i < animations.length; i++) {
+          const id = animations[i].id;
+          document.getElementById('checkbox-' + id).disabled = false;
+        }
+      }
+    } else if (project.compare2 === id) {
+      project.compare2 = undefined;
+      if (typeof project.compare1 !== 'undefined') {
+        for (let i = 0; i < animations.length; i++) {
+          const id = animations[i].id;
+          document.getElementById('checkbox-' + id).disabled = false;
+        }
+      }
+    } else if (typeof project.compare1 === 'undefined')
+      project.compare1 = id;
+    else if (typeof project.compare2 === 'undefined')
+      project.compare2 = id;
+
+    if (typeof project.compare1 !== 'undefined' && typeof project.compare2 !== 'undefined') {
+      for (let i = 0; i < animations.length; i++) {
+        const id = animations[i].id;
+        document.getElementById('checkbox-' + id).disabled = true;
+      }
+    }
   }
 
   updatePagination(max) {
