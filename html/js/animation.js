@@ -136,7 +136,7 @@ export default class Animation extends Project {
                 <tr>
                   <th class="is-clickable column-title" id="animation-select-viewed" title="Selected"
                     style="text-align:center; width: 65px;">
-                    Selected
+                    Compare
                   </th>
                   <th class="is-clickable column-title" id="animation-sort-viewed" title="Number of views"
                     style="text-align:center; width: 65px;">
