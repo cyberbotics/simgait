@@ -306,7 +306,8 @@ export default class Animation extends Project {
     if (typeof project.compare1 !== 'undefined' && typeof project.compare2 !== 'undefined') {
       for (let i = 0; i < animations.length; i++) {
         const id = animations[i].id;
-        document.getElementById('checkbox-' + id).disabled = true;
+        if (id !== project.compare2 && id !== project.compare1)
+          document.getElementById('checkbox-' + id).disabled = true;
       }
     }
   }
