@@ -264,8 +264,8 @@ export default class Animation extends Project {
           tbody.innerHTML = line;
           for (let i = 0; i < data.animations.length; i++) {
             const id = data.animations[i].id;
-            console.log(data.animations[i])
-            document.getElementById('checkbox-' + id).onchange = () => this.handleInput(id, data.animations, project);
+            const url = data.animations[i].url;
+            document.getElementById('checkbox-' + id).onchange = () => this.handleInput(url, data.animations, project);
           }
           for (let i = 0; i < data.animations.length; i++) {
             const node = tbody.querySelector(`#animation-${data.animations[i].id}`);
@@ -282,8 +282,8 @@ export default class Animation extends Project {
       });
   }
 
-  handleInput(id, animations, project) {
-    if (project.compare1 === id) {
+  handleInput(url, animations, project) {
+    if (project.compare1 === url) {
       project.compare1 = undefined;
       if (typeof project.compare2 !== 'undefined') {
         for (let i = 0; i < animations.length; i++) {
@@ -291,7 +291,7 @@ export default class Animation extends Project {
           document.getElementById('checkbox-' + id).disabled = false;
         }
       }
-    } else if (project.compare2 === id) {
+    } else if (project.compare2 === url) {
       project.compare2 = undefined;
       if (typeof project.compare1 !== 'undefined') {
         for (let i = 0; i < animations.length; i++) {
@@ -300,14 +300,15 @@ export default class Animation extends Project {
         }
       }
     } else if (typeof project.compare1 === 'undefined')
-      project.compare1 = id;
+      project.compare1 = url;
     else if (typeof project.compare2 === 'undefined')
-      project.compare2 = id;
+      project.compare2 = url;
 
     if (typeof project.compare1 !== 'undefined' && typeof project.compare2 !== 'undefined') {
       for (let i = 0; i < animations.length; i++) {
         const id = animations[i].id;
-        if (id !== project.compare2 && id !== project.compare1)
+        const url = animations[i].url;
+        if (url !== project.compare2 && url !== project.compare1)
           document.getElementById('checkbox-' + id).disabled = true;
       }
     }
