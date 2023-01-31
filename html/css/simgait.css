@@ -332,5 +332,5 @@ div.table-container {
 }
 
 .selected {
-  text-align: center;
+  text-align: center!important;
 }
