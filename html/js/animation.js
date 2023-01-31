@@ -347,7 +347,6 @@ export default class Animation extends Project {
   }
 
   animationRow(data, project) {
-    console.log(data)
     let size = data.size;
     let unit;
     if (size < 1024)
@@ -386,6 +385,7 @@ export default class Animation extends Project {
         duration = hour + duration;
       }
     }
+    project.test = 'bonjour';
     const admin = project.email ? project.email.endsWith('@cyberbotics.com') : false;
     const url = data.url.startsWith('https://webots.cloud') ? document.location.origin + data.url.substring(20) : data.url;
     const defaultThumbnailUrl = document.location.origin + '/images/thumbnail.jpg';
@@ -399,7 +399,7 @@ export default class Animation extends Project {
     const uploaded = data.uploaded.replace(' ', `<br>${deleteIcon} `);
     const title = data.title === '' ? '<i>anonymous</i>' : data.title;
     let row = `
-<td class="selected"><input type=checkbox></td>
+<td class="selected"><input id="checkbox-${data.id}" type=checkbox></td>
 <td class="has-text-centered">${data.viewed}</td>
 <td>
   <a class="table-title has-text-dark" href="${url}">${title}</a>
