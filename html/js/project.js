@@ -61,14 +61,14 @@ export default class Project extends User {
         const j2 = fetch('storage' + url2 + '/animation.json')
           .then(result => result.json());
 
-        const s1 = fetch('storage' + url1 + '/model.x3d')
+        const s1 = fetch('storage' + url1 + '/scene.x3d')
           .then(result => result.text())
           .then(text => {
             const parser = new DOMParser();
             return parser.parseFromString(text, 'text/xml');
           });
 
-        const s2 = fetch('storage' + url2 + '/model.x3d')
+        const s2 = fetch('storage' + url2 + '/scene.x3d')
           .then(result => result.text())
           .then(text => {
             const parser = new DOMParser();
