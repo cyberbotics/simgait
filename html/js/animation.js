@@ -266,6 +266,7 @@ export default class Animation extends Project {
           const table = project.content.querySelector(`section[data-content="animation"] > div > table`);
           table.style.marginBottom = (50 * (this.pageLimit - data.animations.length)) + 'px';
           const tbody = table.querySelector(`tbody`);
+          tbody.id = 'list-animation';
           tbody.innerHTML = line;
           for (let i = 0; i < data.animations.length; i++) {
             const id = data.animations[i].id;
