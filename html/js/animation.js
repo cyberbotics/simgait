@@ -312,7 +312,9 @@ export default class Animation extends Project {
         if (url !== project.compare2 && url !== project.compare1)
           document.getElementById('checkbox-' + id).disabled = true;
       }
-    }
+      document.getElementById('compare-animation').disabled = false;
+    } else
+      document.getElementById('compare-animation').disabled = true;
   }
 
   updatePagination(max) {
