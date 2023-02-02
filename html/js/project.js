@@ -74,7 +74,63 @@ export default class Project extends User {
             const parser = new DOMParser();
             return parser.parseFromString(text, 'text/xml');
           });
-        Promise.all([s1, s2, j1, j2]).then(() => {console.log("load everything")})
+        Promise.all([s1, s2, j1, j2]).then(() => {
+          j1.then(json1 => {
+            j2.then(json2 => {
+              s1.then(scene1 => {
+                s2.then(scene2 => {
+                  const array1 = json1.frames;
+                  const array2 = json2.frames;
+                  // Check which animation is the longest
+                  let length;
+                  let receiverScene, sceneToBeMerged;
+                  let receiverJson, jsonToBeMerged;
+                  // We assume that all animation have the same timestep.
+                  if (array1.length > array2.length) {
+                    length = array2.length;
+                    receiverScene = scene1;
+                    sceneToBeMerged = scene2;
+                    receiverJson = json1;
+                    jsonToBeMerged = json2;
+                  } else {
+                    length = array1.length;
+                    receiverScene = scene2;
+                    sceneToBeMerged = scene1;
+                    receiverJson = json2;
+                    jsonToBeMerged = json1;
+                  }
+
+                  const skeleton = this.getSkeleton(sceneToBeMerged);
+                  const root = receiverScene.getElementsByTagName('Scene')[0];
+                  const maxId = this.findMaxId(root, -1);
+                  // Combine x3d
+                  skeleton.id = 'n' + (parseInt(skeleton.id.substr(1)) + maxId);
+                  this.increaseId(skeleton, maxId);
+                  root.appendChild(skeleton);
+
+                  // Combine json
+                  // Merge ids
+                  let ids1 = jsonToBeMerged.ids.split(';');
+                  ids1 = ';' + ids1.map(id => parseInt(id) + maxId).join(';');
+                  receiverJson.ids += ids1;
+
+                  // Merge frames
+                  for (let i = 0; i < length; i++) {
+                    const updates1 = jsonToBeMerged.frames[i].updates;
+                    const updates2 = receiverJson.frames[i].updates;
+
+                    for (const update of updates1) {
+                      update.id += maxId;
+                      updates2.push(update);
+                    }
+                  }
+
+                  console.log("merge done")
+                });
+              });
+            });
+          });
+        });
       } else {
         const username = url.pathname.substring(1);
         const content = {
@@ -103,6 +159,51 @@ export default class Project extends User {
       }
     });
     return promise;
+  }
+  findMaxId(node, id) {
+    if (node.childNodes) {
+      for (const child of node.childNodes) {
+        if (child.id) {
+          const newId = parseInt(child.id.substr(1));
+          if (id < newId)
+            id = newId;
+        }
+        id = this.findMaxId(child, id);
+      }
+    }
+    return id;
+  }
+
+  increaseId(node, offset) {
+    if (node.childNodes) {
+      for (const child of node.childNodes) {
+        if (child.id)
+          child.id = 'n' + (parseInt(child.id.substr(1)) + offset);
+
+        this.increaseId(child, offset);
+      }
+    }
+  }
+
+  getSkeleton(xml) {
+    const root = xml.getElementsByTagName('Scene')[0];
+    for (const child of root.childNodes) {
+      if (child.tagName === 'Transform' && this.getNodeAttribute(child, 'name') === 'skeleton') {
+        child.setAttribute('translation', '0 1 0');
+        return child;
+      }
+    }
+  }
+  getNodeAttribute(node, attributeName, defaultValue) {
+    console.assert(node && node.attributes);
+    if (attributeName in node.attributes)
+      return this.sanitizeHTML(node.attributes.getNamedItem(attributeName).value);
+    return defaultValue;
+  }
+  sanitizeHTML(text) {
+    const element = document.createElement('div');
+    element.innerText = text;
+    return element.innerHTML;
   }
   runWebotsView(data, version, raw) {
     if (!version || version === undefined)
