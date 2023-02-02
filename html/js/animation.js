@@ -198,12 +198,16 @@ export default class Animation extends Project {
             }
           } else if (td.className === 'animation-title' && selected) {
             const title = td.childNodes[1];
-            console.log(title)
+            names.push(title.innerText);
+            let url = new URL(title.href);
+            urls.push(url.pathname);
           }
         }
       }
+      console.log(names)
+      console.log(urls)
       project.load('/compare?');
-    }
+    };
   }
 
   initSort(project) {
