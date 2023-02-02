@@ -196,11 +196,9 @@ export default class Animation extends Project {
               if (input.type === 'checkbox' && input.checked)
                 selected = true;
             }
-          } else if (td.className === 'selected') {
-            for (const input of td.childNodes) {
-              if (input.type === 'checkbox' && input.checked)
-                selected = true;
-            }
+          } else if (td.className === 'animation.title') {
+            const title = td.childNodes[0]
+            console.log(title)
           }
         }
       }
@@ -465,7 +463,7 @@ export default class Animation extends Project {
     let row = `
 <td class="selected"><input id="checkbox-${data.id}" type=checkbox></td>
 <td class="has-text-centered">${data.viewed}</td>
-<td>
+<td class="animation-title>
   <a class="table-title has-text-dark" href="${url}">${title}</a>
   <div class="thumbnail">
     <div class="thumbnail-container">
