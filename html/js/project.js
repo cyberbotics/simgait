@@ -128,8 +128,7 @@ export default class Project extends User {
                   const data = {};
                   data.scene = receiverScene;
                   data.json = receiverJson;
-                  this.runWebotsView(data, 'simgait', true);
-                  Project.webotsView.onready = () => {
+                  this.runWebotsView(data, 'simgait', true, () => {
                     Project.webotsView._view.setLabel({
                       id: 444102,
                       font: '/usr/local/webots/resources/fonts/Arial.ttf',
@@ -148,7 +147,7 @@ export default class Project extends User {
                       x: 0.01,
                       y: 0.01
                     });
-                  };
+                  });
                 });
               });
             });
@@ -228,7 +227,7 @@ export default class Project extends User {
     element.innerText = text;
     return element.innerHTML;
   }
-  runWebotsView(data, version, raw) {
+  runWebotsView(data, version, raw, onready) {
     if (!version || version === undefined)
       version = data && data.version ? data.version : this.findGetParameter('version');
 
@@ -247,7 +246,7 @@ export default class Project extends User {
         script.id = 'webots-view-version';
         script.src = src;
         script.onload = () => {
-          this._loadContent(data, resolve, raw);
+          this._loadContent(data, resolve, raw, onready);
         };
         script.onerror = () => {
           console.warn(
@@ -257,7 +256,7 @@ export default class Project extends User {
         };
         document.body.appendChild(script);
       } else
-        this._loadContent(data, resolve, raw);
+        this._loadContent(data, resolve, raw, onready);
     });
 
     promise.then(() => {
@@ -276,9 +275,10 @@ export default class Project extends User {
       }
     });
   }
-  _loadContent(data, resolve, raw) {
+  _loadContent(data, resolve, raw, onready) {
     if (raw) {
       this.setupWebotsView('animation');
+      Project.webotsView.onready = onready();
       Project.webotsView.loadAnimation(new XMLSerializer().serializeToString(data.scene), data.json, false,
         undefined, undefined, true);
       resolve();
