@@ -142,10 +142,10 @@ export default class Project extends User {
                       id: 444103,
                       font: '/usr/local/webots/resources/fonts/Arial.ttf',
                       text: name2,
-                      color: '255,0,0,1',
+                      color: '0,0,255,1',
                       size: 0.08,
                       x: 0.01,
-                      y: 0.02
+                      y: 0.04
                     });
                   });
                 });
