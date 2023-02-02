@@ -187,8 +187,12 @@ export default class Animation extends Project {
       const lists = document.getElementById('list-animation');
       for (const tr of lists.childNodes) {
         for (const td of tr.childNodes) {
-          if (td.className === 'selected')
-            console.log(td)
+          if (td.className === 'selected') {
+            for (const input of td.childNodes) {
+              if (input.type === 'checkbox')
+                console.log(input.checked)
+            }
+          }
         }
       }
       project.load('/compare?');
