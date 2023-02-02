@@ -79,6 +79,9 @@ export default class Project extends User {
             j2.then(json2 => {
               s1.then(scene1 => {
                 s2.then(scene2 => {
+                  this.addSphere(scene1, '1 0 0');
+                  this.addSphere(scene2, '0 0 1');
+
                   const array1 = json1.frames;
                   const array2 = json2.frames;
                   // Check which animation is the longest
@@ -213,6 +216,33 @@ export default class Project extends User {
       if (child.tagName === 'Transform' && this.getNodeAttribute(child, 'name') === 'skeleton') {
         child.setAttribute('translation', '0 1 0');
         return child;
+      }
+    }
+  }
+  addSphere(xml, color) {
+    const root = xml.getElementsByTagName('Scene')[0];
+    let id = this.findMaxId(root, -1);
+    for (const child of root.childNodes) {
+      if (child.tagName === 'Transform' && this.getNodeAttribute(child, 'name') === 'skeleton') {
+        for (const child2 of child.childNodes) {
+          if (child2.tagName === 'Transform' && this.getNodeAttribute(child2, 'name') === 'head') {
+            const transform = xml.createElement('Transform');
+            transform.setAttribute('id', 'n' + (id + 1));
+            transform.setAttribute('translation', '0 0.2 0');
+            const shape = xml.createElement('Shape');
+            shape.setAttribute('id', 'n' + (id + 2));
+            transform.appendChild(shape);
+            const sphere = xml.createElement('Sphere');
+            sphere.setAttribute('id', 'n' + (id + 3));
+            sphere.setAttribute('radius', '0.05');
+            shape.appendChild(sphere);
+            const pbr = xml.createElement('PBRAppearance');
+            pbr.setAttribute('id', 'n' + (id + 4));
+            pbr.setAttribute('baseColor', color);
+            shape.appendChild(pbr);
+            child2.appendChild(transform);
+          }
+        }
       }
     }
   }
