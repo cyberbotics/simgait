@@ -189,8 +189,8 @@ export default class Animation extends Project {
       const names = [];
       const urls = [];
       for (const tr of lists.childNodes) {
+        let selected = false;
         for (const td of tr.childNodes) {
-          let selected = false;
           if (td.className === 'selected') {
             for (const input of td.childNodes) {
               if (input.type === 'checkbox' && input.checked)
