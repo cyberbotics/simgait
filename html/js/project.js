@@ -145,7 +145,7 @@ export default class Project extends User {
                       color: '0,0,255,1',
                       size: 0.08,
                       x: 0.01,
-                      y: 0.05
+                      y: 0.06
                     });
                   });
                 });
