@@ -75,6 +75,7 @@
   }
 
   // get files and variables from post
+  $title = $data->title;
   $animation = array_key_exists('animation-file', $_FILES);
   $size = $_FILES['animation-file']['size'];
   $angles = array_key_exists('angles-file', $_FILES);
@@ -92,7 +93,6 @@
     $line = fgets($file);
     if (substr($line, 0, 15) === "<WorldInfo id='") {
       $world_info = true;
-      $title = parse_sf_string($line, 'title');
       $info = parse_mf_string($line, 'info');
       $description = implode("\n", $info);
     } else if (substr($line, 0, 30) == '<meta name="version" content="')
