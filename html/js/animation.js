@@ -185,12 +185,20 @@ export default class Animation extends Project {
     super.setup('animation', [], template.content);
     document.getElementById('compare-animation').onclick = () => {
       const lists = document.getElementById('list-animation');
+      const names = [];
+      const urls = [];
       for (const tr of lists.childNodes) {
         for (const td of tr.childNodes) {
+          let selected = false;
           if (td.className === 'selected') {
             for (const input of td.childNodes) {
-              if (input.type === 'checkbox')
-                console.log(input.checked)
+              if (input.type === 'checkbox' && input.checked)
+                selected = true;
+            }
+          } else if (td.className === 'selected') {
+            for (const input of td.childNodes) {
+              if (input.type === 'checkbox' && input.checked)
+                selected = true;
             }
           }
         }
