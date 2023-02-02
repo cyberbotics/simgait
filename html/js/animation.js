@@ -186,7 +186,7 @@ export default class Animation extends Project {
     document.getElementById('compare-animation').onclick = () => {
       const lists = document.getElementById('list-animation');
       for (const tr of lists.childNodes) {
-        for (const td of tr) {
+        for (const td of tr.childNodes) {
           if (td.className === 'selected')
             console.log(td)
         }
