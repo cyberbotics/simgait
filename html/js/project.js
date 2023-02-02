@@ -50,7 +50,7 @@ export default class Project extends User {
             }
           });
       } else if (url.pathname.startsWith('/compare')) { 
-        console.log("load compare")
+        console.log(url)
       }else {
         const username = url.pathname.substring(1);
         const content = {
