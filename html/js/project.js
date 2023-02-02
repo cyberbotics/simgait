@@ -279,7 +279,7 @@ export default class Project extends User {
   _loadContent(data, resolve, raw, onready) {
     if (raw) {
       this.setupWebotsView('animation');
-      Project.webotsView.onready = onready();
+      Project.webotsView.onready = () => onready();
       Project.webotsView.loadAnimation(new XMLSerializer().serializeToString(data.scene), data.json, false,
         undefined, undefined, true);
       resolve();
