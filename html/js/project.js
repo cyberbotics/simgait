@@ -49,9 +49,16 @@ export default class Project extends User {
               resolve();
             }
           });
-      } else if (url.pathname.startsWith('/compare')) { 
-        console.log(url)
-      }else {
+      } else if (url.pathname.startsWith('/compare')) {
+        const name1 = url.searchParams.get('name1');
+        const name2 = url.searchParams.get('name2');
+        const url1 = url.searchParams.get('url1');
+        const url2 = url.searchParams.get('url2');
+        console.log(name2)
+        console.log(name1)
+        console.log(url2)
+        console.log(url1)
+      } else {
         const username = url.pathname.substring(1);
         const content = {
           method: 'post',
