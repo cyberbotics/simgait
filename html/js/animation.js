@@ -463,7 +463,7 @@ export default class Animation extends Project {
     let row = `
 <td class="selected"><input id="checkbox-${data.id}" type=checkbox></td>
 <td class="has-text-centered">${data.viewed}</td>
-<td class="animation-title>
+<td class="animation-title">
   <a class="table-title has-text-dark" href="${url}">${title}</a>
   <div class="thumbnail">
     <div class="thumbnail-container">
