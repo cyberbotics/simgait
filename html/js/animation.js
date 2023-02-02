@@ -41,7 +41,18 @@ export default class Animation extends Project {
   }
   addAnimation(project) {
     let content = {};
-    content.innerHTML = `<div class="field">
+    content.innerHTML = `
+    <div class="field">
+      <label class="label">Name</label>
+      <div class="control has-icons-left">
+        <input id="angles-file" name="angles-file" class="input" type="text" required>
+        <span class="icon is-small is-left">
+          <i class="fas fa-upload"></i>
+        </span>
+      </div>
+      <div class="help">Title of your animation: <em>14 Millard Geyer 2010</em></div>
+    </div>
+    <div class="field">
       <label class="label">Webots animation</label>
       <div class="control has-icons-left">
         <input id="animation-file" name="animation-file" class="input" type="file" required accept=".json">
