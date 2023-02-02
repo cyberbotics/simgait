@@ -185,7 +185,12 @@ export default class Animation extends Project {
     super.setup('animation', [], template.content);
     document.getElementById('compare-animation').onclick = () => {
       const lists = document.getElementById('list-animation');
-      console.log(lists)
+      for (const tr of lists) {
+        for (const td of tr) {
+          if (td.className === 'selected')
+            console.log(td)
+        }
+      }
       project.load('/compare?');
     }
   }
