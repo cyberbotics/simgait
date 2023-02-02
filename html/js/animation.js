@@ -178,6 +178,7 @@ export default class Animation extends Project {
           </nav>
           <div class="buttons">
             <button class="button"  style="display:${display}" id="add-a-new-animation">Add a new animation</button>
+            <button class="button"  disabled=true id="movie" onclick="window.location.href=https://github.com/cyberbotics/simgait/wiki">Record movie from animation</button>
             <button class="button"  disabled=true id="compare-animation">Compare</button>
           </div>
         </section>
