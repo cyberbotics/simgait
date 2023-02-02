@@ -128,6 +128,7 @@ export default class Project extends User {
                   const data = {};
                   data.scene = receiverScene;
                   data.json = receiverJson;
+                  this.runWebotsView(data, 'simgait', true);
                   Project.webotsView.onready = () => {
                     Project.webotsView._view.setLabel({
                       id: 444102,
@@ -148,7 +149,6 @@ export default class Project extends User {
                       y: 0.01
                     });
                   };
-                  this.runWebotsView(data, 'simgait', true);
                 });
               });
             });
