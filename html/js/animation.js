@@ -176,8 +176,9 @@ export default class Animation extends Project {
           </div>
           <nav class="pagination is-small is-rounded" role="navigation" aria-label="pagination">
           </nav>
-          <div class="buttons" style="display:${display}">
-            <button class="button" id="add-a-new-animation">Add a new animation</button>
+          <div class="buttons">
+            <button class="button"  style="display:${display}" id="add-a-new-animation">Add a new animation</button>
+            <button class="button"  disabled=true id="compare-animation">Compare</button>
           </div>
         </section>
       </div></div>`;

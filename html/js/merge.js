@@ -1,10 +1,13 @@
-import WebotsView from '../../../webots2/resources/web/wwi/WebotsView.js';
-import {getNodeAttribute} from '../../../webots2/resources/web/wwi/Parser.js';
+import WebotsView from '../../../webots/resources/web/wwi/WebotsView.js';
+import {getNodeAttribute} from '../../../webots/resources/web/wwi/Parser.js';
 
 const container = document.getElementsByClassName('webots-view-container')[0];
 const webotsView = new WebotsView();
 
 container.appendChild(webotsView);
+
+const t1 = "18_Thelen_Ong2019";
+const t2 = "18_Millard_Ong2019"
 
 const j1 = fetch('storage/18_Thelen_Ong2019/animation.json')
   .then(result => result.json());
@@ -52,6 +55,9 @@ Promise.all([s1, s2, j1, j2]).then(() => {
             jsonToBeMerged = json1;
           }
 
+          addSphere(scene1, '1 0 0');
+          addSphere(scene2, '0 0 1');
+
           const skeleton = getSkeleton(sceneToBeMerged);
           const root = receiverScene.getElementsByTagName('Scene')[0];
           const maxId = findMaxId(root, -1);
@@ -78,6 +84,26 @@ Promise.all([s1, s2, j1, j2]).then(() => {
           }
           webotsView.loadAnimation(new XMLSerializer().serializeToString(receiverScene), receiverJson,
             undefined, undefined, undefined, true);
+          webotsView.onready = () => {
+            webotsView._view.setLabel({
+              id: 444102,
+              font: '/usr/local/webots/resources/fonts/Arial.ttf',
+              text: t1,
+              color: '255,0,0,1',
+              size: 0.08,
+              x: 0.01,
+              y: 0.01
+              });
+              webotsView._view.setLabel({
+                id: 444102,
+                font: '/usr/local/webots/resources/fonts/Arial.ttf',
+                text: t1,
+                color: '255,0,0,1',
+                size: 0.08,
+                x: 0.01,
+                y: 0.01
+                });
+          }
         });
       });
     });
@@ -115,6 +141,34 @@ function getSkeleton(xml) {
     if (child.tagName === 'Transform' && getNodeAttribute(child, 'name') === 'skeleton') {
       child.setAttribute('translation', '0 1 0');
       return child;
+    }
+  }
+}
+
+function addSphere(xml, color) {
+  const root = xml.getElementsByTagName('Scene')[0];
+  let id = findMaxId(root, -1);
+  for (const child of root.childNodes) {
+    if (child.tagName === 'Transform' && getNodeAttribute(child, 'name') === 'skeleton') {
+      for (const child2 of child.childNodes) {
+        if (child2.tagName === 'Transform' && getNodeAttribute(child2, 'name') === 'head') {
+          const transform = xml.createElement('Transform');
+          transform.setAttribute('id', 'n' + (id + 1));
+          transform.setAttribute('translation', '0 0.2 0');
+          const shape = xml.createElement('Shape');
+          shape.setAttribute('id', 'n' + (id + 2));
+          transform.appendChild(shape);
+          const sphere = xml.createElement('Sphere');
+          sphere.setAttribute('id', 'n' + (id + 3));
+          sphere.setAttribute('radius', '0.05');
+          shape.appendChild(sphere);
+          const pbr = xml.createElement('PBRAppearance');
+          pbr.setAttribute('id', 'n' + (id + 4));
+          pbr.setAttribute('baseColor', color);
+          shape.appendChild(pbr);
+          child2.appendChild(transform);
+        }
+      }
     }
   }
 }
