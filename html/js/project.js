@@ -54,10 +54,27 @@ export default class Project extends User {
         const name2 = url.searchParams.get('name2');
         const url1 = url.searchParams.get('url1');
         const url2 = url.searchParams.get('url2');
-        console.log(name2)
-        console.log(name1)
-        console.log(url2)
-        console.log(url1)
+
+        const j1 = fetch('storage' + url1 + '/animation.json')
+          .then(result => result.json());
+
+        const j2 = fetch('storage' + url2 + '/animation.json')
+          .then(result => result.json());
+
+        const s1 = fetch('storage' + url1 + '/model.x3d')
+          .then(result => result.text())
+          .then(text => {
+            const parser = new DOMParser();
+            return parser.parseFromString(text, 'text/xml');
+          });
+
+        const s2 = fetch('storage' + url2 + '/model.x3d')
+          .then(result => result.text())
+          .then(text => {
+            const parser = new DOMParser();
+            return parser.parseFromString(text, 'text/xml');
+          });
+        Promise.all([s1, s2, j1, j2]).then(() => {console.log("load everything")})
       } else {
         const username = url.pathname.substring(1);
         const content = {
@@ -87,7 +104,7 @@ export default class Project extends User {
     });
     return promise;
   }
-  runWebotsView(data, version) {
+  runWebotsView(data, version, raw) {
     if (!version || version === undefined)
       version = data && data.version ? data.version : this.findGetParameter('version');
 

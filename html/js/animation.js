@@ -204,7 +204,7 @@ export default class Animation extends Project {
           }
         }
       }
-      project.load(`/compare?name1="${names[0]}"&name2="${names[1]}"&url1="${urls[0]}"&url2="${urls[1]}"`);
+      project.load(`/compare?name1=${names[0]}&name2=${names[1]}&url1=${urls[0]}&url2=${urls[1]}`);
     };
   }
 
