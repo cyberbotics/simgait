@@ -125,7 +125,10 @@ export default class Project extends User {
                     }
                   }
 
-                  console.log("merge done")
+                  const data = {};
+                  data.scene = receiverScene;
+                  data.json = receiverJson;
+                  this.runWebotsView(data, 'simgait', true);
                 });
               });
             });
@@ -224,7 +227,7 @@ export default class Project extends User {
         script.id = 'webots-view-version';
         script.src = src;
         script.onload = () => {
-          this._loadContent(data, resolve);
+          this._loadContent(data, resolve, raw);
         };
         script.onerror = () => {
           console.warn(
@@ -234,7 +237,7 @@ export default class Project extends User {
         };
         document.body.appendChild(script);
       } else
-        this._loadContent(data, resolve);
+        this._loadContent(data, resolve, raw);
     });
 
     promise.then(() => {
@@ -253,8 +256,13 @@ export default class Project extends User {
       }
     });
   }
-  _loadContent(data, resolve) {
-    if (data) {
+  _loadContent(data, resolve, raw) {
+    if (raw) {
+      this.setupWebotsView('animation');
+      Project.webotsView.loadAnimation(data.scene, data.animation, false,
+        undefined, undefined, true);
+      resolve();
+    } else if (data) {
       const reference = 'storage' + data.url.substring(data.url.lastIndexOf('/'));
       this.setupWebotsView(data.duration > 0 ? 'animation' : 'scene', data);
       Project.webotsView.showCustomWindow = true;
