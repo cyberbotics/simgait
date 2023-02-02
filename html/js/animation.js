@@ -196,8 +196,8 @@ export default class Animation extends Project {
               if (input.type === 'checkbox' && input.checked)
                 selected = true;
             }
-          } else if (td.className === 'animation-title') {
-            const title = td.childNodes[0]
+          } else if (td.className === 'animation-title' && selected) {
+            const title = td.childNodes[1];
             console.log(title)
           }
         }
