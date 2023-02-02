@@ -129,7 +129,6 @@ export default class Project extends User {
                   data.scene = receiverScene;
                   data.json = receiverJson;
                   this.runWebotsView(data, 'simgait', true, () => {
-                    console.log(Project.webotsView)
                     Project.webotsView._view.setLabel({
                       id: 444102,
                       font: '/usr/local/webots/resources/fonts/Arial.ttf',
@@ -140,13 +139,13 @@ export default class Project extends User {
                       y: 0.01
                     });
                     Project.webotsView._view.setLabel({
-                      id: 444102,
+                      id: 444103,
                       font: '/usr/local/webots/resources/fonts/Arial.ttf',
                       text: name2,
                       color: '255,0,0,1',
                       size: 0.08,
                       x: 0.01,
-                      y: 0.01
+                      y: 0.02
                     });
                   });
                 });
