@@ -128,6 +128,26 @@ export default class Project extends User {
                   const data = {};
                   data.scene = receiverScene;
                   data.json = receiverJson;
+                  Project.webotsView.onready = () => {
+                    Project.webotsView._view.setLabel({
+                      id: 444102,
+                      font: '/usr/local/webots/resources/fonts/Arial.ttf',
+                      text: name1,
+                      color: '255,0,0,1',
+                      size: 0.08,
+                      x: 0.01,
+                      y: 0.01
+                    });
+                    Project.webotsView._view.setLabel({
+                      id: 444102,
+                      font: '/usr/local/webots/resources/fonts/Arial.ttf',
+                      text: name2,
+                      color: '255,0,0,1',
+                      size: 0.08,
+                      x: 0.01,
+                      y: 0.01
+                    });
+                  };
                   this.runWebotsView(data, 'simgait', true);
                 });
               });
