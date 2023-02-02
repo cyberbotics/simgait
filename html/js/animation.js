@@ -46,9 +46,6 @@ export default class Animation extends Project {
       <label class="label">Name</label>
       <div class="control has-icons-left">
         <input id="angles-file" name="angles-file" class="input" type="text" required>
-        <span class="icon is-small is-left">
-          <i class="fas fa-upload"></i>
-        </span>
       </div>
       <div class="help">Title of your animation: <em>14 Millard Geyer 2010</em></div>
     </div>
