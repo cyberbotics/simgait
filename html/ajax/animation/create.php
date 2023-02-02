@@ -75,7 +75,7 @@
   }
 
   // get files and variables from post
-  $title = $data->title;
+  $title = $_POST['title'];
   $animation = array_key_exists('animation-file', $_FILES);
   $size = $_FILES['animation-file']['size'];
   $angles = array_key_exists('angles-file', $_FILES);
