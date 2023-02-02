@@ -184,7 +184,8 @@ export default class Animation extends Project {
       </div></div>`;
     super.setup('animation', [], template.content);
     document.getElementById('compare-animation').onclick = () => {
-      project.load('/compare')
+      console.log(project)
+      project.load('/compare?');
     }
   }
 
