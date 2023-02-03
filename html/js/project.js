@@ -132,7 +132,6 @@ export default class Project extends User {
                   data.scene = receiverScene;
                   data.json = receiverJson;
                   this.runWebotsView(data, 'simgait', true, () => {
-                    console.log("write label")
                     Project.webotsView._view.setLabel({
                       id: 444102,
                       font: '/usr/local/webots/resources/fonts/Arial.ttf',
@@ -307,6 +306,7 @@ export default class Project extends User {
     });
   }
   _loadContent(data, resolve, raw, onready) {
+    Project.webotsView._view.removeLabels();
     if (raw) {
       this.setupWebotsView('animation');
       Project.webotsView.onready = () => onready();
