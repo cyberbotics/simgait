@@ -228,7 +228,7 @@ export default class Project extends User {
           if (child2.tagName === 'Transform' && this.getNodeAttribute(child2, 'name') === 'pelvis') {
             const transform = xml.createElement('Transform');
             transform.setAttribute('id', 'n' + (id + 1));
-            transform.setAttribute('translation', '0 0.2 0');
+            transform.setAttribute('translation', '0 0.5 0');
             const shape = xml.createElement('Shape');
             shape.setAttribute('id', 'n' + (id + 2));
             transform.appendChild(shape);
