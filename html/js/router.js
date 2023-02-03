@@ -145,8 +145,12 @@ export default class Router {
   setup(title, anchors, content, fullpage = false) {
     document.head.querySelector('#title').innerHTML = this.title + ' - ' + title;
     let menu = '';
-    for (let i = 0; i < anchors.length; i++)
-      menu += `<a class="navbar-item" href="#${anchors[i].toLowerCase()}">${anchors[i]}</a>`;
+    for (let i = 0; i < anchors.length; i++) {
+      if (anchors[i] === 'Animations')
+        menu += `<a class="navbar-item" href="${anchors[i].toLowerCase()}">${anchors[i]}</a>`;
+      else
+        menu += `<a class="navbar-item" href="#${anchors[i].toLowerCase()}">${anchors[i]}</a>`;
+    }
     document.body.querySelector('.navbar-start').innerHTML = menu;
     this.content.innerHTML = '';
     NodeList.prototype.forEach = Array.prototype.forEach;
