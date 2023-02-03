@@ -237,12 +237,14 @@ div.table-container {
   color: grey;
   position: absolute;
   padding-left: 6px;
+  top: 116px;
 }
 
 .fa-sort-down {
   color: grey;
   position: absolute;
   padding-left: 6px;
+  top: 108px;
 }
 
 .pagination-link.is-current {
