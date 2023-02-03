@@ -214,7 +214,7 @@ export default class Project extends User {
     const root = xml.getElementsByTagName('Scene')[0];
     for (const child of root.childNodes) {
       if (child.tagName === 'Transform' && this.getNodeAttribute(child, 'name') === 'skeleton') {
-        child.setAttribute('translation', '0 1 0');
+        child.setAttribute('translation', '0 -1 0');
         return child;
       }
     }
