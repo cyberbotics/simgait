@@ -77,7 +77,7 @@ export default class Animation extends Project {
           <i class="fas fa-upload"></i>
         </span>
       </div>
-      <div class="help">Upload the Webots X3D scene file: <em>scene.x3d</em></div>
+      <div class="help">Upload the Webots X3D scene file: <em>model.x3d</em></div>
     </div>
     `;
     let cancelled = false;
