@@ -616,7 +616,6 @@ export default class User extends Router {
             document.querySelector('#user-menu').style.display = 'flex';
             document.querySelector('#log-in').style.display = 'none';
             document.querySelector('#sign-up').style.display = 'none';
-            document.querySelector('#projects').href = '/' + data.username;
             document.querySelector('#username').innerHTML = data.username;
             that.username = data.username;
             that.id = data.id;
