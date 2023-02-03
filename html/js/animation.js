@@ -45,7 +45,7 @@ export default class Animation extends Project {
     <div class="field">
       <label class="label">Name</label>
       <input id="angles-file" name="title" class="input" type="text" required>
-      <div class="help">Title of your animation: <em>14 muscles Millard Geyer 2010</em></div>
+      <div class="help">Title of your animation: <em>eg. 14 muscles Millard Geyer 2010</em></div>
     </div>
     <div class="field">
       <label class="label">Webots animation</label>
