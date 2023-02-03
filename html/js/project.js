@@ -132,6 +132,7 @@ export default class Project extends User {
                   data.scene = receiverScene;
                   data.json = receiverJson;
                   this.runWebotsView(data, 'simgait', true, () => {
+                    console.log("write label")
                     Project.webotsView._view.setLabel({
                       id: 444102,
                       font: '/usr/local/webots/resources/fonts/Arial.ttf',
