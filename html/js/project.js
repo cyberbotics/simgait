@@ -225,7 +225,7 @@ export default class Project extends User {
     for (const child of root.childNodes) {
       if (child.tagName === 'Transform' && this.getNodeAttribute(child, 'name') === 'skeleton') {
         for (const child2 of child.childNodes) {
-          if (child2.tagName === 'Transform' && this.getNodeAttribute(child2, 'name') === 'head') {
+          if (child2.tagName === 'Transform' && this.getNodeAttribute(child2, 'name') === 'pelvis') {
             const transform = xml.createElement('Transform');
             transform.setAttribute('id', 'n' + (id + 1));
             transform.setAttribute('translation', '0 0.2 0');
