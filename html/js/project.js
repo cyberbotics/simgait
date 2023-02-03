@@ -315,7 +315,6 @@ export default class Project extends User {
     } else if (data) {
       const reference = 'storage' + data.url.substring(data.url.lastIndexOf('/'));
       this.setupWebotsView(data.duration > 0 ? 'animation' : 'scene', data);
-      Project.webotsView._view.removeLabels();
       Project.webotsView.showCustomWindow = true;
       Project.webotsView.onready = () => {
         const graphWindow = new GraphWindow(Project.webotsView);
@@ -323,6 +322,8 @@ export default class Project extends User {
       };
       Project.webotsView.loadAnimation(`${reference}/scene.x3d`, `${reference}/animation.json`, false,
         undefined, `${reference}/thumbnail.jpg`);
+      Project.webotsView._view.removeLabels();
+
       resolve();
     }
   }
