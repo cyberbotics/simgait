@@ -147,7 +147,7 @@ export default class Router {
     let menu = '';
     for (let i = 0; i < anchors.length; i++) {
       if (anchors[i] === 'Animations')
-        menu += `<a class="navbar-item" href="${anchors[i].toLowerCase()}">${anchors[i]}</a>`;
+        menu += `<a class="navbar-item" href="animation">${anchors[i]}</a>`;
       else
         menu += `<a class="navbar-item" href="#${anchors[i].toLowerCase()}">${anchors[i]}</a>`;
     }
