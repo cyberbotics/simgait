@@ -44,9 +44,7 @@ export default class Animation extends Project {
     content.innerHTML = `
     <div class="field">
       <label class="label">Name</label>
-      <div class="control has-icons-left">
-        <input id="angles-file" name="title" class="input" type="text" required>
-      </div>
+      <input id="angles-file" name="title" class="input" type="text" required>
       <div class="help">Title of your animation: <em>14 muscles Millard Geyer 2010</em></div>
     </div>
     <div class="field">
