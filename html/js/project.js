@@ -45,7 +45,7 @@ export default class Project extends User {
               that.notFound();
               resolve();
             } else {
-              that.runWebotsView(data.animation);
+              that.runWebotsView(data.animation, 'simgait');
               resolve();
             }
           });
