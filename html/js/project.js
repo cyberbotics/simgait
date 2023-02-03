@@ -314,7 +314,7 @@ export default class Project extends User {
       resolve();
     } else if (data) {
       const reference = 'storage' + data.url.substring(data.url.lastIndexOf('/'));
-      this.setupWebotsView(data.duration > 0 ? 'animation' : 'scene', data);
+      this.setupWebotsView('animation', data);
       Project.webotsView.showCustomWindow = true;
       Project.webotsView.onready = () => {
         Project.webotsView._view.removeLabels();

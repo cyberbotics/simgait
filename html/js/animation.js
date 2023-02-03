@@ -380,7 +380,7 @@ export default class Animation extends Project {
   }
 
   deleteAnimation(event, project, page) {
-    const animation = parseInt(event.target.id.substring(10)); // skip 'animation-' or 'scene-'
+    const animation = parseInt(event.target.id.substring(10)); // skip 'animation-'
     const dialog = ModalDialog.run(`Really delete animation?`, '<p>There is no way to recover deleted data.</p>', 'Cancel',
       `Delete Animation`, 'is-danger');
     dialog.querySelector('form').addEventListener('submit', function(event) {

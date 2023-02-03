@@ -315,8 +315,6 @@ export default class User extends Router {
   <a class="navbar-link" id="username">${this.username}</a>
   <div class="navbar-dropdown is-boxed">
     <a class="navbar-item" href="/settings"><i class="fas fa-cog"> &nbsp; </i>Settings</a>
-    <a class="navbar-item" href="/${this.username}" id="projects"><i class="fas fa-folder"> &nbsp; </i>Projects</a>
-    <a class="navbar-item" href="/animation" id="animation"><i class="fas fa-play"> &nbsp; </i>Animation</a>
     <div class="navbar-divider"></div>
     <a class="navbar-item" id="log-out"><i class="fas fa-power-off"> &nbsp; </i>Log out</a>
   </div>
