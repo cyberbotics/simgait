@@ -45,7 +45,7 @@ export default class Project extends User {
               that.notFound();
               resolve();
             } else {
-              that.runWebotsView(data.animation, 'R2023b');
+              that.runWebotsView(data.animation, 'testing');
               resolve();
             }
           });
