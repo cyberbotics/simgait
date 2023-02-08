@@ -45,7 +45,7 @@ export default class Project extends User {
               that.notFound();
               resolve();
             } else {
-              that.runWebotsView(data.animation, 'simgait');
+              that.runWebotsView(data.animation, 'R2023b');
               resolve();
             }
           });
@@ -131,7 +131,7 @@ export default class Project extends User {
                   const data = {};
                   data.scene = receiverScene;
                   data.json = receiverJson;
-                  this.runWebotsView(data, 'simgait', true, () => {
+                  this.runWebotsView(data, 'R2023b', true, () => {
                     Project.webotsView._view.setLabel({
                       id: 444102,
                       font: '/usr/local/webots/resources/fonts/Arial.ttf',
