@@ -458,7 +458,6 @@ export default class Animation extends Project {
 
     const admin = project.email ? project.email.endsWith('@cyberbotics.com') : false;
     const url = data.url.startsWith('https://webots.cloud') ? document.location.origin + data.url.substring(20) : data.url;
-    const defaultThumbnailUrl = document.location.origin + '/images/thumbnail.jpg';
     const versionUrl = `https://github.com/cyberbotics/webots/releases/tag/${data.version}`;
     const style = (data.user === 0) ? ' style="color:grey"' : (parseInt(project.id) === data.user
       ? ' style="color:#007acc"' : (admin ? ' style="color:red"' : ''));
@@ -473,12 +472,6 @@ export default class Animation extends Project {
 <td class="has-text-centered">${data.viewed}</td>
 <td class="animation-title">
   <a class="table-title has-text-dark" href="${url}">${title}</a>
-  <div class="thumbnail">
-    <div class="thumbnail-container">
-      <img class="thumbnail-image" src="${defaultThumbnailUrl}" onerror="this.src='';"/>
-      <p class="thumbnail-description">${data.description}<div class="thumbnail-description-fade"/></p>
-    </div>
-  </div>
 </td>
 <td><a class="has-text-dark" href="${versionUrl}" target="_blank" title="View Webots release">${data.version}</a></td>`;
     if (data.duration !== 0)
